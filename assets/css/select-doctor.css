@@ -1,0 +1,49 @@
+
+/*select doctor*/
+.dropdown-menu-doctor {
+    max-height: 300px;
+    overflow-y: auto;
+    width: 100%;
+}
+
+.doctor-item {
+    cursor: pointer;
+    border-bottom: #c3c3c3 solid 1px;
+}
+
+.doctor-item small {
+    font-size: 13px;
+    display: block;
+    margin-left: 5px;
+    font-style: italic;
+    color: #666;
+}
+
+.doctor-item:hover {
+    background-color: #8fe5e8;
+}
+
+.no-search-results-doctor {
+    display: block;
+}
+
+.input-group-doctor .btn-outline-secondary {
+    border: none;
+    background: transparent;
+    color: #495057; /* Màu của icon, có thể điều chỉnh tùy ý */
+}
+
+.input-group-doctor .btn-outline-secondary:hover {
+    background: #e9ecef; /* Màu nền khi hover, có thể điều chỉnh tùy ý */
+}
+
+.doctor-toggle::after {
+    content: "";
+    border-left: 0.5em solid transparent;
+    border-right: 0.5em solid transparent;
+    border-top: 0.5em solid;
+    position: relative;
+    top: 0.5em;
+    margin-left: 0.5em;
+    float: right;
+}
