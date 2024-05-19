@@ -4,7 +4,7 @@ class BaseController{
     const MODEL_FOLDER_NAME = 'models';
     /**
      * @param $path : folderName.fileName
-     * config gọi path view cho ngắn gọn hơn
+     * configs gọi path view cho ngắn gọn hơn
      */
     protected function view($viewPath, array $data = []){
         extract($data);

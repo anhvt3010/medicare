@@ -31,7 +31,7 @@
 
 <body>
 <!-- ======= Top Bar ======= -->
-<?php include "components/topbar.html" ?>
+<?php include "components/topbar.php" ?>
 <!-- ======= Header ======= -->
 <?php include "components/header.html" ?>
 <!-- ======= Hero Section ======= -->

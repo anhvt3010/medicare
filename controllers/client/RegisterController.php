@@ -1,7 +1,8 @@
 <?php
-class RegisterController {
+class RegisterController extends BaseController {
     public function register() {
-        echo __METHOD__;
+        return $this->view('client.register', [
+        ]);
     }
     public function login() {
         return include './views/client/login.php';

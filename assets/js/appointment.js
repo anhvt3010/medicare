@@ -31,3 +31,5 @@ window.onload = setDates;
 document.getElementById('otherDateBtn').addEventListener('click', function () {
     document.getElementById('otherDateInput').classList.toggle('d-none');
 });
+
+

@@ -582,7 +582,7 @@ var KTMenu = function(element, options) {
         }
     }
 
-    // Prepare popper config for dropdown(see: https://popper.js.org/docs/v2/)
+    // Prepare popper configs for dropdown(see: https://popper.js.org/docs/v2/)
     var _getDropdownPopperConfig = function(item) {
         // Placement
         var placement = _getOptionFromElementAttribute(item, 'placement');
