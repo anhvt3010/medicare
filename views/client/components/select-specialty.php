@@ -59,7 +59,13 @@
                     <?php
                     if (!empty($listSpecialties)) {
                         foreach ($listSpecialties as $specialty) {
-                            echo "<li class='filter-item-specialty-specialty items p-2' data-filter='" . htmlspecialchars($specialty['name']) . "' data-value='" . htmlspecialchars($specialty['specialty_id']) . "'>" . htmlspecialchars($specialty['name']) . "<br><small class='text-muted'>" . htmlspecialchars($specialty['description']) . "</small></li>";
+                            echo "<li class='filter-item-specialty-specialty items p-2' 
+                                      data-filter='" . htmlspecialchars($specialty['name']) . "' 
+                                      data-value='" . htmlspecialchars($specialty['specialty_id']) . "'>
+                                        " . htmlspecialchars($specialty['name']) . "
+                                        <br>
+                                        <small class='text-muted'>" . htmlspecialchars($specialty['description']) . "</small>
+                                  </li>";
                         }
                     }
                     ?>
@@ -69,63 +75,43 @@
     </div>
     <input type="hidden" name="bts-ex-5" value="">
 </div>
+<span id="error-specialty" class="ml-2" style="color: red;"></span>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function () {
-        $('.filter-item-specialty-specialty').on('click', function () {
-            var selectedSpecialty = $(this).data('filter'); // Lấy tên chuyên khoa từ thuộc tính data-filter
-            var specialtyId = $(this).data('value'); // Lấy ID của chuyên khoa
-            localStorage.setItem('specialtyId', specialtyId); // lưu id chuyên khoa vào localStorage
-            $('#dropdownMenuButton').text('Chuyên khoa: ' + selectedSpecialty); // Cập nhật nội dung của nút button
-            $('#dropdownMenuButton').dropdown('toggle');
-        });
-    });
-</script>
-<script>
-    function loadDoctorsBySpecialty(specialtyId) {
-        if (!specialtyId) {
-            console.error("specialtyId is required");
-            return;
-        }
-        $.ajax({
-            url: 'http://localhost/Medicio/index.php',
-            type: 'GET',
-            data: {
-                controller: 'home',
-                action: 'getDoctor',
-                specialtyId: specialtyId
-            },
-            success: function (response) {
-                updateDoctorList(response); // Cập nhật danh sách bác sĩ từ dữ liệu JSON
-                console.log(specialtyId)
-                console.log(response)
-            },
-            error: function (xhr, status, error) {
-                console.error("AJAX Error:", status, error);
-            }
-        });
-    }
+    // Lắng nghe sự kiện click trên các phần tử li
+    var specialtyItems = document.querySelectorAll('.filter-item-specialty-specialty');
+    specialtyItems.forEach(function(item) {
+        item.addEventListener('click', function() {
+            // Lấy giá trị specialty_id từ thuộc tính 'data-value'
+            var specialtyId = this.getAttribute('data-value');
 
-    function updateDoctorList(doctors) {
-        if (!Array.isArray(doctors)) {
-            console.error("Invalid response, array expected", doctors);
-            return;
-        }
-        var listHtml = '';
-        $.each(doctors, function (index, doctor) {
-            listHtml += "<li class='filter-item doctor-item p-2' data-filter='" + doctor.name + "' data-value='" + doctor.employee_id + "'>" + doctor.name + "</li>";
-        });
-        $('#filter-doctor ul').html(listHtml);
-    }
-
-    $(document).ready(function () {
-        $('.filter-item-specialty-specialty').on('click', function () {
-            var specialtyId = localStorage.getItem('specialtyId');
+            // Bat nut chon doctor
+            document.getElementById('dropdownMenuButtonDoctor').disabled = false;
+            var doctorButton = document.getElementById('dropdownMenuButtonDoctor');
+            fetchDoctorsBySpecialty(specialtyId);
             if (specialtyId) {
-                loadDoctorsBySpecialty(specialtyId);
+                doctorButton.textContent = 'Chọn Bác Sĩ (*)'; // Thiết lập lại nội dung mặc định của nút
+                fetchDoctorsBySpecialty(specialtyId); // Gọi hàm để lấy danh sách bác sĩ theo chuyên khoa
+            } else {
+                doctorButton.textContent = 'Chọn Bác Sĩ (*)'; // Thiết lập lại nội dung mặc định của nút khi không có chuyên khoa được chọn
             }
-        })
+
+            var selectedSpecialty = $(this).data('filter');
+            $('#dropdownMenuButton').text('Chuyên khoa: ' + selectedSpecialty); // Cập nhật nội dung của nút button
+
+            // Gửi yêu cầu AJAX tới select-doctor.php
+            var xhr = new XMLHttpRequest();
+            xhr.open('POST', './views/client/components/select-doctor.php', true);
+            xhr.setRequestHeader('Content-Type', 'application/json');
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    // Xử lý phản hồi từ select-doctor.php (nếu cần)
+                    // console.log(xhr.responseText);
+                }
+            };
+            xhr.send(JSON.stringify({specialtyId: specialtyId}));
+        });
     });
 </script>
 </body>

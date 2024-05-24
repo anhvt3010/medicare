@@ -14,7 +14,7 @@ class BaseModel extends Database {
         $table,
         $select = ['*'],
         $orderBys = ['name' => 'asc'],
-        $limit = 10
+//        $limit = 10
     ): array
     {
         $column = implode(',', $select);
@@ -23,7 +23,7 @@ class BaseModel extends Database {
 //            ?   "SELECT $column FROM $table ORDER BY $orderByString LIMIT $limit"
 //            :   "SELECT $column FROM $table LIMIT $limit";
 
-        $sql = "SELECT $column FROM $table LIMIT $limit";
+        $sql = "SELECT $column FROM $table";
 
         $query = $this->_query($sql);
         $data = [];

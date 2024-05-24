@@ -20,9 +20,11 @@ class HomeController extends BaseController
 
     public function home()
     {
+        $countDoctors = $this->doctorModel->getCountDoctors();
         $listDoctors = $this->doctorModel->getDoctorForHome();
         return $this->view('client.home', [
-            'listDoctors' => $listDoctors
+            'listDoctors' => $listDoctors,
+            'countDoctors' => $countDoctors,
         ]);
     }
 
@@ -83,9 +85,13 @@ class HomeController extends BaseController
 
     public function test()
     {
+        $countDoctors = $this->doctorModel->getCountDoctors();
         return $this->view('test', [
+            'countDoctors' => $countDoctors,
         ]);
     }
+
+
 
     public function logout()
     {

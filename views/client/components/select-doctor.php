@@ -1,3 +1,11 @@
+<?php
+$data = json_decode(file_get_contents("php://input"), true);
+// xu li de khong tra ve giao dien
+if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($data)) {
+    header('Content-Type: application/json');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -29,6 +37,7 @@
             margin-left: 0.5em;
             float: right;
         }
+
         .no-search-results {
             display: block;
         }
@@ -40,43 +49,81 @@
     <button class="btn btn-outline-info dropdown-toggle end-toggle"
             style="width: 100%; background-color: #3fbbc0; color: #ffffff; border-color: #3fbbc0; text-align: left"
             type="button" id="dropdownMenuButtonDoctor"
-            data-bs-toggle="dropdown" aria-expanded="false">
-        Chọn Bác Sĩ (*)
+            data-bs-toggle="dropdown" aria-expanded="false" disabled>
+        Chọn bác sĩ (*)
     </button>
     <div class="dropdown-menu" aria-labelledby="dropdownMenuButtonDoctor">
         <div class="live-filtering" data-clear="true" data-autocomplete="true" data-keys="true">
             <div class="list-to-filter" id="filter-doctor">
                 <ul class="list-unstyled mb-0">
-                    <?php
-                    if (empty($listDoctorsBySpecialty)) {
-                        echo '<div class="no-search-results p-2">
-                        <div class="alert alert-warning" role="alert" style="margin-bottom: 0 !important;">
-                            <i class="fa fa-warning margin-right-sm"></i>&nbsp;Không có bác sĩ
-                            <strong></strong>
-                        </div>
-                      </div>';
-                    } else {
-                        foreach ($listDoctorsBySpecialty as $doctor) {
-                            echo "<li class='filter-item doctor-item p-2' data-filter='" . htmlspecialchars($doctor['name']) . "' data-value='" . htmlspecialchars($doctor['employee_id']) . "'>" . htmlspecialchars($doctor['name']) . "</li>";
-                        }
-                    }
-                    ?>
                 </ul>
             </div>
         </div>
     </div>
 </div>
+<span id="error-doctor" class="ml-2" style="color: red;"></span>
+<input type="text" hidden="hidden" id="selected-doctor"/>
 <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 <script>
-    $(document).ready(function() {
-        $(document).on('click', '.filter-item', function() {
-            var selectedDoctor = $(this).data('filter'); // Lấy tên bác sĩ từ thuộc tính data-filter
-            var dropdownMenuButtonDoctor = $('#dropdownMenuButtonDoctor');
-            dropdownMenuButtonDoctor.text('Bác sĩ: ' + selectedDoctor); // Cập nhật nội dung của nút button
-            dropdownMenuButtonDoctor.dropdown('toggle'); // Đóng dropdown
+    document.addEventListener('DOMContentLoaded', function() {
+        var specialtyItems = document.querySelectorAll('.filter-item-specialty-specialty');
+        var selectedSpecialty = document.getElementById("selected-specialty");
+        specialtyItems.forEach(function(item) {
+            item.addEventListener('click', function() {
+                var specialtyId = this.getAttribute('data-value');
+                selectedSpecialty.value = specialtyId;
+                document.getElementById('selected-doctor').value = ''
+                console.log('Chuyen khoa', specialtyId)
+                fetchDoctorsBySpecialty(specialtyId);
+            });
         });
     });
+
+    function fetchDoctorsBySpecialty(specialtyId) {
+        $.ajax({
+            url: 'http://localhost/Medicio/index.php',
+            type: 'GET',
+            data: {
+                controller: 'home',
+                action: 'getDoctor',
+                specialtyId: specialtyId
+            },
+            success: function(doctors) {
+                updateDoctorsList(doctors);
+            },
+            error: function(error) {
+                console.error('Error:', error);
+            }
+        });
+    }
+
+    function updateDoctorsList(doctors) {
+        var list = document.getElementById('filter-doctor');
+        var ul = list.querySelector('ul');
+        ul.innerHTML = ''; // Xóa danh sách hiện tại
+
+        if (doctors.length === 0) {
+            ul.innerHTML = '<div class="no-search-results p-2">' +
+                '<div class="alert alert-warning" role="alert" style="margin-bottom: 0 !important;">' +
+                '<i class="fa fa-warning margin-right-sm"></i>&nbsp;Không có bác sĩ</div></div>';
+        } else {
+            doctors.forEach(function(doctor) {
+                var li = document.createElement('li');
+                li.className = 'filter-item doctor-item p-2';
+                li.setAttribute('data-filter', doctor.name);
+                li.setAttribute('data-value', doctor.employee_id);
+                li.textContent = doctor.name;
+                li.onclick = function() {
+                    document.getElementById('dropdownMenuButtonDoctor').textContent = 'Bác sĩ: ' + doctor.name;
+                    document.getElementById('selected-doctor').value = doctor.employee_id; // Lưu ID bác sĩ vào input
+                    console.log('Bac si: ', document.getElementById('selected-doctor').value)
+                    $('#dropdownMenuButtonDoctor').dropdown('toggle'); // Đóng dropdown menu
+                };
+                ul.appendChild(li);
+            });
+        }
+    }
 </script>
 </body>
 </html>

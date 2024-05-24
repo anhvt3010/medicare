@@ -77,7 +77,7 @@ class AuthModel extends BaseModel {
         session_destroy();
 
         // Chuyển hướng người dùng về trang đăng nhập hoặc trang chủ
-        header("Location: index.php?controller=login&action=login");
+        header("Location: index.php?controller=home&action=home");
         exit;
     }
 

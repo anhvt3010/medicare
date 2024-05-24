@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,7 +36,7 @@
 <!-- ======= Top Bar ======= -->
 <?php include "components/topbar.php" ?>
 <!-- ======= Header ======= -->
-<?php include "components/header.html" ?>
+<?php include "components/header.php" ?>
 <!-- ======= Hero Section ======= -->
 <?php include "components/hero.html" ?>
 
@@ -45,7 +48,7 @@
     <!-- ======= About Us Section ======= -->
     <?php include "components/about.html"; ?>
     <!-- ======= Counts Section ======= -->
-    <?php include "components/counts.html" ?>
+    <?php include "components/counts.php" ?>
     <!-- ======= Features Section ======= -->
     <?php include "components/features.html" ?>
     <!-- ======= Phần Dịch Vụ ======= -->

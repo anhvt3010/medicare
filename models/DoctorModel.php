@@ -12,9 +12,9 @@ class DoctorModel  extends BaseModel {
         return mysqli_query($this->connection, $sql);
     }
 
-    public function getAll($select = ['*'], $orderBy = ['name' => 'desc'], $limit = 10): array
+    public function getAll($select = ['*'], $orderBy = ['name' => 'desc']): array
     {
-        return $this->findAll(self::TABLE_NAME, $select, $orderBy, $limit);
+        return $this->findAll(self::TABLE_NAME, $select, $orderBy);
     }
 
     public function getById($id): array
@@ -30,6 +30,21 @@ class DoctorModel  extends BaseModel {
                 JOIN roles AS r ON r.role_id = e.role_id
                 WHERE r.role_name = 'doctor'
                 LIMIT 4";
+
+        $query = $this->_query($sql);
+        $data = [];
+        while ($result = mysqli_fetch_assoc($query)) {
+            $data[] = $result;
+        }
+        return $data;
+    }
+
+    public function getCountDoctors(): array
+    {
+        $sql = "SELECT count(*)
+                FROM employees AS e
+                JOIN roles AS r ON r.role_id = e.role_id
+                WHERE r.role_name = 'doctor'";
 
         $query = $this->_query($sql);
         $data = [];
