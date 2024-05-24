@@ -1,8 +1,14 @@
 #toast-container > .toast-success {
-    background-color: #51a351 !important; /* Màu xanh lá cho thông báo thành công */
+    background-color: #51a351 !important;
+    color: white !important;
     opacity: 1 !important;
 }
 
+#toast-container .toast-error {
+    background-color: #d9534f !important;
+    color: white !important;
+    opacity: 1 !important;
+}
 
 .time-slot {
     border-radius: 10px;

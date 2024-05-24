@@ -1,5 +1,5 @@
 <?php
-
+//require_once 'BaseController.php';
 class HomeController extends BaseController
 {
     private $doctorModel;
@@ -91,6 +91,11 @@ class HomeController extends BaseController
         ]);
     }
 
+    public function confirm()
+    {
+        return $this->view('client.confirm', [
+        ]);
+    }
 
 
     public function logout()

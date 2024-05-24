@@ -34,10 +34,13 @@ session_start();
             <div class="row" id="form-time-container">
                 <?php include "components/form-time.php" ?>
             </div>
-            <div class="row" id="form-info-container">
+            <div id="form-info-container">
                 <?php include "components/form-information.php" ?>
             </div>
         </form>
+<!--        <div id="confirm-information">-->
+<!--            --><?php //include "components/confirm.php" ?>
+<!--        </div>-->
     </section>
 </main>
 <?php include "components/footer.html" ?>
@@ -52,10 +55,6 @@ session_start();
         const formTimeContainer = document.getElementById('form-time-container');
         const formInfoContainer = document.getElementById('form-info-container');
         const buttonAction = document.getElementById('action-button');
-        const errorMessage = document.createElement('div');
-        errorMessage.style.color = 'red';
-        errorMessage.style.display = 'none'; // Ẩn thông báo lỗi ban đầu
-        formTimeContainer.appendChild(errorMessage); // Thêm thông báo lỗi vào container
 
         // Ban đầu ẩn form thông tin
         formInfoContainer.style.display = 'none';
@@ -70,7 +69,6 @@ session_start();
             console.log(validateAppointment(specialId, doctorId, dateSlot, timeSlotId))
             // Kiểm tra nếu một trong các giá trị là rỗng
             if (validateAppointment(specialId, doctorId, dateSlot, timeSlotId)) {
-                errorMessage.style.display = 'none'; // Ẩn thông báo lỗi nếu tất cả thông tin đã được điền
                 buttonAction.disabled = false; // Enable nút
                 // Ẩn form thời gian và hiển thị form thông tin
                 formTimeContainer.style.display = 'none';
@@ -107,32 +105,38 @@ session_start();
         console.log('patientEmail:', patientEmail);
         console.log('patientDescription:', patientDescription);
 
-        $.ajax({
-            url: 'http://localhost/Medicio/index.php',
-            type: 'POST',
-            data: {
-                controller: 'appointment',
-                action: 'create',
-                specialId: specialId,
-                doctorId: doctorId,
-                dateSlot: dateSlot,
-                timeSlotId: timeSlotId,
-                patientName: patientName,
-                patientGender: patientGender,
-                patientDob: patientDob,
-                patientPhone: patientPhone,
-                patientEmail: patientEmail,
-                patientDescription: patientDescription,
-            },
-            success: function(message) {
-                console.log(message);
-                toastr.success('Lịch hẹn đã được tạo thành công!');
-            },
-            error: function(error) {
-                console.error('Error:', error);
-                toastr.error('Có lỗi xảy ra khi tạo lịch hẹn.');
-            }
-        });
+        if(validatePatientInfo(patientName, patientGender, patientDob, patientPhone, patientEmail, patientDescription)) {
+            $.ajax({
+                url: 'http://localhost/Medicio/index.php',
+                type: 'POST',
+                data: {
+                    controller: 'appointment',
+                    action: 'create',
+                    specialId: specialId,
+                    doctorId: doctorId,
+                    dateSlot: dateSlot,
+                    timeSlotId: timeSlotId,
+                    patientName: patientName,
+                    patientGender: patientGender,
+                    patientDob: patientDob,
+                    patientPhone: patientPhone,
+                    patientEmail: patientEmail,
+                    patientDescription: patientDescription,
+                },
+                success: function(message) {
+                    console.log(message);
+                    toastr.success('Lịch hẹn đã được tạo thành công!', '', {
+                        onHidden: function() {
+                            window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=confirm';
+                        }
+                    });
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                    toastr.error('Có lỗi xảy ra khi tạo lịch hẹn.');
+                }
+            });
+        }
     });
 </script>
 </body>
