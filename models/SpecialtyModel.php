@@ -25,4 +25,17 @@ class SpecialtyModel extends Database{
         }
         return $data;
     }
+
+    public function getSpecialtiesForAdmin(): array
+    {
+        $sql = "SELECT *
+            FROM specialties";
+
+        $query = $this->_query($sql);
+        $data = [];
+        while ($result = mysqli_fetch_assoc($query)) {
+            $data[] = $result;
+        }
+        return $data;
+    }
 }
