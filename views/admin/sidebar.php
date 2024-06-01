@@ -6,7 +6,7 @@
                     <ul class="sidebar-elements">
                         <li class="divider">Menu</li>
                         <li class="active">
-                            <a href="index.php">
+                            <a href="http://localhost/Medicio/views/admin/index.php">
                                 <i class="icon fa-solid fa-house"></i><span>Trang chủ</span>
                             </a>
                         </li>
@@ -16,6 +16,8 @@
                             </a>
                             <ul class="sub-menu">
                                 <li><a href="http://localhost/Medicio/index.php?controller=appointment&action=homeAdmin">Danh sách lịch khám</a></li>
+                                <li><a href="http://localhost/Medicio/index.php?controller=appointment&action=today">Lịch khám hôm nay</a></li>
+                                <li><a href="http://localhost/Medicio/index.php?controller=appointment&action=confirm">Xác nhận lịch khám</a></li>
                             </ul>
                         </li>
                         <li class="parent">

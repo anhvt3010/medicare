@@ -17,7 +17,7 @@ class EmployeeController extends BaseController {
         $listEmployees = $this->employeeModel->getEmployeeForAdmin();
 //        $listSpecialties = $this->specialtyModel->getSpecialtiesForAppointment();
         return $this->view('admin.employees', [
-            'listEmployees' => $listEmployees,
+            'listEmployees' => $listEmployeess,
 //            'listSpecialties' => $listSpecialties,
         ]);
     }

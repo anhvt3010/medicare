@@ -101,10 +101,10 @@
                                     </tbody>
                                 </table>
                                 <div class="row be-datatable-footer">
-                                    <div class="col-sm-10 dataTables_paginate" id="pagination"
-                                         style="margin-bottom: 0px!important;"></div>
                                     <div class="col-sm-2 dataTables_info" id="sub-pagination"
                                          style="line-height: 48px"> 1 đến 5 trong số 100 </div>
+                                    <div class="col-sm-10 dataTables_paginate" id="pagination"
+                                         style="margin-bottom: 0px!important;"></div>
                                 </div>
                             </div>
                         </div>

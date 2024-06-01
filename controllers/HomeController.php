@@ -28,6 +28,15 @@ class HomeController extends BaseController
         ]);
     }
 
+    public function home_admin()
+    {
+
+        return $this->view('admin.index', [
+//            'listDoctors' => $listDoctors,
+//            'countDoctors' => $countDoctors,
+        ]);
+    }
+
     public function login()
     {
         return $this->view('client.login');

@@ -7,7 +7,8 @@
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
-    <title>Danh sách lịch khám</title>
+    <title>Lịch khám hôm nay</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'import-link-tag.php' ?>
     <style>
         #btn-action:focus {
@@ -15,10 +16,7 @@
             border: none;
             box-shadow: none;
         }
-        .col-2-5 {
-            flex: 0 0 20.83333%;
-            max-width: 20.83333%;
-        }
+
     </style>
 </head>
 <body>
@@ -29,12 +27,12 @@
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="page-head">
-            <h2 class="page-head-title">Danh sách lịch khám</h2>
+            <h2 class="page-head-title">Lịch khám hôm nay <?php echo $totalAppointment ?></h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
                     <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý đặt lịch</li>
-                    <li class="breadcrumb-item active">Danh sách lịch khám</li>
+                    <li class="breadcrumb-item active">Lịch khám hôm nay</li>
                 </ol>
             </nav>
         </div>
@@ -43,7 +41,7 @@
                 <div class="col-md-12">
                     <div class="card card-table">
                         <div class="row table-filters-container">
-                            <div class="col-2-5 table-filters pb-0">
+                            <div class="col-3 table-filters pb-0">
                                 <div class="filter-container">
                                     <label class="control-label table-filter-title">Lọc chuyên khoa:</label>
                                     <form>
@@ -61,7 +59,7 @@
                                 </div>
                             </div>
 
-                            <div class="col-2-5 table-filters pb-0">
+                            <div class="col-3 table-filters pb-0">
                                 <div class="filter-container">
                                     <label class="control-label table-filter-title">Lọc bác sĩ:</label>
                                     <form>
@@ -79,7 +77,8 @@
                                 </div>
                             </div>
 
-                            <div class="col-2-5 table-filters pb-0">
+
+                            <div class="col-3 table-filters pb-0">
                                 <span class="table-filter-title">Tra cứu bệnh nhân </span>
                                 <div class="filter-container">
                                     <div class="row">
@@ -91,49 +90,14 @@
                                 </div>
                             </div>
 
-                            <div class="col-2-5 table-filters pb-0">
-                                <span class="table-filter-title">Trạng thái</span>
-                                <?php
-                                $statusArray = explode(',', $statusAppointment);
-                                ?>
+                            <div class="col-3 table-filters pb-0">
+                                <span class="table-filter-title" style="opacity: 0">Tìm kiếm</span>
                                 <div class="filter-container">
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="custom-controls-stacked">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(0, $statusArray) ? 'checked' : ''; ?>
-                                                                value="0" class="custom-control-input" id="toDo" type="checkbox">
-                                                        <label class="custom-control-label" for="toDo">Chờ xác nhận</label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(1, $statusArray) ? 'checked' : ''; ?>
-                                                                value="1" class="custom-control-input" id="inReview" type="checkbox">
-                                                        <label class="custom-control-label" for="inReview">Đã xác nhận</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="custom-controls-stacked">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(2, $statusArray) ? 'checked' : ''; ?>
-                                                                value="2" class="custom-control-input" id="inProgress" type="checkbox">
-                                                        <label class="custom-control-label" for="inProgress">Hoàn thành</label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(3, $statusArray) ? 'checked' : ''; ?>
-                                                                value="3" class="custom-control-input" id="done" type="checkbox">
-                                                        <label class="custom-control-label" for="done">Đã hủy</label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-2 table-filters pb-xl-4">
-                                <div class="m-0 pt-8">
-                                    <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -241,7 +205,10 @@
                                                         </svg>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <button type="button" class="dropdown-item" data-id="<?php echo $appointment['id'] ?>">Chi tiết</button>
+<!--                                                        <button type="button" class="dropdown-item" data-id="--><?php //echo $appointment['id'] ?><!--">Chi tiết</button>-->
+                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
+                                                            Chi tiết
+                                                        </button>
                                                     </div>
                                                 </div>
                                             </td>
@@ -256,11 +223,11 @@
                                          style="margin-bottom: 0px!important;">
                                         <nav aria-label="Page navigation example">
                                             <?php
-                                                $currentPage = $_GET['page'] ?? 1;
-                                                $queryString = $_SERVER['QUERY_STRING']; // Lấy chuỗi truy vấn hiện tại
-                                                parse_str($queryString, $queryParams); // Phân tích chuỗi truy vấn thành mảng
-                                                unset($queryParams['page']); // Loại bỏ tham số 'page' để tránh trùng lặp
-                                                $newQueryString = http_build_query($queryParams); // Tạo lại chuỗi truy vấn mà không có 'page'
+                                            $currentPage = $_GET['page'] ?? 1;
+                                            $queryString = $_SERVER['QUERY_STRING']; // Lấy chuỗi truy vấn hiện tại
+                                            parse_str($queryString, $queryParams); // Phân tích chuỗi truy vấn thành mảng
+                                            unset($queryParams['page']); // Loại bỏ tham số 'page' để tránh trùng lặp
+                                            $newQueryString = http_build_query($queryParams); // Tạo lại chuỗi truy vấn mà không có 'page'
                                             ?>
                                             <ul class="pagination">
                                                 <li class="page-item <?php if ($currentPage == 1) echo 'disabled'; ?>">
@@ -286,14 +253,14 @@
                                         </nav>
                                     </div>
                                     <?php
-                                        $recordsPerPage = 10;
-                                        $currentPage = $_GET['page'] ?? 1;
-                                        $totalPages = ceil($totalAppointment / $recordsPerPage);
-                                        $startRecord = ($currentPage - 1) * $recordsPerPage + 1;
-                                        $endRecord = $currentPage * $recordsPerPage;
-                                        if ($endRecord > $totalAppointment) {
-                                            $endRecord = $totalAppointment;
-                                        }
+                                    $recordsPerPage = 10;
+                                    $currentPage = $_GET['page'] ?? 1;
+                                    $totalPages = ceil($totalAppointment / $recordsPerPage);
+                                    $startRecord = ($currentPage - 1) * $recordsPerPage + 1;
+                                    $endRecord = $currentPage * $recordsPerPage;
+                                    if ($endRecord > $totalAppointment) {
+                                        $endRecord = $totalAppointment;
+                                    }
                                     ?>
                                     <div class="col-sm-2 dataTables_info" id="sub-pagination" style="line-height: 48px">
                                         <?php echo $startRecord . " đến " . $endRecord . " trong số " . $totalAppointment; ?>
@@ -306,9 +273,31 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    ...
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">Understood</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
 </div>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <?php include 'import-script.php' ?>
 <script type="text/javascript">
     $(document).ready(function(){
@@ -330,40 +319,28 @@
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicio/index.php?controller=appointment&action=homeAdmin&page=1'
+    var url_appointment = 'http://localhost/Medicio/index.php?controller=appointment&action=today&page=1'
 
     document.getElementById('button').addEventListener('click', function() {
-    var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
-        ? null
-        : document.querySelector('.select2[name="specialty"]').value;
-    var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
-        ? null
-        : document.querySelector('.select2[name="doctor"]').value;
+        var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
+            ? null
+            : document.querySelector('.select2[name="specialty"]').value;
+        var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
+            ? null
+            : document.querySelector('.select2[name="doctor"]').value;
         var searchInput = document.getElementById('searchInput').value.trim();
-    var toDo = document.getElementById('toDo').checked;
-    var inReview = document.getElementById('inReview').checked;
-    var inProgress = document.getElementById('inProgress').checked;
-    var done = document.getElementById('done').checked;
 
-    var statusAppointment = [];
-    if (!toDo && !inReview && !inProgress && !done) statusAppointment = null;
-    if (toDo) statusAppointment.push(0);
-    if (inReview) statusAppointment.push(1);
-    if (inProgress) statusAppointment.push(2);
-    if (done) statusAppointment.push(3);
 
-    if (specialty) {
-        url_appointment += '&specialty=' + encodeURIComponent(specialty);
-    }
-    if (doctor) {
-        url_appointment += '&doctor=' + encodeURIComponent(doctor);
-    }
-    if (searchInput.length > 0) {
-        url_appointment += '&search=' + encodeURIComponent(searchInput);
-    }
-    if (statusAppointment) {
-        url_appointment += '&statusAppointment=' + statusAppointment.join(',');
-    }
+        if (specialty) {
+            url_appointment += '&specialty=' + encodeURIComponent(specialty);
+        }
+        if (doctor) {
+            url_appointment += '&doctor=' + encodeURIComponent(doctor);
+        }
+        if (searchInput.length > 0) {
+            url_appointment += '&search=' + encodeURIComponent(searchInput);
+        }
+
         console.log(url_appointment)
 
         window.location.href = url_appointment
@@ -388,19 +365,6 @@
         var date = new Date(timestamp * 1000);
         return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
     }
-
-    function formatStatus(status) {
-        var statusColors = {
-            0: ['#fbbc05', 'Chờ xác nhận'],
-            1: ['#4285f4', 'Đã xác nhận'],
-            2: ['#34a853', 'Đã hoàn thành'],
-            3: ['#ea4335', 'Đã hủy'],
-            'default': ['#d3d3d3', 'Không xác định']
-        };
-        var statusInfo = statusColors[status] || statusColors['default'];
-        return '<div class="btn btn-secondary" style="width: 150px; color: whitesmoke; font-weight: normal; background-color: ' + statusInfo[0] + ';">' + statusInfo[1] + '</div>';
-    }
-
 
     function convertDateToDayTimestamp(dateString) {
         if (!dateString) return null;

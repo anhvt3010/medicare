@@ -127,7 +127,7 @@ session_start();
                     console.log(message);
                     toastr.success('Lịch hẹn đã được tạo thành công!', '', {
                         onHidden: function() {
-                            window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=confirm';
+                            window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home';
                         }
                     });
                 },
