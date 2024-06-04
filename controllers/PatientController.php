@@ -23,4 +23,13 @@ class PatientController extends BaseController
             'listSpecialties' => $listSpecialties,
         ]);
     }
+
+    public function detail()
+    {
+        $id = $_GET['patient_id'] ?? null;
+        $patient = $this->patientModel->findById($id);
+        return $this->view('admin.patient-detail', [
+            'patient' => $patient,
+        ]);
+    }
 }

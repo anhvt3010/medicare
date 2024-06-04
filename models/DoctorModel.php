@@ -1,4 +1,5 @@
 <?php
+require_once 'configs/cloudinaryConfig.php';
 class DoctorModel  extends BaseModel {
     const ROLE = 'doctor';
 
@@ -10,6 +11,56 @@ class DoctorModel  extends BaseModel {
 
     private function _query($sql){
         return mysqli_query($this->connection, $sql);
+    }
+
+    public function getById($id): array
+    {
+        $sql = "SELECT *
+                FROM employees AS e
+                JOIN roles AS r ON r.role_id = e.role_id
+                WHERE r.role_name = 'doctor' AND e.employee_id = $id";
+
+        $query = $this->_query($sql);
+        return mysqli_fetch_assoc($query);
+    }
+
+    public function addDoctor($name, $dob, $email, $phone,$gender, $address, $specialty_id, $position_id, $status, $avt): bool
+    {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $created_at = date("Y-m-d H:i:s");
+        $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
+        $role_id = 2;
+        $sql = "INSERT INTO employees (
+                       specialty_id,
+                       position_id,
+                       role_id,
+                       name,
+                       password,
+                       phone,
+                       email,
+                       dob,
+                       gender,
+                       address, 
+                       status,
+                       create_at,
+                       avt)
+                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+
+        $stmt = mysqli_prepare($this->connection, $sql);
+        if ($stmt === false) {
+            throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
+        }
+
+        mysqli_stmt_bind_param($stmt, 'iiisssssisiss',
+            $specialty_id, $position_id, $role_id,$name, $hashedPassword, $phone, $email, $dob, $gender,
+            $address, $status,$created_at, $avt);
+        $result = mysqli_stmt_execute($stmt);
+        if ($result === false) {
+            throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));
+        }
+
+        mysqli_stmt_close($stmt);
+        return $result;
     }
 
     public function getDoctorForHome(): array
@@ -43,7 +94,7 @@ class DoctorModel  extends BaseModel {
                 JOIN positions AS p ON e.position_id = p.position_id
                 JOIN specialties AS s ON e.specialty_id = s.specialty_id
                 JOIN roles AS r ON e.role_id = r.role_id
-                WHERE r.role_name = LOWER('doctor')";
+                WHERE r.role_name = LOWER('doctor') ORDER BY e.employee_id DESC";
 
         $query = $this->_query($sql);
         $data = [];
@@ -84,27 +135,5 @@ class DoctorModel  extends BaseModel {
         return $data;
     }
 
-//    public function add($data){
-//        $this->create(self::TABLE_NAME, $data);
-//    }
-//
-//    public function updateData($id, $data)
-//    {
-//        $this->update(self::TABLE_NAME, $id, $data);
-//    }
-//
-//    public function delete($table, $id)
-//    {
-//        return __METHOD__;
-//    }
-//    public function getAll($select = ['*'], $orderBy = ['name' => 'desc']): array
-//    {
-//        return $this->findAll(self::TABLE_NAME, $select, $orderBy);
-//    }
-//
-//    public function getById($id): array
-//    {
-//        return $this->findById(self::TABLE_NAME, $id);
-//    }
 
 }

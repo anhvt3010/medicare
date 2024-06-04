@@ -32,22 +32,34 @@
                 <div class="col-md-12">
                     <div class="card card-table">
                         <div class="row table-filters-container">
-                            <div class="col-12 col-lg-12 col-xl-6">
-
+                            <div class="col-2 table-filters pb-0">
+                                <div class="filter-container">
+<!--                                    <button id="btnAdd" type="button" class="btn btn-success form-control"-->
+<!--                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Thêm mới</button>-->
+                                </div>
                             </div>
-                            <div class="col-12 col-lg-12 col-xl-6">
-                                <div class="row">
-                                    <div class="col-12 col-lg-9 table-filters">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <input id="searchInput" placeholder="Nhập tên bệnh nhân..."
-                                                       class="form-control">
-                                            </div>
+
+                            <div class="col-4 table-filters pb-0">
+                                <div class="filter-container">
+                                </div>
+                            </div>
+
+
+                            <div class="col-2 table-filters pb-0">
+                                <div class="filter-container">
+                                    <div class="row">
+                                        <div class="col-12">
                                         </div>
                                     </div>
-                                    <div class="col-12 col-lg-3 table-filters">
-                                        <div class="m-0">
-                                            <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
+                                </div>
+                            </div>
+
+                            <div class="col-4 table-filters pb-0">
+                                <div class="filter-container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input id="searchInput" placeholder="Nhập tên bệnh nhân..."
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -136,14 +148,15 @@
                     </td>
                     <td class='text-right'>
                         <div class='btn-group btn-hspace'>
-                            <button class='btn btn-secondary dropdown-toggle' type='button'
-                                    data-toggle='dropdown'>Hành động
-                                <span class='icon-dropdown mdi mdi-chevron-down'></span>
-                            </button>
-                            <div class='dropdown-menu' role='menu'>
-                                <button type='button' class='dropdown-item'>Xem chi tiết</button>
-                                <button type='button' class='dropdown-item'>Chỉnh sửa</button>
-                                <button type='button' class='dropdown-item'>Xóa</button>
+                            <button class='btn btn-secondary dropdown-toggle' type='button' style='border: none; background-color: transparent;'
+                                        data-toggle='dropdown'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                                            <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
+                                                        </svg>
+                                </button>
+                            <div class='dropdown-menu dropdown-menu-right' role='menu'>
+                                <a href="http://localhost/Medicio/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
+                                   type='button' class='dropdown-item'>Xem chi tiết</a>
                             </div>
                         </div>
                     </td>

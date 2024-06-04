@@ -8,6 +8,7 @@
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
     <title>Danh sách bác sĩ</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
           href="http://localhost/Medicio/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css"
@@ -46,11 +47,23 @@
                 <div class="col-md-12">
                     <div class="card card-table">
                         <div class="row table-filters-container">
-                            <div class="col-12 col-lg-12 col-xl-6">
-                                <div class="row">
-                                    <div class="col-lg-6 table-filters pb-0">
-                                        <div class="filter-container m-0 p-0">
-                                            <!--                                            <label class="control-label table-filter-title">Lọc chuyên khoa:</label>-->
+                            <div class="col-2 table-filters pb-0">
+                                <div class="filter-container">
+                                    <button id="btnAddDoctor" type="button" class="btn btn-success form-control"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Thêm mới</button>
+                                </div>
+                            </div>
+
+                            <div class="col-3 table-filters pb-0">
+                                <div class="filter-container">
+                                </div>
+                            </div>
+
+
+                            <div class="col-3 table-filters pb-0">
+                                <div class="filter-container">
+                                    <div class="row">
+                                        <div class="col-12">
                                             <form>
                                                 <select class="form-select form-control" id="selectSpecialty">
                                                     <option value="All" selected>Tất cả chuyên khoa</option>
@@ -65,19 +78,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-12 col-xl-6">
-                                <div class="row">
-                                    <div class="col-12 col-lg-9 table-filters">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <input id="searchInput" placeholder="Nhập tên bác sĩ..."
-                                                       class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-3 table-filters">
-                                        <div class="m-0">
-                                            <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
+
+                            <div class="col-4 table-filters pb-0">
+                                <div class="filter-container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input id="searchInput" placeholder="Nhập tên bác sĩ..."
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -101,10 +108,10 @@
                                     </tbody>
                                 </table>
                                 <div class="row be-datatable-footer">
-                                    <div class="col-sm-2 dataTables_info" id="sub-pagination"
-                                         style="line-height: 48px"> 1 đến 5 trong số 100 </div>
                                     <div class="col-sm-10 dataTables_paginate" id="pagination"
                                          style="margin-bottom: 0px!important;"></div>
+                                    <div class="col-sm-2 dataTables_info" id="sub-pagination"
+                                         style="line-height: 48px"> 1 đến 5 trong số 100 </div>
                                 </div>
                             </div>
                         </div>
@@ -113,56 +120,19 @@
             </div>
         </div>
     </div>
+    <?php include "doctor-add.php"; ?>
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
 </div>
-<script src="http://localhost/Medicio/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\perfect-scrollbar\js\perfect-scrollbar.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\bootstrap\dist\js\bootstrap.bundle.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/js\app.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\jquery-ui\jquery-ui.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\select2\js\select2.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\select2\js\select2.full.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\bootstrap-slider\bootstrap-slider.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datetimepicker\js\bootstrap-datetimepicker.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net\js\jquery.dataTables.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-bs4\js\dataTables.bootstrap4.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-buttons\js\dataTables.buttons.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-buttons\js\buttons.flash.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\jszip\jszip.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\pdfmake\pdfmake.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\pdfmake\vfs_fonts.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-buttons\js\buttons.colVis.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-buttons\js\buttons.print.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-buttons\js\buttons.html5.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-buttons-bs4\js\buttons.bootstrap4.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-responsive\js\dataTables.responsive.min.js"
-        type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\datatables\datatables.net-responsive-bs4\js\responsive.bootstrap4.min.js"
-        type="text/javascript"></script>
+<?php include 'import-script.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // App.init();
         // App.tableFilters();
 
-        const listDoctors = JSON.parse('<?php echo json_encode($listDoctors); ?>');
+        let listDoctors = <?php echo json_encode($listDoctors); ?>;
         const doctorsPerPage = 5;
         let currentPage = 1;
 
@@ -211,14 +181,15 @@
                         <td class='cell-detail'></td>
                         <td class='text-right'>
                             <div class='btn-group btn-hspace'>
-                                <button class='btn btn-secondary dropdown-toggle' type='button'
-                                        data-toggle='dropdown'>Hành động
-                                    <span class='icon-dropdown mdi mdi-chevron-down'></span>
+                                <button class='btn btn-secondary dropdown-toggle' type='button' style='border: none; background-color: transparent;'
+                                        data-toggle='dropdown'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                                            <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
+                                                        </svg>
                                 </button>
-                                <div class='dropdown-menu' role='menu'>
-                                    <button type='button' class='dropdown-item'>Xem chi tiết</button>
-                                    <button type='button' class='dropdown-item'>Chỉnh sửa</button>
-                                    <button type='button' class='dropdown-item'>Xóa</button>
+                                <div class='dropdown-menu dropdown-menu-right' role='menu'>
+                                    <a href='http://localhost/Medicio/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
+                                       type='button' class='dropdown-item'>Xem chi tiết</a>
                                 </div>
                             </div>
                         </td>
@@ -320,6 +291,181 @@
         const paginationElement = document.getElementById('pagination');
         setupPagination(listDoctors, paginationElement, doctorsPerPage);
         renderDoctors(currentPage);
+
+        // Xu ly them moi
+        const errorMessages = {
+            emName: 'Tên không được để trống và không vượt quá 50 ký tự',
+            emDob: 'Vui lòng nhập ngày sinh',
+            emDobAge: 'Nhân viên phải trên 18 tuổi',
+            emEmail: 'Email không hợp lệ',
+            emPhone: 'Số điện thoại không hợp lệ',
+            emAddress: 'Địa chỉ không được để trống và không vượt quá 255 ký tự',
+            emSpecialty: 'Vui lòng chọn chuyên khoa '
+        };
+
+        document.getElementById('btnAddEm').addEventListener('click', function() {
+            const emName = document.getElementById('emName');
+            const emGender = document.getElementById('emGender');
+            const emDob = document.getElementById('emDob');
+            const emEmail = document.getElementById('emEmail');
+            const emPhone = document.getElementById('emPhone');
+            const emAddress = document.getElementById('emAddress');
+            const emSpecialty = document.getElementById('emSpecialty');
+            const emStatus= document.getElementById('emStatus');
+            const emAvt = document.getElementById('emAvt');
+            let isValid = true;
+
+            // Xóa thông báo lỗi trước
+            const errorEmName = document.getElementById('errorEmName');
+            const errorEmDob = document.getElementById('errorEmDob');
+            const errorEmEmail = document.getElementById('errorEmEmail');
+            const errorEmPhone = document.getElementById('errorEmPhone');
+            const errorEmAddress = document.getElementById('errorEmAddress');
+            const errorEmSpecialty = document.getElementById('errorEmSpecialty');
+            const errorEmAvt = document.getElementById('errorEmAvt');
+
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.classList.remove('is-invalid');
+                let errorElement;
+
+                switch (input.id) {
+                    case 'emName':
+                        errorElement = errorEmName;
+                        break;
+                    case 'emDob':
+                        errorElement = errorEmDob;
+                        break;
+                    case 'emEmail':
+                        errorElement = errorEmEmail;
+                        break;
+                    case 'emPhone':
+                        errorElement = errorEmPhone;
+                        break;
+                    case 'emAddress':
+                        errorElement = errorEmAddress;
+                        break;
+                    case 'emSpecialty':
+                        errorElement = errorEmSpecialty;
+                        break;
+                    case 'errorEmAvt':
+                        errorElement = errorEmAvt;
+                        break;
+                    default:
+                        console.error('Không tìm thấy phần tử lỗi cho:', input.id);
+                        return; // Skip the rest of the loop if no error element is found
+                }
+
+                if (errorElement) {
+                    errorElement.textContent = ''; // Xóa nội dung lỗi hiện tại
+                }
+            });
+
+            // Kiểm tra tên nhân viên
+            if (emName.value.trim() === '' || emName.value.length > 50) {
+                document.getElementById('errorEmName').textContent = errorMessages.emName;
+                emName.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra ngày sinh
+            if (emDob.value.trim() === '') {
+                document.getElementById('errorEmDob').textContent = errorMessages.emDob;
+                emDob.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                const dob = new Date(emDob.value);
+                const today = new Date();
+                const age = today.getFullYear() - dob.getFullYear();
+                if (age < 18 || (age === 18 && today < new Date(dob.setFullYear(today.getFullYear())))) {
+                    document.getElementById('errorEmDob').textContent = errorMessages.emDobAge;
+                    emDob.classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+
+            // Kiểm tra email
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail.com$/;
+            if (emEmail.value.trim() === '' || !emailRegex.test(emEmail.value)) {
+                document.getElementById('errorEmEmail').textContent = errorMessages.emEmail;
+                emEmail.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra số điện thoại
+            const phoneRegex = /^(0|\+84)(3[2-9]|5[689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$/;
+            if (emPhone.value.trim() === '' || !phoneRegex.test(emPhone.value)) {
+                document.getElementById('errorEmPhone').textContent = errorMessages.emPhone;
+                emPhone.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra địa chỉ
+            if (emAddress.value.trim() === '' || emAddress.value.length > 255) {
+                document.getElementById('errorEmAddress').textContent = errorMessages.emAddress;
+                emAddress.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra chuyên khoa làm việc
+            if (emSpecialty.value === '0') {
+                document.getElementById('errorEmSpecialty').textContent = errorMessages.emSpecialty;
+                emSpecialty.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra file ảnh
+            if (emAvt.files.length === 0) {
+                errorEmAvt.textContent = 'Vui lòng tải lên ảnh.';
+                emAvt.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                const file = emAvt.files[0];
+                const fileType = file['type'];
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!validImageTypes.includes(fileType)) {
+                    errorEmAvt.textContent = 'Chỉ chấp nhận file ảnh (JPEG, PNG, GIF).';
+                    emAvt.classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+
+            // Nếu tất cả thông tin hợp lệ
+            if (isValid) {
+                var formData = new FormData();
+                formData.append('name', emName.value);
+                formData.append('gender', parseInt(emGender.value, 10));
+                formData.append('dob', emDob.value);
+                formData.append('email', emEmail.value);
+                formData.append('phone', emPhone.value);
+                formData.append('address', emAddress.value);
+                formData.append('position_id', 1); // Giả sử 1 là chức vụ bác sĩ
+                formData.append('specialty_id', parseInt(emSpecialty.value, 10));
+                formData.append('status', parseInt(emStatus.value, 10));
+                formData.append('avt', emAvt.files[0]); // Thêm file vào FormData
+
+                var file = emAvt.files[0];
+                console.log('File Name: ' + file.name);
+                console.log('File Size: ' + file.size + ' bytes');
+                console.log('File Type: ' + file.type);
+                console.log('Last Modified: ' + new Date(file.lastModified));
+
+                $.ajax({
+                    url: 'http://localhost/Medicio/index.php?controller=doctor&action=add',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false, // Không set contentType
+                    processData: false, // Không xử lý dữ liệu
+                    success: function(response) {
+                        console.log(response);
+                        $('#staticBackdrop').modal('hide');
+                        location.reload();
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
+            }
+        });
 
         App.init();
         App.tableFilters();

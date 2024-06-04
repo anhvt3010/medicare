@@ -1,6 +1,5 @@
 <?php
-class PatientModel extends BaseModel {
-
+class PatientModel extends Database {
     protected $connection = null;
 
     public function __construct() {
@@ -21,6 +20,21 @@ class PatientModel extends BaseModel {
             $data[] = $result;
         }
         return $data;
+    }
+
+    public function findById($id): array
+    {
+        $sql = "SELECT p.patient_id,
+                       p.name AS name,
+                       p.email AS email,
+                       p.phone AS phone,
+                       p.gender AS gender,
+                       p.dob AS dob,
+                       p.address AS address,
+                        p.status AS status
+                FROM patients AS p WHERE p.patient_id = {$id}";
+        $query = $this->_query($sql);
+        return mysqli_fetch_assoc($query);
     }
 
 

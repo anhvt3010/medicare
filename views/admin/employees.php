@@ -8,6 +8,7 @@
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
     <title>Danh sách lịch khám</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
           href="http://localhost/Medicio/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css"
@@ -46,18 +47,30 @@
                 <div class="col-md-12">
                     <div class="card card-table">
                         <div class="row table-filters-container">
-                            <div class="col-12 col-lg-12 col-xl-6">
-                                <div class="row">
-                                    <div class="col-lg-6 table-filters pb-0">
-                                        <div class="filter-container m-0 p-0">
-                                            <!--                                            <label class="control-label table-filter-title">Lọc chuyên khoa:</label>-->
+                            <div class="col-2 table-filters pb-0">
+                                <div class="filter-container">
+                                    <button id="btnAdd" type="button" class="btn btn-success form-control"
+                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Thêm mới</button>
+                                </div>
+                            </div>
+
+                            <div class="col-3 table-filters pb-0">
+                                <div class="filter-container">
+                                </div>
+                            </div>
+
+
+                            <div class="col-3 table-filters pb-0">
+                                <div class="filter-container">
+                                    <div class="row">
+                                        <div class="col-12">
                                             <form>
                                                 <select class="form-select form-control" id="selectSpecialty">
                                                     <option value="All" selected>Tất cả chức vụ</option>
-<!--                                                    --><?php
-//                                                    foreach ($listSpecialties as $specialty) {
-//                                                        echo "<option value='" . htmlspecialchars($specialty['name']) . "'>" . htmlspecialchars($specialty['name']) . "</option>";
-//                                                    }
+                                                    <?php
+                                                    foreach ($listPositions as $position) {
+                                                        echo "<option value='" . htmlspecialchars($position['position_id']) . "'>" . htmlspecialchars($position['name']) . "</option>";
+                                                    }
 //                                                    ?>
                                                 </select>
                                             </form>
@@ -65,19 +78,13 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-12 col-lg-12 col-xl-6">
-                                <div class="row">
-                                    <div class="col-12 col-lg-9 table-filters">
-                                        <div class="row">
-                                            <div class="col-12">
-                                                <input id="searchInput" placeholder="Nhập tên nhân viên..."
-                                                       class="form-control">
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="col-12 col-lg-3 table-filters">
-                                        <div class="m-0">
-                                            <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
+
+                            <div class="col-4 table-filters pb-0">
+                                <div class="filter-container">
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <input id="searchInput" placeholder="Nhập tên nhân viên..."
+                                                   class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -112,36 +119,40 @@
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <?php include 'employee-add.php'?>
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import-script.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         // App.init();
         // App.tableFilters();
 
-        const listDoctors = JSON.parse('<?php echo json_encode($listEmployees); ?>');
-        const doctorsPerPage = 5;
+        const listEmployees = JSON.parse('<?php echo json_encode($listEmployees); ?>');
+        const employeesPerPage = 5;
         let currentPage = 1;
 
         const searchInput = document.getElementById('searchInput');
-        searchInput.addEventListener('input', searchDoctor);
+        searchInput.addEventListener('input', searchEmployees);
 
         const selectSpecialty = document.getElementById('selectSpecialty');
         selectSpecialty.addEventListener('change', filterBySpecialty);
 
-        function searchDoctor() {
+        function searchEmployees() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredDoctors = listDoctors.filter(doctor => doctor.name.toLowerCase().includes(input));
+            const filteredDoctors = listEmployees.filter(doctor => doctor.name.toLowerCase().includes(input));
             currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
-            setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
-            renderDoctors(currentPage, filteredDoctors); // Cập nhật lại hàm renderDoctors để nhận thêm tham số filteredDoctors
+            setupPagination(filteredDoctors, paginationElement, employeesPerPage);
+            renderEmployees(currentPage, filteredDoctors);
         }
 
-        function renderDoctors(page, items = listDoctors) {
-            const start = (page - 1) * doctorsPerPage;
-            const end = start + doctorsPerPage;
+        function renderEmployees(page, items = listEmployees) {
+            const start = (page - 1) * employeesPerPage;
+            const end = start + employeesPerPage;
             const paginatedItems = items.slice(start, end);
             const tableBody = document.getElementById('tableBody');
 
@@ -167,14 +178,14 @@
                         <td class='cell-detail'></td>
                         <td class='text-right'>
                             <div class='btn-group btn-hspace'>
-                                <button class='btn btn-secondary dropdown-toggle' type='button'
-                                        data-toggle='dropdown'>Hành động
-                                    <span class='icon-dropdown mdi mdi-chevron-down'></span>
+                                <button class='btn btn-secondary dropdown-toggle' type='button' style='border: none; background-color: transparent;'
+                                        data-toggle='dropdown'>
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                                            <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
+                                                        </svg>
                                 </button>
-                                <div class='dropdown-menu' role='menu'>
+                                <div class='dropdown-menu dropdown-menu-right' role='menu'>
                                     <button type='button' class='dropdown-item'>Xem chi tiết</button>
-                                    <button type='button' class='dropdown-item'>Chỉnh sửa</button>
-                                    <button type='button' class='dropdown-item'>Xóa</button>
                                 </div>
                             </div>
                         </td>
@@ -247,7 +258,7 @@
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 currentPage = page;
-                renderDoctors(currentPage);
+                renderEmployees(currentPage);
 
                 document.querySelectorAll('.pagination .page-item').forEach(item => {
                     item.classList.remove('active');
@@ -259,27 +270,189 @@
             return li;
         }
 
-        function show(){
-            alert('dsfs')
-        }
-
         function filterBySpecialty() {
             const selectedSpecialty = document.getElementById('selectSpecialty').value;
-            const filteredDoctors = selectedSpecialty === 'All' ? listDoctors : listDoctors.filter(doctor => doctor.specialty === selectedSpecialty);
+            const filteredDoctors = selectedSpecialty === 'All' ? listEmployees : listEmployees.filter(doctor => doctor.specialty === selectedSpecialty);
             currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
-            setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
-            renderDoctors(currentPage, filteredDoctors);
+            setupPagination(filteredDoctors, paginationElement, employeesPerPage);
+            renderEmployees(currentPage, filteredDoctors);
         }
 
         function changePage(page) {
             currentPage = page;
-            renderDoctors(currentPage);
-            setupPagination(listDoctors, document.getElementById('pagination'), doctorsPerPage);
+            renderEmployees(currentPage);
+            setupPagination(listEmployees, document.getElementById('pagination'), employeesPerPage);
         }
 
         const paginationElement = document.getElementById('pagination');
-        setupPagination(listDoctors, paginationElement, doctorsPerPage);
-        renderDoctors(currentPage);
+        setupPagination(listEmployees, paginationElement, employeesPerPage);
+        renderEmployees(currentPage);
+
+        const errorMessages = {
+            emName: 'Tên không được để trống và không vượt quá 50 ký tự',
+            emDob: 'Vui lòng nhập ngày sinh',
+            emDobAge: 'Nhân viên phải trên 18 tuổi',
+            emEmail: 'Email không hợp lệ',
+            emPhone: 'Số điện thoại không hợp lệ',
+            emAddress: 'Địa chỉ không được để trống và không vượt quá 255 ký tự',
+            emPosition: 'Vui lòng chọn chức vụ',
+            emSpecialty: 'Vui lòng chọn chuyên khoa '
+        };
+
+        document.getElementById('btnAddEm').addEventListener('click', function() {
+            const emName = document.getElementById('emName');
+            const emGender = document.getElementById('emGender');
+            const emDob = document.getElementById('emDob');
+            const emEmail = document.getElementById('emEmail');
+            const emPhone = document.getElementById('emPhone');
+            const emAddress = document.getElementById('emAddress');
+            const emPosition = document.getElementById('emPosition');
+            const emSpecialty = document.getElementById('emSpecialty');
+            const emStatus= document.getElementById('emStatus');
+            let isValid = true;
+
+            // Xóa thông báo lỗi trước
+            const errorEmName = document.getElementById('errorEmName');
+            const errorEmDob = document.getElementById('errorEmDob');
+            const errorEmEmail = document.getElementById('errorEmEmail');
+            const errorEmPhone = document.getElementById('errorEmPhone');
+            const errorEmAddress = document.getElementById('errorEmAddress');
+            const errorEmPosition = document.getElementById('errorEmPosition');
+            const errorEmSpecialty = document.getElementById('errorEmSpecialty');
+
+            document.querySelectorAll('.form-control').forEach(input => {
+                input.classList.remove('is-invalid');
+                let errorElement;
+
+                switch (input.id) {
+                    case 'emName':
+                        errorElement = errorEmName;
+                        break;
+                    case 'emDob':
+                        errorElement = errorEmDob;
+                        break;
+                    case 'emEmail':
+                        errorElement = errorEmEmail;
+                        break;
+                    case 'emPhone':
+                        errorElement = errorEmPhone;
+                        break;
+                    case 'emAddress':
+                        errorElement = errorEmAddress;
+                        break;
+                    case 'emPosition':
+                        errorElement = errorEmPosition;
+                        break;
+                    case 'emSpecialty':
+                        errorElement = errorEmSpecialty;
+                        break;
+                    default:
+                        console.error('Không tìm thấy phần tử lỗi cho:', input.id);
+                        return; // Skip the rest of the loop if no error element is found
+                }
+
+                if (errorElement) {
+                    errorElement.textContent = ''; // Xóa nội dung lỗi hiện tại
+                }
+            });
+
+            // Kiểm tra tên nhân viên
+            if (emName.value.trim() === '' || emName.value.length > 50) {
+                document.getElementById('errorEmName').textContent = errorMessages.emName;
+                emName.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra ngày sinh
+            if (emDob.value.trim() === '') {
+                document.getElementById('errorEmDob').textContent = errorMessages.emDob;
+                emDob.classList.add('is-invalid');
+                isValid = false;
+            } else {
+                const dob = new Date(emDob.value);
+                const today = new Date();
+                const age = today.getFullYear() - dob.getFullYear();
+                if (age < 18 || (age === 18 && today < new Date(dob.setFullYear(today.getFullYear())))) {
+                    document.getElementById('errorEmDob').textContent = errorMessages.emDobAge;
+                    emDob.classList.add('is-invalid');
+                    isValid = false;
+                }
+            }
+
+            // Kiểm tra email
+            const emailRegex = /^[a-zA-Z0-9._%+-]+@gmail.com$/;
+            if (emEmail.value.trim() === '' || !emailRegex.test(emEmail.value)) {
+                document.getElementById('errorEmEmail').textContent = errorMessages.emEmail;
+                emEmail.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra số điện thoại
+            const phoneRegex = /^(0|\+84)(3[2-9]|5[689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$/;
+            if (emPhone.value.trim() === '' || !phoneRegex.test(emPhone.value)) {
+                document.getElementById('errorEmPhone').textContent = errorMessages.emPhone;
+                emPhone.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra địa chỉ
+            if (emAddress.value.trim() === '' || emAddress.value.length > 255) {
+                document.getElementById('errorEmAddress').textContent = errorMessages.emAddress;
+                emAddress.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra chức vụ
+            if (emPosition.value === '0') {
+                document.getElementById('errorEmPosition').textContent = errorMessages.emPosition;
+                emPosition.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Kiểm tra chuyên khoa làm việc
+            if (emSpecialty.value === '0') {
+                document.getElementById('errorEmSpecialty').textContent = errorMessages.emSpecialty;
+                emSpecialty.classList.add('is-invalid');
+                isValid = false;
+            }
+
+            // Nếu tất cả thông tin hợp lệ
+            if (isValid) {
+                console.log('emName: ', emName.value);
+                console.log('emGender: ', parseInt(emGender.value, 10));
+                console.log('emDob: ', emDob.value);
+                console.log('emEmail: ', emEmail.value);
+                console.log('emPhone: ', emPhone.value);
+                console.log('emAddress: ', emAddress.value);
+                console.log('emPosition: ', parseInt(emPosition.value, 10));
+                console.log('emSpecialty: ', parseInt(emSpecialty.value, 10));
+                console.log('emStatus: ', parseInt(emStatus.value, 10));
+
+                $.ajax({
+                    url: 'http://localhost/Medicio/index.php?controller=employee&action=add',
+                    type: 'POST',
+                    data: {
+                        name: emName.value,
+                        gender: parseInt(emGender.value, 10),
+                        dob: emDob.value,
+                        email: emEmail.value,
+                        phone: emPhone.value,
+                        address: emAddress.value,
+                        position_id: parseInt(emPosition.value, 10),
+                        specialty_id: parseInt(emSpecialty.value, 10),
+                        status: parseInt(emStatus.value, 10)
+                    },
+                    success: function(response) {
+                        console.log(response);
+                        $('#staticBackdrop').modal('hide'); // Đóng modal
+                        location.reload(); // Tải lại trang để cập nhật danh sách nhân viên
+                    },
+                    error: function() {
+                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    }
+                });
+            }
+        });
 
         App.init();
         App.tableFilters();

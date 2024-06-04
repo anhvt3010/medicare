@@ -1,6 +1,6 @@
 <script src="http://localhost/Medicio/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
 <script src="http://localhost/Medicio/views/admin/assets/lib\perfect-scrollbar\js\perfect-scrollbar.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets/lib\bootstrap\dist\js\bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicio/views/admin/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
 <script src="http://localhost/Medicio/views/admin/assets/js/app.js" type="text/javascript"></script>
 <script src="http://localhost/Medicio/views/admin/assets/lib\jquery-ui\jquery-ui.min.js"  type="text/javascript"></script>
 <script src="http://localhost/Medicio/views/admin/assets/lib\select2\js\select2.min.js" type="text/javascript"></script>

@@ -45,7 +45,7 @@
                                     <div class="content">
                                         <ul>
                                             <li class="notification notification-unread"><a href="#">
-                                                    <div class="image"><img src="assets\img\avatar2.png" alt="Avatar">
+                                                    <div class="image"><img src="http://localhost/Medicio/views/admin/assets\img\avatar2.png" alt="Avatar">
                                                     </div>
                                                     <div class="notification-info">
                                                         <div class="text"><span class="user-name">Jessica Caruso</span>

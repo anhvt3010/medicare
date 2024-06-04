@@ -1,4 +1,3 @@
-<?php
-print_r($date);
-print_r($today)
-?>
+<div>
+    <?php echo $test ?>
+</div>
