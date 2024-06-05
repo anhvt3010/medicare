@@ -11,10 +11,10 @@
             <ul class="nav navbar-nav float-right be-user-nav">
                 <li class="nav-item dropdown"><a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                                                  role="button" aria-expanded="false"><img
-                            src="http://localhost/Medicio/assets/img/doctors/doctors-1.jpg" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
+                            src="<?php echo $_SESSION['admin_avt'] ?>" alt="Avatar"><span class="user-name">Túpac Amaru</span></a>
                     <div class="dropdown-menu" role="menu">
                         <div class="user-info">
-                            <div class="user-name">Tuan Anh</div>
+                            <div class="user-name"><?php echo $_SESSION['admin_name'] ?></div>
                             <div class="user-position online">Hoạt động</div>
                         </div>
                         <a class="dropdown-item" href="pages-profile.html">

@@ -1,4 +1,10 @@
 <?php
+// Thiết lập thời gian tồn tại của cookie và session
+session_set_cookie_params(86400);
+ini_set('session.gc_maxlifetime', 86400);
+
+// Khởi động session
+session_start();
 require_once 'BaseModel.php';
 class AuthModel extends BaseModel {
     const TABLE_NAME = "patients";
@@ -18,7 +24,7 @@ class AuthModel extends BaseModel {
         $phone = mysqli_real_escape_string($this->connection, $phone);
         $password = mysqli_real_escape_string($this->connection, $password);
 
-        $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE phone = '$phone'";
+        $sql = "SELECT * FROM patients WHERE phone = '$phone'";
 
         $result = $this->_query($sql);
         if ($result && mysqli_num_rows($result) > 0) {
@@ -30,30 +36,38 @@ class AuthModel extends BaseModel {
         }
         return false; // Đăng nhập thất bại
     }
-    //    public function login($phone, $password): bool
-//    {
-//        if (session_status() == PHP_SESSION_NONE) {
-//            session_start();
-//        }
-//
-//        $phone = mysqli_real_escape_string($this->connection, $phone);
-//
-//        $sql = "SELECT * FROM " . self::TABLE_NAME . " WHERE phone = '$phone'";
-//
-//        $result = $this->_query($sql);
-//        if ($result && mysqli_num_rows($result) > 0) {
-//            $user = mysqli_fetch_assoc($result);
-//            if (password_verify($password, $user['password'])) {
-//                // Thiết lập các giá trị session
-//                $_SESSION['user_id'] = $user['id'];
-//                $_SESSION['user_name'] = $user['username'];
-//                $_SESSION['user_phone'] = $phone;
-//
-//                return true;
-//            }
-//        }
-//        return false;
-//    }
+
+    public function loginAdmin($phone, $password): string
+    {
+        $phone = mysqli_real_escape_string($this->connection, $phone);
+        $password = mysqli_real_escape_string($this->connection, $password);
+
+        $sql = "SELECT * FROM employees WHERE phone = '$phone'";
+        $result = $this->_query($sql);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $admin = mysqli_fetch_assoc($result);
+            // Giả sử mật khẩu được lưu dưới dạng băm
+            if (password_verify($password, $admin['password'])) {
+                // Lưu thông tin vào session
+                $_SESSION['admin_phone'] = $admin['phone'];
+                $_SESSION['role_id'] = $admin['role_id'];
+                $_SESSION['admin_name'] = $admin['name'];
+                $_SESSION['admin_avt'] = $admin['avt'];
+                return json_encode([
+                    'success' => true,
+                    'sessionData' => [
+                        'admin_phone' => $_SESSION['admin_phone'],
+                        'role_id' => $_SESSION['role_id'],
+                        'admin_name' => $_SESSION['admin_name']
+                    ]
+                ]);
+            } else {
+                return json_encode(['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng']);
+            }
+        }
+        return json_encode(['success' => false, 'message' => 'Không tìm thấy tài khoản']);
+    }
 
     function logout() {
         // Khởi động session nếu chưa được khởi động

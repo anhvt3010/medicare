@@ -438,16 +438,10 @@
                 formData.append('email', emEmail.value);
                 formData.append('phone', emPhone.value);
                 formData.append('address', emAddress.value);
-                formData.append('position_id', 1); // Giả sử 1 là chức vụ bác sĩ
                 formData.append('specialty_id', parseInt(emSpecialty.value, 10));
                 formData.append('status', parseInt(emStatus.value, 10));
                 formData.append('avt', emAvt.files[0]); // Thêm file vào FormData
 
-                var file = emAvt.files[0];
-                console.log('File Name: ' + file.name);
-                console.log('File Size: ' + file.size + ' bytes');
-                console.log('File Type: ' + file.type);
-                console.log('Last Modified: ' + new Date(file.lastModified));
 
                 $.ajax({
                     url: 'http://localhost/Medicio/index.php?controller=doctor&action=add',

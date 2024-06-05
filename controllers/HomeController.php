@@ -32,8 +32,7 @@ class HomeController extends BaseController
     {
 
         return $this->view('admin.index', [
-//            'listDoctors' => $listDoctors,
-//            'countDoctors' => $countDoctors,
+
         ]);
     }
 
@@ -77,27 +76,6 @@ class HomeController extends BaseController
                 'listDoctorsBySpecialty' => $listDoctorsBySpecialty
             ]);
         }
-    }
-
-    public function update()
-    {
-        $id = $_GET['id'];
-
-        $data = [
-            'ten' => 'Doctor 18'
-        ];
-//        $this->doctorModel->updateData($id, $data);
-        return $this->view('test', [
-//            'message' => $message
-        ]);
-    }
-
-    public function test()
-    {
-        $countDoctors = $this->doctorModel->getCountDoctors();
-        return $this->view('test', [
-            'countDoctors' => $countDoctors,
-        ]);
     }
 
     public function confirm()

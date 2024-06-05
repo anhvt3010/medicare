@@ -1,11 +1,3 @@
-<?php
-//session_start();
-// Kiểm tra xem người dùng đã đăng nhập hay chưa
-if (isset($_SESSION['user_phone'])) {
-    header("Location: http://localhost/Medicio/index.php?controller=home&action=home");
-    exit();
-}
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,13 +91,13 @@ if (isset($_SESSION['user_phone'])) {
         }
     </style>
 </head>
-<body style="background-color: #3fbbc0; overflow-y: hidden ">
+<body style="background-color: #1f5d60; overflow-y: hidden ">
 <!-- Login 9 - Bootstrap Brain Component -->
-<section class=" py-3 py-md-5 py-xl-8" style="margin-top: 50px">
+<section class="py-5 py-md-5 py-xl-8 mt-1" style="margin-top: 85px!important;">
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-12 col-md-6 col-xl-7">
-                <div class="d-flex justify-content-center" style="background-color: #3fbbc0; color: white">
+                <div class="d-flex justify-content-center" style="background-color: #1F5D60FF; color: white">
                     <div class="col-12 col-xl-9">
                         <a href="http://localhost/Medicio/index.php?controller=home&action=home#hero"
                            class="logo me-auto">
@@ -129,13 +121,10 @@ if (isset($_SESSION['user_phone'])) {
             <div class="col-12 col-md-6 col-xl-5">
                 <div class="card border-0 rounded-4">
                     <div class="card-body p-3 p-md-4 p-xl-4">
-                        <div class="row mb-1">
+                        <div class="row mb-3">
                             <div class="col-12">
                                 <div>
-                                    <h3>Đăng Nhập</h3>
-                                    <p>Bạn không có tài khoản? <a
-                                                href="http://localhost/Medicio/index.php?controller=register&action=register">Đăng
-                                            kí</a></p>
+                                    <h3>Đăng Nhập Trang Quản Trị</h3>
                                 </div>
                             </div>
                         </div>
@@ -159,7 +148,7 @@ if (isset($_SESSION['user_phone'])) {
                                     <span id="login-false"></span>
                                 </div>
                                 <div class="col-12">
-                                    <div class="form-check ">
+                                    <div class="form-check mb-3">
                                         <input class="form-check-input" type="checkbox" value="" name="remember_me"
                                                id="remember_me">
                                         <label class="form-check-label text-secondary" for="remember_me">
@@ -170,7 +159,7 @@ if (isset($_SESSION['user_phone'])) {
                                 <div class="col-12 mt-4">
                                     <div class="d-grid">
                                         <button id="loginButton"
-                                                class="btn btn-lg" style="background-color: #3fbbc0; color: white"
+                                                class="btn btn-lg" style="background-color: #1F5D60FF; color: white"
                                                 type="submit">Đăng nhập ngay
                                         </button>
                                     </div>
@@ -184,14 +173,6 @@ if (isset($_SESSION['user_phone'])) {
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <a href="http://localhost/Medicio/index.php?controller=auth&action=loginAdmin"
-                                   style="color: red">Đăng nhập quản trị
-                                </a>
-                                <i style="color: red" class="fa-solid fa-right-to-bracket"></i>
-                            </div>
-                        </div>
                         <div id="toast" class="toast">Thông báo ở đây!</div>
                     </div>
                 </div>
@@ -199,6 +180,7 @@ if (isset($_SESSION['user_phone'])) {
         </div>
     </div>
 </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var inputs = document.querySelectorAll('.form-control');
@@ -250,19 +232,27 @@ if (isset($_SESSION['user_phone'])) {
         });
 
         if (isValid) {
-            fetch('services/loginService.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('Đăng nhập thành công!', '#28a745', 800, redirectToHome);
+            $.ajax({
+                url: 'http://localhost/Medicio/index.php?controller=auth&action=processLoginAdmin',
+                type: 'POST',
+                data: formData,
+                contentType: false, // Không set contentType
+                processData: false, // Không xử lý dữ liệu
+                success: function(response) {
+                    var data = JSON.parse(response);
+                    if(data['success'] === true) {
+                        showToast('Đăng nhập thành công', '#28a745', 8000);
+                        console.log('Thông tin session:', data['sessionData'], window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home_admin');
+
+
                     } else {
-                        showToast('Đăng nhập thất bại: ' + data.message, 'dc3545', 3000);
+                        showToast(data['message'], '#a7284e', 3000);
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
         }
     }
 
@@ -277,9 +267,6 @@ if (isset($_SESSION['user_phone'])) {
         }, time);
     }
 
-    function redirectToHome() {
-        window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home'; // Điều hướng đến trang chủ sau khi đăng nhập thành công
-    }
 </script>
 </body>
 </html>

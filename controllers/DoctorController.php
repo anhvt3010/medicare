@@ -30,7 +30,7 @@ class DoctorController extends BaseController {
     {
         $doctor_id = $_GET['doctor_id'] ?? '';
         $doctor = $this->doctorModel->getById($doctor_id);
-        $listPositions = $this->positionModel->getAll();
+//        $listPositions = $this->positionModel->getAll();
         $listSpecialties = $this->specialtyModel->getSpecialtiesForAppointment();
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
@@ -39,10 +39,40 @@ class DoctorController extends BaseController {
         }
         return $this->view('admin.employee-detail', [
             'doctor' => $doctor,
-            'listPositions' => $listPositions,
+//            'listPositions' => $listPositions,
             'listSpecialties' => $listSpecialties,
         ]);
     }
+    public function update()
+    {
+        $doctor_id = $_POST['id'];
+        $specialty_id = $_POST['specialty_id'];
+        $name = $_POST['name'];
+        $phone  = $_POST['phone'];
+        $email = $_POST['email'];
+        $dob = $_POST['dob'];
+        $gender = $_POST['gender'];
+        $address  = $_POST['address'];
+        $status  = $_POST['status'];
+
+        // Xử lý upload ảnh đại diện
+        if (isset($_FILES['avtUpdate']) && $_FILES['avtUpdate']['error'] == 0) {
+            $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avtUpdate']['tmp_name']));
+        } else {
+            $avt = $_POST['avt'];
+        }
+
+        $result = $this->doctorModel->updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+        }
+        return $this->view('admin.employee-detail', [
+            'result' => $result,
+        ]);
+    }
+
 
     public function add()
     {

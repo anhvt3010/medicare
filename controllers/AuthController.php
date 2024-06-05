@@ -1,0 +1,45 @@
+<?php
+    class AuthController  extends BaseController{
+        private $authModel;
+
+        public function __construct()
+        {
+            $this->loadModel('AuthModel');
+            $this->authModel = new AuthModel();
+        }
+        public function login() {
+            return $this->view('client.login', [
+            ]);
+        }
+
+        public function register() {
+            return include './views/client/register.php';
+        }
+
+        public function loginAdmin() {
+            return $this->view('admin.login');
+        }
+
+        public function processLoginAdmin()
+        {
+            $phone = $_POST['phone'];
+            $password = $_POST['password'];
+//            $hashedPassword = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 12]);
+            $result = $this->authModel->loginAdmin($phone, $password);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            return $this->view('admin.login', [
+                'result' => $result,
+            ]);
+        }
+
+        public function logout()
+        {
+            $this->authModel->logout();
+            return $this->view('admin.login');
+        }
+
+    }

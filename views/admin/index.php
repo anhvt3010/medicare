@@ -1,4 +1,14 @@
-﻿<!DOCTYPE html>
+﻿<?php
+session_start(); // Khởi động session
+
+// Kiểm tra xem session 'admin_name' đã được thiết lập hay chưa
+if (!isset($_SESSION['admin_name'])) {
+    // Nếu không, chuyển hướng đến trang đăng nhập
+    header('Location: http://localhost/Medicio/index.php?controller=login&action=loginAdmin');
+    exit(); // Dừng việc thực thi script hiện tại
+}
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8">
