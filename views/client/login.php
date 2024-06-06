@@ -187,7 +187,7 @@ if (isset($_SESSION['user_phone'])) {
                         <div class="row mt-3">
                             <div class="col-12">
                                 <a href="http://localhost/Medicio/index.php?controller=auth&action=loginAdmin"
-                                   style="color: red">Đăng nhập quản trị
+                                   style="color: #4182ff">Đăng nhập quản trị
                                 </a>
                                 <i style="color: red" class="fa-solid fa-right-to-bracket"></i>
                             </div>
@@ -199,6 +199,7 @@ if (isset($_SESSION['user_phone'])) {
         </div>
     </div>
 </section>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         var inputs = document.querySelectorAll('.form-control');
@@ -250,19 +251,26 @@ if (isset($_SESSION['user_phone'])) {
         });
 
         if (isValid) {
-            fetch('services/loginService.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.json())
-                .then(data => {
-                    if (data.success) {
-                        showToast('Đăng nhập thành công!', '#28a745', 800, redirectToHome);
+            $.ajax({
+                url: 'http://localhost/Medicio/index.php?controller=auth&action=processLoginClient',
+                type: 'POST',
+                data: formData,
+                contentType: false, // Không set contentType
+                processData: false, // Không xử lý dữ liệu
+                success: function(response) {
+                    console.log(response);
+                    if(response['success'] === true) {
+                        showToast('Đăng nhập thành công', '#28a745', 8000);
+                        console.log('Thông tin session:', response['sessionData']);
+                        window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home';
                     } else {
-                        showToast('Đăng nhập thất bại: ' + data.message, 'dc3545', 3000);
+                        showToast(response['message'], '#a7284e', 3000);
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
         }
     }
 

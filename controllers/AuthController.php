@@ -36,6 +36,21 @@
             ]);
         }
 
+        public function processLoginClient()
+        {
+            $phone = $_POST['phone'];
+            $password = $_POST['password'];
+            $result = $this->authModel->loginClient($phone, $password);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            return $this->view('client.login', [
+                'result' => $result,
+            ]);
+        }
+
         public function logout()
         {
             $this->authModel->logout();

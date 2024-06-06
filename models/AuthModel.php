@@ -19,22 +19,28 @@ class AuthModel extends BaseModel {
         return mysqli_query($this->connection, $sql);
     }
 
-    public function login($phone, $password): bool
+    public function loginClient($phone, $password)
     {
         $phone = mysqli_real_escape_string($this->connection, $phone);
         $password = mysqli_real_escape_string($this->connection, $password);
 
         $sql = "SELECT * FROM patients WHERE phone = '$phone'";
-
         $result = $this->_query($sql);
         if ($result && mysqli_num_rows($result) > 0) {
             $user = mysqli_fetch_assoc($result);
-            // Giả sử mật khẩu được lưu dưới dạng băm
             if (password_verify($password, $user['password'])) {
-                return true; // Đăng nhập thành công
+                $_SESSION['user_phone'] = $phone;
+                return [
+                    'success' => true,
+                    'sessionData' => [
+                        'user_phone' => $_SESSION['user_phone']
+                    ]
+                ];
+            } else {
+                return ['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng'];
             }
         }
-        return false; // Đăng nhập thất bại
+        return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
     }
 
     public function loginAdmin($phone, $password): string
