@@ -43,7 +43,7 @@ class AuthModel extends BaseModel {
         return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
     }
 
-    public function loginAdmin($phone, $password): string
+    public function loginAdmin($phone, $password): array
     {
         $phone = mysqli_real_escape_string($this->connection, $phone);
         $password = mysqli_real_escape_string($this->connection, $password);
@@ -60,19 +60,19 @@ class AuthModel extends BaseModel {
                 $_SESSION['role_id'] = $admin['role_id'];
                 $_SESSION['admin_name'] = $admin['name'];
                 $_SESSION['admin_avt'] = $admin['avt'];
-                return json_encode([
+                return [
                     'success' => true,
                     'sessionData' => [
                         'admin_phone' => $_SESSION['admin_phone'],
                         'role_id' => $_SESSION['role_id'],
                         'admin_name' => $_SESSION['admin_name']
                     ]
-                ]);
+                ];
             } else {
-                return json_encode(['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng']);
+                return ['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng'];
             }
         }
-        return json_encode(['success' => false, 'message' => 'Không tìm thấy tài khoản']);
+        return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
     }
 
     function logout() {

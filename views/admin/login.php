@@ -239,14 +239,13 @@
                 contentType: false, // Không set contentType
                 processData: false, // Không xử lý dữ liệu
                 success: function(response) {
-                    var data = JSON.stringify(response);
-                    if(data['success'] === true) {
+                    console.log(response);
+                    if(response['success'] === true) {
                         showToast('Đăng nhập thành công', '#28a745', 8000);
-                        console.log('Thông tin session:', data['sessionData'], window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home_admin');
-
+                        console.log('Thông tin session:', response['sessionData']);
+                        window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home';
                     } else {
-                        console.log(data['message'])
-                        showToast(data['message'], '#a7284e', 3000);
+                        showToast(response['message'], '#a7284e', 3000);
                     }
                 },
                 error: function() {
