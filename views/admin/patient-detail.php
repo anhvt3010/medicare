@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -104,7 +111,7 @@
             </div>
             <div class="col-12">
                 <div class="d-flex justify-content-between">
-                    <a id="backButton" class="btn btn-danger" href="http://localhost/Medicio/index.php?controller=patient&action=index">Quay lại danh sách</a>
+                    <a id="backButton" class="btn btn-danger" href="http://localhost/Medicare/index.php?controller=patient&action=index">Quay lại danh sách</a>
                     <button id="editButton" class="btn btn-primary">Chỉnh sửa</button>
                 </div>
             </div>

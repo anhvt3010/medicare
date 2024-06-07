@@ -16,7 +16,7 @@
                                 <div class="content">
                                     <h2>Recent</h2>
                                     <div class="contact-list contact-list-recent">
-                                        <div class="user"><a href="#"><img src="http://localhost/Medicio/views/admin/assets\img\avatar1.png"
+                                        <div class="user"><a href="#"><img src="http://localhost/Medicare/views/admin/assets\img\avatar1.png"
                                                                            alt="Avatar">
                                                 <div class="user-data">
                                                     <span class="status away"></span>

@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -84,7 +91,7 @@
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên hoặc sđt ..."
+                                            <input id="searchInput" placeholder="Nhập tên hoặc sđt ..." autocomplete="off"
                                                    class="form-control" value="<?php echo $_GET['search'] ?? '' ?>">
                                         </div>
                                     </div>
@@ -241,7 +248,9 @@
                                                         </svg>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <button type="button" class="dropdown-item" data-id="<?php echo $appointment['id'] ?>">Chi tiết</button>
+                                                        <a type="button" class="dropdown-item"
+                                                           href="http://localhost/Medicare/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>"
+                                                           data-id="<?php echo $appointment['id'] ?>">Chi tiết</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -330,7 +339,7 @@
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicio/index.php?controller=appointment&action=homeAdmin&page=1'
+    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=index&page=1'
 
     document.getElementById('button').addEventListener('click', function() {
     var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'

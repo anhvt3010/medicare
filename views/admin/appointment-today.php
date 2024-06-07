@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -83,7 +90,7 @@
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên hoặc sđt ..."
+                                            <input id="searchInput" placeholder="Nhập tên hoặc sđt ..." autocomplete="off"
                                                    class="form-control" value="<?php echo $_GET['search'] ?? '' ?>">
                                         </div>
                                     </div>
@@ -319,7 +326,7 @@
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicio/index.php?controller=appointment&action=today&page=1'
+    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=today&page=1'
 
     document.getElementById('button').addEventListener('click', function() {
         var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'

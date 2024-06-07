@@ -84,7 +84,7 @@ $(document).ready(function () {
         console.log('Bác sĩ:  + ', parseInt(document.getElementById('selected-doctor').value,10))
 
         $.ajax({
-            url: 'http://localhost/Medicio/index.php',
+            url: 'http://localhost/Medicare/index.php',
             type: 'GET',
             data: {
                 controller: 'appointment',
@@ -107,6 +107,11 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', function() {
     timeSlots = [];
     displayTimeSlots(timeSlots);
+    // var btnSelectOrtherDay = document.getElementById('otherDay');
+    // btnSelectDay.addEventListener('click', function() {
+    //     var inputOtherDate = document.getElementById('input-otherDate');
+    //     inputOtherDate.focus();  // Set focus vào input
+    // });
 });
 
 

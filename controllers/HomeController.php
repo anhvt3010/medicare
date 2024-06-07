@@ -30,9 +30,13 @@ class HomeController extends BaseController
 
     public function home_admin()
     {
-
         return $this->view('admin.index', [
+        ]);
+    }
 
+    public function not_found()
+    {
+        return $this->view('404', [
         ]);
     }
 

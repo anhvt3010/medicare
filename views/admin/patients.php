@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -33,10 +40,7 @@
                     <div class="card card-table">
                         <div class="row table-filters-container">
                             <div class="col-2 table-filters pb-0">
-                                <div class="filter-container">
-<!--                                    <button id="btnAdd" type="button" class="btn btn-success form-control"-->
-<!--                                            data-bs-toggle="modal" data-bs-target="#staticBackdrop">Thêm mới</button>-->
-                                </div>
+
                             </div>
 
                             <div class="col-4 table-filters pb-0">
@@ -59,7 +63,7 @@
                                     <div class="row">
                                         <div class="col-12">
                                             <input id="searchInput" placeholder="Nhập tên bệnh nhân..."
-                                                   class="form-control">
+                                                   autocomplete="off" class="form-control">
                                         </div>
                                     </div>
                                 </div>
@@ -101,6 +105,7 @@
 <?php include 'import-script.php' ?>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        App.init();
 
         const listSpecialties = JSON.parse('<?php echo json_encode($listPatients); ?>');
         const itemsPerPage = 5;
@@ -146,16 +151,16 @@
                     <td class='cell-detail'>
                     <span style='font-size: 13px; color: black'>${patient.address}</span>
                     </td>
-                    <td class='text-right'>
+                    <td class='text-right p-0'>
                         <div class='btn-group btn-hspace'>
-                            <button class='btn btn-secondary dropdown-toggle' type='button' style='border: none; background-color: transparent;'
+                            <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
                                         data-toggle='dropdown'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                                             <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
                                                         </svg>
                                 </button>
                             <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                <a href="http://localhost/Medicio/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
+                                <a href="http://localhost/Medicare/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
                                    type='button' class='dropdown-item'>Xem chi tiết</a>
                             </div>
                         </div>
@@ -253,9 +258,6 @@
         const paginationElement = document.getElementById('pagination');
         setupPagination(listSpecialties, paginationElement, itemsPerPage);
         renderSpecialties(currentPage);
-
-        App.init();
-        App.tableFilters();
     });
 </script>
 </body>

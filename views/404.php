@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
-    <title>Phòng khám Medicare</title>
+    <title>404</title>
     <meta content="" name="description">
     <meta content="" name="keywords">
 
@@ -31,37 +31,32 @@
 
 <body>
 <!-- ======= Top Bar ======= -->
-<?php include "components/topbar.php" ?>
+<?php include "client/components/topbar.php" ?>
 <!-- ======= Header ======= -->
-<?php include "components/header.php" ?>
-<!-- ======= Hero Section ======= -->
-<?php include "components/hero.html" ?>
+<?php include "client/components/header.php" ?>
 
-<main id="main">
-    <!-- ======= Featured Services Section ======= -->
-    <?php include "components/featured-services.html" ?>
-    <!-- ======= Cta Section ======= -->
-    <?php include "components/cta.html" ?>
-    <!-- ======= About Us Section ======= -->
-    <?php include "components/about.html"; ?>
-    <!-- ======= Counts Section ======= -->
-    <?php include "components/counts.php" ?>
-    <!-- ======= Features Section ======= -->
-    <?php include "components/features.html" ?>
-    <!-- ======= Phần Dịch Vụ ======= -->
-    <?php include "components/services.html" ?>
-
-    <!-- ======= Section Đặt lịch hẹn ======= -->
-<!--    --><?php //include "components/appointment.php" ?>
-
-    <!-- ======= Bác sĩ Section ======= -->
-    <?php include "components/doctors.php" ?>
-    <!-- ======= Liên hệ Section ======= -->
-    <?php include "components/contact.html" ?>
-</main>
+<section class="py-3 py-md-5 min-vh-100 d-flex justify-content-center align-items-center">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <div class="text-center">
+                    <h2 class="d-flex justify-content-center align-items-center gap-2 mb-4">
+                        <span class="display-1 fw-bold">4</span>
+                        <i class="bi bi-exclamation-circle-fill text-danger display-4"></i>
+                        <span class="display-1 fw-bold bsb-flip-h">4</span>
+                    </h2>
+                    <h3 class="h2 mb-2">Ối! Không xong rồi.</h3>
+                    <p class="mb-5">Trang bạn đang tìm kiếm không được tìm thấy.</p>
+                    <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" style="background-color: #3fbbc0; border-color: #3fbbc0"
+                       href="http://localhost/Medicare/index.php?controller=home&action=home" role="button">Trở lại trang chủ</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- ======= Footer ======= -->
-<?php include "components/footer.html" ?>
+<?php include "client/components/footer.html" ?>
 
 <div id="preloader"></div>
 <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>

@@ -15,4 +15,5 @@ $cloudinary = new \Cloudinary\Cloudinary([
 
 // Lưu đối tượng Cloudinary vào biến toàn cục để sử dụng sau này
 $GLOBALS['cloudinary'] = $cloudinary;
+
 ?>

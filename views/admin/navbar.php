@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand fixed-top be-top-header">
     <div class="container-fluid">
         <div class="be-navbar-header">
-            <a href="index.php" class="ml-5">
+            <a href="http://localhost/Medicare/index.php?controller=home&action=home_admin" class="ml-5">
                 <img src="assets/img/Medicare.png" alt="logo" width="150">
             </a>
         </div>
@@ -23,7 +23,7 @@
                         <a class="dropdown-item" href="#">
                             <span class="icon mdi mdi-settings"></span>Cài đặt
                         </a>
-                        <a class="dropdown-item" href="pages-login.html">
+                        <a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=auth&action=logout">
                             <span class="icon mdi mdi-power"></span>Đăng xuất
                         </a>
                     </div>
@@ -45,7 +45,7 @@
                                     <div class="content">
                                         <ul>
                                             <li class="notification notification-unread"><a href="#">
-                                                    <div class="image"><img src="http://localhost/Medicio/views/admin/assets\img\avatar2.png" alt="Avatar">
+                                                    <div class="image"><img src="http://localhost/Medicare/views/admin/assets\img\avatar2.png" alt="Avatar">
                                                     </div>
                                                     <div class="notification-info">
                                                         <div class="text"><span class="user-name">Jessica Caruso</span>

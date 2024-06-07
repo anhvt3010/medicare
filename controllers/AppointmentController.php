@@ -95,7 +95,7 @@ class AppointmentController extends BaseController
 
     }
 
-    public function homeAdmin(){
+    public function index(){
         $page = $_GET['page'] ?? 1;
 
         $listSpecialties = $this->specialtyModel->getSpecialtiesForAdmin();
@@ -180,6 +180,7 @@ class AppointmentController extends BaseController
 //            co the bo cac bien, vi lay $_GET
         ]);
     }
+
     public function get_one(){
         $appointmentId = $_GET['appointmentId'] ?? null;
 
@@ -194,15 +195,57 @@ class AppointmentController extends BaseController
         ]);
     }
 
-    public function test()
+    public function update_result()
     {
-        $converter = new ConvertDate();
-        $today = date('d/m/Y');
-        $date = $converter->convertDateToDayTimestamp($today);
+        $id = $_POST['appointment_id'];
 
-        $this->view('test', [
-            'date' => $date,
-            'today'=> $today
+        if (isset($_FILES['pdfFile']) && $_FILES['pdfFile']['error'] == 0) {
+            $result = $this->uploadToCloudinary($this->escapeBackslashes($_FILES['pdfFile']['tmp_name']));
+        }
+
+        $update = $this->appointmentModel->updateResultAppointment($id, $result);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($update);
+            exit;
+        } else {
+            return $this->view('test', [
+                'message' => $update
+            ]);
+        }
+
+    }
+
+    public function detail(): void
+    {
+        $appointment_id = $_GET['id'];
+        $appointment = $this->appointmentModel->getAppointmentById($appointment_id);
+        $this->view('admin.appointment-detail', [
+            'appointment' => $appointment,
         ]);
+    }
+
+    public function uploadToCloudinary($filePath): string
+    {
+        try {
+            $cloudinary = $GLOBALS['cloudinary'];
+
+            $options = [
+                'resource_type' => 'auto',
+                'type' => 'upload',
+                'access_mode' => 'public'
+            ];
+
+            $result = $cloudinary->uploadApi()->upload($filePath, $options);
+
+            return $result['secure_url'];
+        } catch (Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    }
+
+    private function escapeBackslashes($string): array|string
+    {
+        return str_replace("\\", "\\\\", $string);
     }
 }

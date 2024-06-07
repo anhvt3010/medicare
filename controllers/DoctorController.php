@@ -43,6 +43,7 @@ class DoctorController extends BaseController {
             'listSpecialties' => $listSpecialties,
         ]);
     }
+
     public function update()
     {
         $doctor_id = $_POST['id'];

@@ -1,11 +1,8 @@
 ﻿<?php
 session_start(); // Khởi động session
-
-// Kiểm tra xem session 'admin_name' đã được thiết lập hay chưa
 if (!isset($_SESSION['admin_name'])) {
-    // Nếu không, chuyển hướng đến trang đăng nhập
-    header('Location: http://localhost/Medicio/index.php?controller=login&action=loginAdmin');
-    exit(); // Dừng việc thực thi script hiện tại
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -16,23 +13,12 @@ if (!isset($_SESSION['admin_name'])) {
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="shortcut icon" href="assets\img\logo-fav.png">
+    <link href="http://localhost/Medicare/assets/img/logo.png" rel="icon">
     <title>Trang chủ - QTV</title>
-    <link rel="stylesheet" type="text/css" href="assets\lib\perfect-scrollbar\css\perfect-scrollbar.css">
-    <link rel="stylesheet" type="text/css"
-          href="assets\lib\material-design-icons\css\material-design-iconic-font.min.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicio/views/admin/assets\lib\jquery.vectormap\jquery-jvectormap-1.2.2.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicio/views/admin/assets\lib\jqvmap\jqvmap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicio/views/admin/assets\lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="http://localhost/Medicio/views/admin/assets\css\app.css" type="text/css">
-    <!--    icon-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <?php include 'import-link-tag.php' ?>
 
 </head>
 <body>
-<div class="be-wrapper be-fixed-sidebar">
     <!--    Navbar-->
     <?php include 'navbar.php' ?>
     <!--    left sidebar-->
@@ -40,6 +26,7 @@ if (!isset($_SESSION['admin_name'])) {
     <div class="be-content">
         <div class="main-content container-fluid">
             <div class="row">
+<!--                bieu do 1-->
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
                         <div class="chart sparkline" id="spark1"></div>
@@ -54,6 +41,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                     </div>
                 </div>
+<!--                bieu do 2-->
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
                         <div class="chart sparkline" id="spark2"></div>
@@ -69,6 +57,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                     </div>
                 </div>
+<!--                bieu do 3-->
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
                         <div class="chart sparkline" id="spark3"></div>
@@ -83,6 +72,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                     </div>
                 </div>
+<!--                bieu do 4-->
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
                         <div class="chart sparkline" id="spark4"></div>
@@ -102,13 +92,16 @@ if (!isset($_SESSION['admin_name'])) {
                     <div class="widget widget-fullwidth be-loading">
                         <div class="widget-head">
                             <div class="tools">
-                                <div class="dropdown"><a class="dropdown-toggle" data-toggle="dropdown"><span
-                                                class="icon mdi mdi-more-vert d-inline-block d-md-none"></span></a>
-                                    <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="#">Week</a><a
-                                                class="dropdown-item" href="#">Month</a><a class="dropdown-item"
-                                                                                           href="#">Year</a>
+                                <div class="dropdown">
+                                    <a class="dropdown-toggle" data-toggle="dropdown">
+                                        <span class="icon mdi mdi-more-vert d-inline-block d-md-none"></span>
+                                    </a>
+                                    <div class="dropdown-menu" role="menu">
+                                        <a class="dropdown-item" href="#">Tuần</a>
+                                        <a class="dropdown-item" href="#">Tháng</a>
+                                        <a class="dropdown-item" href="#">Năm</a>
                                         <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Today</a>
+                                        <a class="dropdown-item" href="#">Hôm nay</a>
                                     </div>
                                 </div>
                                 <span class="icon mdi mdi-chevron-down"></span><span
@@ -117,12 +110,12 @@ if (!isset($_SESSION['admin_name'])) {
                             </div>
                             <div class="button-toolbar d-none d-md-block">
                                 <div class="btn-group">
-                                    <button class="btn btn-secondary" type="button">Week</button>
-                                    <button class="btn btn-secondary active" type="button">Month</button>
-                                    <button class="btn btn-secondary" type="button">Year</button>
+                                    <button class="btn btn-secondary" type="button">Tuần</button>
+                                    <button class="btn btn-secondary active" type="button">Tháng</button>
+                                    <button class="btn btn-secondary" type="button">Năm</button>
                                 </div>
                                 <div class="btn-group">
-                                    <button class="btn btn-secondary" type="button">Today</button>
+                                    <button class="btn btn-secondary" type="button">Hôm nay</button>
                                 </div>
                             </div>
                             <span class="title">Thống kê lịch khám</span>
@@ -160,6 +153,7 @@ if (!isset($_SESSION['admin_name'])) {
                     </div>
                 </div>
             </div>
+
             <!--          2 bang-->
             <div class="row">
                 <div class="col-12 col-lg-6">
@@ -402,29 +396,54 @@ if (!isset($_SESSION['admin_name'])) {
     </div>
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
-</div>
 
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery\jquery.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\perfect-scrollbar\js\perfect-scrollbar.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\bootstrap\dist\js\bootstrap.bundle.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\js\app.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\jquery.flot.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\jquery.flot.pie.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\jquery.flot.time.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\jquery.flot.resize.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\plugins\jquery.flot.orderBars.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\plugins\curvedLines.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-flot\plugins\jquery.flot.tooltip.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery.sparkline\jquery.sparkline.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\countup\countUp.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jquery-ui\jquery-ui.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jqvmap\jquery.vmap.min.js" type="text/javascript"></script>
-<script src="http://localhost/Medicio/views/admin/assets\lib\jqvmap\maps\jquery.vmap.world.js" type="text/javascript"></script>
+
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery\jquery.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\perfect-scrollbar\js\perfect-scrollbar.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\bootstrap\dist\js\bootstrap.bundle.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\js\app.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\jquery.flot.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\jquery.flot.pie.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\jquery.flot.time.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\jquery.flot.resize.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\plugins\jquery.flot.orderBars.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\plugins\curvedLines.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-flot\plugins\jquery.flot.tooltip.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery.sparkline\jquery.sparkline.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\countup\countUp.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jquery-ui\jquery-ui.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jqvmap\jquery.vmap.min.js" type="text/javascript"></script>
+<script src="http://localhost/Medicare/views/admin/assets\lib\jqvmap\maps\jquery.vmap.world.js" type="text/javascript"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         //-initialize the javascript
         App.init();
         App.dashboard();
+
+        var newDataForPurchases = [[1, 50], [2, 70], [3, 50], [4, 80], [5, 60], [6, 90], [7, 50], [8, 55], [9, 70]];
+
+        $.plot($("#main-chart"), [{
+            data: newDataForPurchases, // Sử dụng dữ liệu mới cho "Purchases"
+            showLabels: true,
+            label: "Purchases",
+            labelPlacement: "below",
+            canvasRender: true,
+            cColor: "#FFFFFF"
+        }, {
+            data: [[1, 20], [2, 40], [3, 25], [4, 45], [5, 25], [6, 50], [7, 35], [8, 60], [9, 30]],
+            showLabels: true,
+            label: "Plans",
+            labelPlacement: "below",
+            canvasRender: true,
+            cColor: "#FFFFFF"
+        }, {
+            data: [[1, 35], [2, 15], [3, 20], [4, 30], [5, 15], [6, 18], [7, 28], [8, 10], [9, 30]],
+            showLabels: true,
+            label: "Services",
+            labelPlacement: "below",
+            canvasRender: true,
+            cColor: "#FFFFFF"
+        }]);
 
     });
 </script>

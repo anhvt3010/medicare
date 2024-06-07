@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,16 +17,16 @@
     <title>Danh sách bác sĩ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicio/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
+          href="http://localhost/Medicare/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicio/views/admin/assets/lib\material-design-icons\css\material-design-iconic-font.min.css">
+          href="http://localhost/Medicare/views/admin/assets/lib\material-design-icons\css\material-design-iconic-font.min.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicio/views/admin/assets/lib\select2\css\select2.min.css">
+          href="http://localhost/Medicare/views/admin/assets/lib\select2\css\select2.min.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicio/views/admin/assets/lib\bootstrap-slider\css\bootstrap-slider.min.css">
+          href="http://localhost/Medicare/views/admin/assets/lib\bootstrap-slider\css\bootstrap-slider.min.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicio/views/admin/assets/lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="http://localhost/Medicio/views/admin/assets/css\app.css" type="text/css">
+          href="http://localhost/Medicare/views/admin/assets/lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css\app.css" type="text/css">
     <!--    icon-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
@@ -83,7 +90,7 @@
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên bác sĩ..."
+                                            <input id="searchInput" placeholder="Nhập tên bác sĩ..." autocomplete="off"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -101,7 +108,7 @@
                                         <th style="width:17%;">Chuyên khoa</th>
                                         <th style="width:15%;">Thông tin liên hệ</th>
                                         <th style="width:15%;">Đánh giá</th>
-                                        <th style="width:10%;"></th>
+                                        <th style="width:2%;"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="tableBody" style="font-size: 15px">
@@ -179,16 +186,16 @@
                             <div>${doctor.phone}</div>
                         </td>
                         <td class='cell-detail'></td>
-                        <td class='text-right'>
+                        <td class='text-right p-0'>
                             <div class='btn-group btn-hspace'>
-                                <button class='btn btn-secondary dropdown-toggle' type='button' style='border: none; background-color: transparent;'
+                                <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
                                         data-toggle='dropdown'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                                             <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
                                                         </svg>
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                    <a href='http://localhost/Medicio/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
+                                    <a href='http://localhost/Medicare/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
                                        type='button' class='dropdown-item'>Xem chi tiết</a>
                                 </div>
                             </div>
@@ -444,7 +451,7 @@
 
 
                 $.ajax({
-                    url: 'http://localhost/Medicio/index.php?controller=doctor&action=add',
+                    url: 'http://localhost/Medicare/index.php?controller=doctor&action=add',
                     type: 'POST',
                     data: formData,
                     contentType: false, // Không set contentType

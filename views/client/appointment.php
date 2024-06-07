@@ -1,12 +1,10 @@
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Đặt Lịch Khám</title>
+    <link href="assets/img/logo.png" rel="icon">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -107,7 +105,7 @@ session_start();
 
         if(validatePatientInfo(patientName, patientGender, patientDob, patientPhone, patientEmail, patientDescription)) {
             $.ajax({
-                url: 'http://localhost/Medicio/index.php',
+                url: 'http://localhost/Medicare/index.php',
                 type: 'POST',
                 data: {
                     controller: 'appointment',
@@ -127,7 +125,7 @@ session_start();
                     console.log(message);
                     toastr.success('Lịch hẹn đã được tạo thành công!', '', {
                         onHidden: function() {
-                            window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home';
+                            window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home';
                         }
                     });
                 },

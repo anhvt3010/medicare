@@ -94,7 +94,7 @@
                             <div class="col-12">
                                 <div>
                                     <h3>Đăng Kí</h3>
-                                    <p>Bạn đã có tài khoản? <a href="http://localhost/Medicio/index.php?controller=auth&action=login">Đăng nhập</a></p>
+                                    <p>Bạn đã có tài khoản? <a href="http://localhost/Medicare/index.php?controller=auth&action=login">Đăng nhập</a></p>
                                 </div>
                             </div>
                         </div>
@@ -202,7 +202,7 @@
         }, 2000); // Toast hiển thị trong 3 giây
     }
     function redirectToLogin() {
-        window.location.href = "http://localhost/Medicio/index.php?controller=login&action=login";
+        window.location.href = "http://localhost/Medicare/index.php?controller=login&action=login";
     }
 </script>
 </body>

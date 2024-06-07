@@ -11,7 +11,7 @@
             <?php
             if (!isset($_SESSION['user_phone'])) {
                 echo
-                '<a href="http://localhost/Medicio/index.php?controller=home&action=login" class="navbar order-last order-lg-0" style="color:white;">
+                '<a href="http://localhost/Medicare/index.php?controller=home&action=login" class="navbar order-last order-lg-0" style="color:white;">
                   <i style="color: white;" class="fa fa-sign-in" aria-hidden="true"></i>
                   Đăng nhập
                 </a>';

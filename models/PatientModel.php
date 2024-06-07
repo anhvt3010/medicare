@@ -37,5 +37,38 @@ class PatientModel extends Database {
         return mysqli_fetch_assoc($query);
     }
 
+    public function findByPhone($phone): array
+    {
+        $sql = "SELECT p.patient_id,
+                       p.name AS name,
+                       p.email AS email,
+                       p.phone AS phone,
+                       p.gender AS gender,
+                       p.dob AS dob,
+                       p.address AS address,
+                        p.status AS status
+                FROM patients AS p WHERE p.phone = {$phone}";
+        $query = $this->_query($sql);
+        return mysqli_fetch_assoc($query);
+    }
+
+    public function updatePatient($name, $gender, $dob, $email, $address, $phone) {
+        $sql = "UPDATE patients SET 
+                    name = '" . mysqli_real_escape_string($this->connection, $name) . "',
+                    email = '" . mysqli_real_escape_string($this->connection, $email) . "',
+                    gender = '" . intval($gender) . "',
+                    dob = '" . mysqli_real_escape_string($this->connection, $dob) . "',
+                    address = '" . mysqli_real_escape_string($this->connection, $address) . "'
+                WHERE phone = " . $phone;
+
+        $query = $this->_query($sql);
+
+        if ($query) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
 
 }

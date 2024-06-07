@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -10,7 +17,7 @@
     <title>Xác nhận lịch khám</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'import-link-tag.php' ?>
-    <link href="http://localhost/Medicio/assets/css/appointment.css" rel="stylesheet">
+    <link href="http://localhost/Medicare/assets/css/appointment.css" rel="stylesheet">
     <style>
         #btn-action:focus {
             outline: none;
@@ -88,7 +95,7 @@
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên hoặc sđt ..."
+                                            <input id="searchInput" placeholder="Nhập tên hoặc sđt ..." autocomplete="off"
                                                    class="form-control" value="<?php echo $_GET['search'] ?? '' ?>">
                                         </div>
                                     </div>
@@ -315,8 +322,8 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <?php include 'import-script.php' ?>
-<script src="http://localhost/Medicio/assets/js/appointment-update.js"></script>
-<script src="http://localhost/Medicio/assets/js/validateAppointment.js"></script>
+<script src="http://localhost/Medicare/assets/js/appointment-update.js"></script>
+<script src="http://localhost/Medicare/assets/js/validateAppointment.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         var appointmentUpdate = [];
@@ -325,7 +332,7 @@
             console.log('Hiển thị thông tin cho appointment ID:', appointmentId);
 
             $.ajax({
-                url: 'http://localhost/Medicio/index.php',
+                url: 'http://localhost/Medicare/index.php',
                 type: 'GET',
                 data: {
                     controller: 'appointment',
@@ -414,7 +421,7 @@
             console.log('appointmentUpdated', appointmentUpdated)
 
             $.ajax({
-                url: 'http://localhost/Medicio/index.php?controller=appointment&action=update',
+                url: 'http://localhost/Medicare/index.php?controller=appointment&action=update',
                 type: 'POST',
                 // contentType: 'application/json', // Thêm header này nếu bạn gửi JSON
                 data: {
@@ -499,7 +506,7 @@
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicio/index.php?controller=appointment&action=confirm&page=1'
+    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=confirm&page=1'
 
     document.getElementById('button').addEventListener('click', function () {
         var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'

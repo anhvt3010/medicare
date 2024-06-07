@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -57,7 +64,7 @@
                             </div>
                             <hr>
                             <div class="mt-3 d-flex justify-content-between">
-                                <a id="backButton" class="btn btn-danger" href="http://localhost/Medicio/index.php?controller=specialty&action=index">Quay lại danh sách</a>
+                                <a id="backButton" class="btn btn-danger" href="http://localhost/Medicare/index.php?controller=specialty&action=index">Quay lại danh sách</a>
                                 <button id="editButton" class="btn btn-primary">Chỉnh sửa</button>
                             </div>
                         </div>
@@ -118,7 +125,7 @@
                     console.log("Trạng thái:", specialtyStatus.value);
 
                     $.ajax({
-                        url: 'http://localhost/Medicio/index.php?controller=specialty&action=update',
+                        url: 'http://localhost/Medicare/index.php?controller=specialty&action=update',
                         type: 'POST', // Sử dụng phương thức POST cho việc cập nhật
                         data: {
                             specialtyId: <?php echo $specialty['specialty_id'] ?>,
@@ -128,7 +135,7 @@
                         },
                         success: function (response) {
                             alert('Cập nhật thành công');
-                            window.location.href = 'http://localhost/Medicio/index.php?controller=specialty&action=index';
+                            window.location.href = 'http://localhost/Medicare/index.php?controller=specialty&action=index';
                         },
                         error: function () {
                             alert('Có lỗi xảy ra khi lấy dữ liệu');

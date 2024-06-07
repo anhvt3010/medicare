@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,9 +179,9 @@
                         <td class='milestone'>
                             <div>${specialty.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</div>
                         </td>
-                        <td class='text-right'>
+                        <td class='text-right p-0'>
                             <div class='btn-group btn-hspace'>
-                                <button class='btn btn-secondary dropdown-toggle' type='button' style='border: none; background-color: transparent;'
+                                <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
                                         data-toggle='dropdown'>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                                             <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
@@ -182,7 +189,7 @@
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-right' role='menu'>
                                     <a class='dropdown-item '
-                                       href='http://localhost/Medicio/index.php?controller=specialty&action=get_one&specialtyId=${specialty.specialty_id}'>Xem chi tiết</a>
+                                       href='http://localhost/Medicare/index.php?controller=specialty&action=get_one&specialtyId=${specialty.specialty_id}'>Xem chi tiết</a>
 <!--                                    <a class='dropdown-item' href='#'>Xóa</a>-->
                                 </div>
                             </div>
@@ -316,7 +323,7 @@
                 console.log('specialtyStatus: ', specialtyStatus.value);
 
                 $.ajax({
-                    url: 'http://localhost/Medicio/index.php?controller=specialty&action=add',
+                    url: 'http://localhost/Medicare/index.php?controller=specialty&action=add',
                     type: 'GET',
                     data: {
                         specialtyName: specialtyName.value,

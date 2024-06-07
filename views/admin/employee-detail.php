@@ -1,3 +1,10 @@
+<?php
+session_start(); // Khởi động session
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -199,7 +206,7 @@
                     </div>
                 </div>
                 <div class="d-flex justify-content-between p-3">
-                    <a id="backButton" class="btn btn-danger" href="http://localhost/Medicio/index.php?controller=doctor&action=index">Quay lại danh sách</a>
+                    <a id="backButton" class="btn btn-danger" href="http://localhost/Medicare/index.php?controller=doctor&action=index">Quay lại danh sách</a>
                     <button id="editButtonDoctor" class="btn btn-primary">Chỉnh sửa</button>
                 </div>
             </div>
@@ -283,7 +290,7 @@
                     // document.getElementById('fullScreenSpinner').style.display = 'flex';
 
                     $.ajax({
-                        url: 'http://localhost/Medicio/index.php?controller=doctor&action=update',
+                        url: 'http://localhost/Medicare/index.php?controller=doctor&action=update',
                         type: 'POST',
                         data: formData,
                         contentType: false, // Không set contentType
@@ -291,7 +298,7 @@
                         success: function(response) {
                             console.log(response);
                             alert("Cập nhật thành công")
-                            window.location.href = 'http://localhost/Medicio/index.php?controller=doctor&action=index';
+                            window.location.href = 'http://localhost/Medicare/index.php?controller=doctor&action=index';
                         },
                         error: function() {
                             alert('Có lỗi xảy ra, vui lòng thử lại.');

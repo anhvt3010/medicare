@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -11,8 +12,16 @@
     <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-9/assets/css/login-9.css">
     <link href="assets/css/style.css" rel="stylesheet">
+    <link href="assets/vendor/fontawesome-free/css/all.css" rel="stylesheet">
 
     <style>
+        .password-toggle {
+            cursor: pointer;
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+        }
         .toast {
             visibility: hidden; /* Ẩn toast */
             min-width: 250px; /* Đặt chiều rộng tối thiểu */
@@ -99,7 +108,7 @@
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="d-flex justify-content-center" style="background-color: #1F5D60FF; color: white">
                     <div class="col-12 col-xl-9">
-                        <a href="http://localhost/Medicio/index.php?controller=home&action=home#hero"
+                        <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero"
                            class="logo me-auto">
                             <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345"
                                  alt="BootstrapBrain Logo">
@@ -142,19 +151,13 @@
                                         <input type="password" class="form-control" name="password" id="password"
                                                value="" placeholder="Password" required>
                                         <label for="password" class="form-label">Mật khẩu</label>
+                                        <i class="fas fa-eye password-toggle" id="togglePassword"
+                                           style="position: absolute; right: 10px; top: 50%; transform: translateY(-50%);
+                                           cursor: pointer;"></i>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <span id="login-false"></span>
-                                </div>
-                                <div class="col-12">
-                                    <div class="form-check mb-3">
-                                        <input class="form-check-input" type="checkbox" value="" name="remember_me"
-                                               id="remember_me">
-                                        <label class="form-check-label text-secondary" for="remember_me">
-                                            Giữ tôi luôn đăng nhập
-                                        </label>
-                                    </div>
                                 </div>
                                 <div class="col-12 mt-4">
                                     <div class="d-grid">
@@ -170,6 +173,17 @@
                             <div class="col-12">
                                 <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end mt-3">
                                     <a href="#!">Quên mật khẩu</a>
+                                </div>
+                            </div>
+                            <div class="row mt-3">
+                                <div class="col-12">
+                                    <a href="http://localhost/Medicare/index.php?controller=auth&action=login"
+                                       style="color: #1F5D60FF">Đăng nhập người dùng
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(31, 93, 96, 1);transform: ;msFilter:;">
+                                            <path d="m13.061 4.939-2.122 2.122L15.879 12l-4.94 4.939 2.122 2.122L20.121 12z"></path>
+                                            <path d="M6.061 19.061 13.121 12l-7.06-7.061-2.122 2.122L8.879 12l-4.94 4.939z"></path>
+                                        </svg>
+                                    </a>
                                 </div>
                             </div>
                         </div>
@@ -198,6 +212,14 @@
         });
 
         document.getElementById('loginButton').addEventListener('click', validateAndSubmit);
+
+        document.getElementById('togglePassword').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+
     });
 
     function validateAndSubmit() {
@@ -233,7 +255,7 @@
 
         if (isValid) {
             $.ajax({
-                url: 'http://localhost/Medicio/index.php?controller=auth&action=processLoginAdmin',
+                url: 'http://localhost/Medicare/index.php?controller=auth&action=processLoginAdmin',
                 type: 'POST',
                 data: formData,
                 contentType: false, // Không set contentType
@@ -241,9 +263,9 @@
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        showToast('Đăng nhập thành công', '#28a745', 8000);
+                        showToast('Đăng nhập thành công', '#28a745', 800);
                         console.log('Thông tin session:', response['sessionData']);
-                        window.location.href = 'http://localhost/Medicio/index.php?controller=home&action=home';
+                        window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home_admin';
                     } else {
                         showToast(response['message'], '#a7284e', 3000);
                     }
