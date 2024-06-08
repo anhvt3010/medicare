@@ -265,7 +265,8 @@
                     if(response['success'] === true) {
                         showToast('Đăng nhập thành công', '#28a745', 800);
                         console.log('Thông tin session:', response['sessionData']);
-                        window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home_admin';
+                        // window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home_admin';
+                        window.location.href = 'http://localhost/Medicare/index.php?controller=appointment&action=index'
                     } else {
                         showToast(response['message'], '#a7284e', 3000);
                     }
