@@ -225,6 +225,15 @@ class AppointmentController extends BaseController
         ]);
     }
 
+    public function detail_client(): void
+    {
+        $appointment_id = $_GET['id'];
+        $appointment = $this->appointmentModel->getAppointmentById($appointment_id);
+        $this->view('client.appointment-detail', [
+            'appointment' => $appointment,
+        ]);
+    }
+
     public function uploadToCloudinary($filePath): string
     {
         try {

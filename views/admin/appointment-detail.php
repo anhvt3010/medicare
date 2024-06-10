@@ -96,7 +96,7 @@ if (!isset($_SESSION['admin_name'])) {
                             <div class="col-8">
                                 <label for="" class="form-label">Ngày đặt lịch khám</label>
                                 <div class="form-control-sm" style="background-color: #eee; line-height: 30px">
-                                    <?php echo $appointment['date_slot'] ?>
+                                    <?php echo convertDayTimestampToDate($appointment['date_slot']); ?>
                                 </div>
                             </div>
                             <div class="col-4">
@@ -252,6 +252,13 @@ if (!isset($_SESSION['admin_name'])) {
             modal.modal('hide');
         });
 
+        <?php
+        function convertDayTimestampToDate($dayTimestamp) {
+            if (!isset($dayTimestamp)) return null;
+            $timestamp = $dayTimestamp * 86400; // Chuyển đổi số ngày thành giây
+            return date('d/m/Y', $timestamp); // Định dạng lại timestamp thành ngày tháng
+        }
+        ?>
     });
 </script>
 </body>

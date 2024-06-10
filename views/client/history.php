@@ -24,10 +24,6 @@
                     <h2 class="page-head-title">Lịch sử khám bệnh</h2>
                 </div>
                 <div class="card card-table">
-
-                    <div class="row table-filters-container">
-<!--                        bộ lọc-->
-                    </div>
                     <div class="card-body">
                         <div class="noSwipe">
                             <table class="table table-striped table-hover be-table-responsive" id="table1">
@@ -141,14 +137,16 @@
                                         <td class="p-0">
                                             <div class="btn-group">
                                                 <button id="btn-action"
-                                                        style="border: none; background-color: transparent; "
-                                                        class=" dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                                        style="border: none; background-color: transparent;"
+                                                        class="dropdown-toggle" type="button"
+                                                        data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
                                                         <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
                                                     </svg>
                                                 </button>
-                                                <div class="dropdown-menu dropdown-menu-right">
-                                                    <button type="button" class="dropdown-item" data-id="<?php echo $appointment['id'] ?>">Chi tiết</button>
+                                                <div class="dropdown-menu dropdown-menu-left">
+                                                    <a type="button" class="dropdown-item"
+                                                       href="http://localhost/Medicare/index.php?controller=appointment&action=detail_client&id=<?php echo $appointment['id'] ?>">Chi tiết</a>
                                                 </div>
                                             </div>
                                         </td>
@@ -167,7 +165,8 @@
 
 </main>
 <?php include "components/footer.html" ?>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 
 </body>
 </html>
