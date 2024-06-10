@@ -5,6 +5,7 @@ class HomeController extends BaseController
     private $doctorModel;
     private $specialtyModel;
     private $authModel;
+    private $appointmentModel;
 
     public function __construct()
     {
@@ -13,6 +14,9 @@ class HomeController extends BaseController
 
         $this->loadModel('SpecialtyModel');
         $this->specialtyModel = new SpecialtyModel();
+
+        $this->loadModel('AppointmentModel');
+        $this->appointmentModel = new AppointmentModel();
 
         $this->loadModel('AuthModel');
         $this->authModel = new AuthModel();
@@ -30,7 +34,24 @@ class HomeController extends BaseController
 
     public function home_admin()
     {
+        $appointmentSuccess = $this->appointmentModel->getTotalAppointmentsSuccess();
+        $appointmentPending = $this->appointmentModel->getTotalAppointmentsConfirm();
+        $appointmentProcess = $this->appointmentModel->getTotalAppointmentsProcess();
+        $appointmentCancel = $this->appointmentModel->getTotalAppointmentsCancel();
+
+        $from0_14 = $this->appointmentModel->getTotalAppointments0_14();
+        $from15_35 = $this->appointmentModel->getTotalAppointments15_35();
+        $from36_64 = $this->appointmentModel->getTotalAppointments36_64();
+        $from65 = $this->appointmentModel->getTotalAppointments64();
         return $this->view('admin.index', [
+            'appointmentProcess' => $appointmentProcess,
+            'appointmentSuccess' => $appointmentSuccess,
+            'appointmentPending' => $appointmentPending,
+            'appointmentCancel' => $appointmentCancel,
+            'from0_14' => $from0_14,
+            'from15_35' => $from15_35,
+            'from36_64' => $from36_64,
+            'from65' => $from65,
         ]);
     }
 
@@ -88,6 +109,10 @@ class HomeController extends BaseController
         ]);
     }
 
+    public function test_toast()
+    {
+        return $this->view('toast');
+    }
 
     public function logout()
     {

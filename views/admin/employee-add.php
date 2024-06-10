@@ -52,7 +52,7 @@
                     </div>
                 </div>
                 <div class="mb-1 row">
-                    <div class="col-6">
+                    <div class="col-5">
                         <label for="emPosition" class="form-label">Chức vụ *</label>
                         <select id="emPosition" class="form-select" aria-label="Large select example" style="height: 50px">
                             <option hidden="hidden" value="0">Chọn chức vụ</option>
@@ -64,17 +64,12 @@
                         </select>
                         <span style="margin-left: 10px; color: red" id="errorEmPosition"></span>
                     </div>
-                    <div class="col-6">
-                        <label for="emSpecialty" class="form-label">Chuyên khoa làm việc *</label>
-                        <select id="emSpecialty" class="form-select" aria-label="Large select example" style="height: 50px">
-                            <option hidden="hidden" value="0">Chọn chuyên khoa</option>
-                            <?php
-                            foreach ($listSpecialties as $specialty) {
-                                echo "<option value='" . htmlspecialchars($specialty['specialty_id']) . "'>" . htmlspecialchars($specialty['name']) . "</option>";
-                            }
-                            ?>
-                        </select>
-                        <span style="margin-left: 10px; color: red" id="errorEmSpecialty"></span>
+                    <div class="col-7">
+                        <div class="mb-3">
+                            <label for="empAvt" class="form-label">Tải lên ảnh</label>
+                            <input class="form-control" type="file" id="empAvt">
+                            <span style="margin-left: 10px; color: red" id="errorEmpAvt"></span>
+                        </div>
                     </div>
                 </div>
                 <strong class="pl-3"><i>* Mật khẩu mặc định là: Abc12345</i></strong>

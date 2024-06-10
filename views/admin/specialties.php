@@ -8,15 +8,9 @@ if (!isset($_SESSION['admin_name'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="assets/img/logo.png" rel="icon">
     <title>Danh sách lịch khám</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <?php include 'import-link-tag.php'?>
+    <?php include 'import_head.php' ?>
 </head>
 <body>
 <div class="be-wrapper">
@@ -29,7 +23,7 @@ if (!isset($_SESSION['admin_name'])) {
             <h2 class="page-head-title" style="font-size: 25px">Danh sách chuyên khoa</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
-                    <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="http://localhost/Medicare/index.php?controller=home&action=home_admin">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý chuyên khoa</li>
                     <li class="breadcrumb-item active">Danh sách chuyên khoa</li>
                 </ol>

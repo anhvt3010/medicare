@@ -33,6 +33,11 @@ if (!isset($_SESSION['admin_name'])) {
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="be-wrapper">
     <!--    Navbar-->
     <?php include 'navbar.php' ?>
@@ -136,7 +141,8 @@ if (!isset($_SESSION['admin_name'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-        // App.init();
+        document.getElementById('loading-spinner').style.display = 'none';
+        App.init();
         // App.tableFilters();
 
         let listDoctors = <?php echo json_encode($listDoctors); ?>;
@@ -438,6 +444,7 @@ if (!isset($_SESSION['admin_name'])) {
 
             // Nếu tất cả thông tin hợp lệ
             if (isValid) {
+                document.getElementById('loading-spinner').style.display = 'block';
                 var formData = new FormData();
                 formData.append('name', emName.value);
                 formData.append('gender', parseInt(emGender.value, 10));
@@ -463,13 +470,13 @@ if (!isset($_SESSION['admin_name'])) {
                     },
                     error: function() {
                         alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    },
+                    complete: function() {
+                        $("#loading-spinner").hide(); // Ẩn spinner khi yêu cầu hoàn thành
                     }
                 });
             }
         });
-
-        App.init();
-        App.tableFilters();
     });
 </script>
 </body>

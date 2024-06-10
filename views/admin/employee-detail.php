@@ -75,12 +75,11 @@ if (!isset($_SESSION['admin_name'])) {
     </style>
 </head>
 <body>
-<!--<div id="fullScreenSpinner" class="position-fixed top-0 start-0 w-100 h-100 d-flex justify-content-center align-items-center"-->
-<!--     style="background-color: rgba(0,0,0,0.5); display: none!important; z-index: 1050;">-->
-<!--    <div class="spinner-border text-light" role="status">-->
-<!--        <span class="visually-hidden">Loading...</span>-->
-<!--    </div>-->
-<!--</div>-->
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="be-wrapper">
     <!--    Navbar-->
     <?php include 'navbar.php' ?>
@@ -221,7 +220,7 @@ if (!isset($_SESSION['admin_name'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>
     window.onload = function() {
-        // document.getElementById('fullScreenSpinner').style.display = 'none';
+        document.getElementById('loading-spinner').style.display = 'none';
         // Thiết lập giá trị cho select chuyên khoa
         var specialtySelect = document.getElementById('docUpSpecialty');
         specialtySelect.value = '<?php echo $doctor['specialty_id']; ?>';
@@ -287,7 +286,7 @@ if (!isset($_SESSION['admin_name'])) {
                         console.log(pair[0]+ ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
                     }
 
-                    // document.getElementById('fullScreenSpinner').style.display = 'flex';
+                    document.getElementById('loading-spinner').style.display = 'block';
 
                     $.ajax({
                         url: 'http://localhost/Medicare/index.php?controller=doctor&action=update',
@@ -304,15 +303,10 @@ if (!isset($_SESSION['admin_name'])) {
                             alert('Có lỗi xảy ra, vui lòng thử lại.');
                         },
                         complete: function() {
-                            // Ẩn spinner khi AJAX hoàn thành
-                            // document.getElementById('fullScreenSpinner').style.display = 'none';
+                            $("#loading-spinner").hide(); // Ẩn spinner khi yêu cầu hoàn thành
                         }
                     });
-                } else {
-                    // Ẩn spinner nếu dữ liệu không hợp lệ
-                    // document.getElementById('fullScreenSpinner').style.display = 'none';
                 }
-
             });
         });
 
@@ -341,7 +335,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Kiểm tra họ và tên
         if (!name || name.length > 50) {
-            document.getElementById('errorDocName').textContent = 'Họ và tên không được để trống và không quá 50 ký tự.';
+            document.getElementById('errorDocName').textContent = 'Họ và tên không hợp lệ.';
             isValid = false;
         } else {
             document.getElementById('errorDocName').textContent = '';
@@ -349,7 +343,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Kiểm tra tên tài khoản
         if (!username || username.length > 50) {
-            document.getElementById('errorDocUsername').textContent = 'Tên tài khoản không được để trống và không quá 50 ký tự.';
+            document.getElementById('errorDocUsername').textContent = 'Tên tài khoản không hợp lệ.';
             isValid = false;
         } else {
             document.getElementById('errorDocUsername').textContent = '';
@@ -357,9 +351,9 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Kiểm tra ngày sinh
         const today = new Date();
-        const minAge = new Date(today.getFullYear() - 22, today.getMonth(), today.getDate());
+        const minAge = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
         if (!dob || dob >= minAge) {
-            document.getElementById('errorDocDob').textContent = 'Ngày sinh không được để trống và phải lớn hơn 22 tuổi.';
+            document.getElementById('errorDocDob').textContent = 'Ngày sinh không hợp lệ.';
             isValid = false;
         } else {
             document.getElementById('errorDocDob').textContent = '';
@@ -367,7 +361,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Kiểm tra email
         if (!email || email.length > 150) {
-            document.getElementById('errorDocEmail').textContent = 'Email không được để trống và không quá 150 ký tự.';
+            document.getElementById('errorDocEmail').textContent = 'Email không hợp lệ.';
             isValid = false;
         } else {
             document.getElementById('errorDocEmail').textContent = '';

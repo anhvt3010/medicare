@@ -78,7 +78,6 @@ class DoctorController extends BaseController {
     public function add()
     {
         $specialty_id = $_POST['specialty_id'];
-        $position_id = $_POST['position_id'];
         $name = $_POST['name'];
         $phone  = $_POST['phone'];
         $email = $_POST['email'];
@@ -91,10 +90,10 @@ class DoctorController extends BaseController {
         if (isset($_FILES['avt']) && $_FILES['avt']['error'] == 0) {
             $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avt']['tmp_name']));
         } else {
-            $avt = 'looi'; // Hoặc đặt một URL ảnh mặc định nếu cần
+            $avt = 'http://localhost/Medicare/assets/img/doctors/doctor_default.png';
         }
 
-        $result = $this->doctorModel->addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $position_id, $status, $avt);
+        $result = $this->doctorModel->addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
             echo json_encode($result);

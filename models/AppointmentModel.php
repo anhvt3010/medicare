@@ -445,4 +445,78 @@ class AppointmentModel extends Database {
             return [];
         }
     }
+
+    public function getTotalAppointmentsCancel() {
+        $sql = "SELECT COUNT(*) AS total 
+            FROM appointments AS a
+            WHERE  a.status = 3";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
+    public function getTotalAppointmentsSuccess() {
+        $sql = "SELECT COUNT(*) AS total 
+            FROM appointments AS a
+            WHERE  a.status = 2";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
+    public function getTotalAppointmentsProcess() {
+        $sql = "SELECT COUNT(*) AS total 
+            FROM appointments AS a
+            WHERE  a.status = 1";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
+    public function getTotalAppointments0_14() {
+        $sql = "SELECT COUNT(*) AS total
+                FROM appointments AS a
+                WHERE a.status = 2 
+                AND TIMESTAMPDIFF(YEAR, a.patient_dob, CURDATE()) BETWEEN 0 AND 14;";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
+    public function getTotalAppointments15_35() {
+        $sql = "SELECT COUNT(*) AS total
+                FROM appointments AS a
+                WHERE a.status = 2 
+                AND TIMESTAMPDIFF(YEAR, a.patient_dob, CURDATE()) BETWEEN 15 AND 35;";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
+    public function getTotalAppointments36_64() {
+        $sql = "SELECT COUNT(*) AS total
+                FROM appointments AS a
+                WHERE a.status = 2 
+                AND TIMESTAMPDIFF(YEAR, a.patient_dob, CURDATE()) BETWEEN 36 AND 64;";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
+    public function getTotalAppointments64() {
+        $sql = "SELECT COUNT(*) AS total
+                FROM appointments AS a
+                WHERE a.status = 2 
+                AND TIMESTAMPDIFF(YEAR, a.patient_dob, CURDATE()) > 64;;";
+
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
 }

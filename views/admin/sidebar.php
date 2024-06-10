@@ -4,7 +4,7 @@
             <div class="left-sidebar-scroll">
                 <div class="left-sidebar-content">
                     <ul class="sidebar-elements">
-                        <li class="divider">Menu</li>
+                        <li class="divider">Danh sách quản lý</li>
                         <li class="active">
                             <a href="http://localhost/Medicare/index.php?controller=home&action=home_admin">
                                 <i class="icon fa-solid fa-house"></i><span>Trang chủ</span>
@@ -54,13 +54,6 @@
                         </li>
                     </ul>
                 </div>
-            </div>
-        </div>
-        <div class="progress-widget">
-            <div class="progress-data"><span class="progress-value">60%</span><span
-                    class="name">Current Project</span></div>
-            <div class="progress">
-                <div class="progress-bar progress-bar-primary" style="width: 60%;"></div>
             </div>
         </div>
     </div>

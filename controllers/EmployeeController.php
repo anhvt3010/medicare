@@ -1,8 +1,9 @@
 <?php
+require 'configs/cloudinaryConfig.php';
 class EmployeeController extends BaseController {
-    private $employeeModel;
-    private $specialtyModel;
-    private $positionModel;
+    private EmployeeModel $employeeModel;
+    private SpecialtyModel $specialtyModel;
+    private PositionModel $positionModel;
 
     public function __construct()
     {
@@ -24,7 +25,7 @@ class EmployeeController extends BaseController {
         return $this->view('admin.employees', [
             'listEmployees' => $listEmployees,
             'listPositions' => $listPositions,
-            'listSpecialties' => $listSpecialties,
+//            'listSpecialties' => $listSpecialties,
         ]);
     }
 
@@ -33,7 +34,6 @@ class EmployeeController extends BaseController {
      */
     public function add()
     {
-        $specialty_id = $_POST['specialty_id'];
         $position_id = $_POST['position_id'];
         $name = $_POST['name'];
         $phone  = $_POST['phone'];
@@ -43,7 +43,14 @@ class EmployeeController extends BaseController {
         $address  = $_POST['address'];
         $status  = $_POST['status'];
 
-        $result = $this->employeeModel->addEmployee($name,$dob, $email, $phone, $gender, $address, $specialty_id, $position_id, $status);
+        // Xử lý upload ảnh đại diện
+        if (isset($_FILES['avt']) && $_FILES['avt']['error'] == 0) {
+            $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avt']['tmp_name']));
+        } else {
+            $avt = 'http://localhost/Medicare/assets/img/doctors/doctor_default.png';
+        }
+
+        $result = $this->employeeModel->addEmployee($name,$dob, $email, $phone, $gender, $address, $position_id, $status, $avt);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
             echo json_encode($result);
@@ -52,6 +59,27 @@ class EmployeeController extends BaseController {
         return $this->view('test', [
             'result' => $result,
         ]);
+    }
+
+    public function uploadImageToCloudinary($imagePath): string
+    {
+        try {
+            // Truy cập đối tượng Cloudinary từ biến toàn cục
+            $cloudinary = $GLOBALS['cloudinary'];
+
+            // Upload ảnh lên Cloudinary sử dụng đối tượng Cloudinary
+            $result = $cloudinary->uploadApi()->upload($imagePath);
+
+            // Trả về URL an toàn của ảnh đã upload
+            return $result['secure_url'];
+        } catch (Exception $e) {
+            return 'Error: ' . $e->getMessage();
+        }
+    }
+
+    private function escapeBackslashes($string): array|string
+    {
+        return str_replace("\\", "\\\\", $string);
     }
 
 }

@@ -34,13 +34,12 @@ class EmployeeModel  extends BaseModel {
         return $data;
     }
 
-    public function addEmployee($name, $dob, $email, $phone,$gender, $address, $specialty_id, $position_id, $status): bool
+    public function addEmployee($name, $dob, $email, $phone,$gender, $address, $position_id, $status, $avt): bool
     {
         $created_at = date("Y-m-d H:i:s");
         $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
         $role_id = 1;
         $sql = "INSERT INTO employees (
-                       specialty_id,
                        position_id,
                        role_id,
                        name,
@@ -51,7 +50,8 @@ class EmployeeModel  extends BaseModel {
                        gender,
                        address, 
                        status,
-                       create_at)
+                       create_at,
+                       avt)
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($this->connection, $sql);
@@ -59,9 +59,9 @@ class EmployeeModel  extends BaseModel {
             throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
         }
 
-        mysqli_stmt_bind_param($stmt, 'iiisssssisis',
-            $specialty_id, $position_id, $role_id,$name, $hashedPassword, $phone, $email, $dob, $gender,
-            $address, $status,$created_at);
+        mysqli_stmt_bind_param($stmt, 'iisssssisiss',
+            $position_id, $role_id,$name, $hashedPassword, $phone, $email, $dob, $gender,
+            $address, $status,$created_at, $avt);
         $result = mysqli_stmt_execute($stmt);
         if ($result === false) {
             throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));

@@ -1,437 +1,246 @@
-﻿<?php
-session_start(); // Khởi động session
-if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
-    exit();
-}
-?>
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link rel="shortcut icon" href="assets\img\logo-fav.png">
     <title>Trang chủ - QTV</title>
-
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicare/views/admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicare/views/admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicare/views/admin/assets/lib/jquery.vectormap/jquery-jvectormap-1.2.2.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicare/views/admin/assets/lib/jqvmap/jqvmap.min.css">
-    <link rel="stylesheet" type="text/css" href="http://localhost/Medicare/views/admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css/app.css" type="text/css">
-
-    <!--    icon-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
-
+    <?php include 'import_head.php' ?>
 </head>
 <body>
+<div class="be-wrapper be-fixed-sidebar">
     <!--    Navbar-->
     <?php include 'navbar.php' ?>
     <!--    left sidebar-->
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="main-content container-fluid">
+            <!--            4 so lieu-->
             <div class="row">
-<!--                bieu do 1-->
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
-                        <div class="chart sparkline" id="spark1"></div>
+                        <div class="chart sparkline" >
+                            <i class="fa-solid fa-bed-pulse fa-3x"  style="color: #34a853"></i>
+                        </div>
                         <div class="data-info">
-                            <div class="desc">Người dùng mới</div>
-                            <div class="value"><span
-                                        class="indicator indicator-equal mdi mdi-chevron-right"></span>
-                                <span class="number"
-                                      data-toggle="counter"
-                                      data-end="113">0</span>
+                            <div class="desc">Bệnh nhân đã phục vụ</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up"></span>
+                                <span class="number" data-toggle="counter"
+                                      data-end="<?php echo $appointmentSuccess ?>"></span>
                             </div>
                         </div>
                     </div>
                 </div>
-<!--                bieu do 2-->
+                <div class="col-12 col-lg-6 col-xl-3" >
+                    <a class="widget widget-tile" title="Đi đến trang xác nhận lịch hẹn"
+                       href="http://localhost/Medicare/index.php?controller=appointment&action=confirm">
+                        <div class="chart sparkline" style="color: black">
+                            <i class="fa-solid fa-calendar-check fa-3x" style="color: #fae711"></i>
+                        </div>
+                        <div class="data-info" style="color: black">
+                            <div class="desc" >Cần xác nhận lịch hẹn</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up" style="color: #fae711"></span>
+                                <span class="number" data-toggle="counter"
+                                      data-end="<?php echo $appointmentPending ?>">0</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
-                        <div class="chart sparkline" id="spark2"></div>
+                        <div class="chart sparkline">
+                            <i class="fa-solid fa-clock fa-3x" style="color: #4182ff"></i>
+                        </div>
                         <div class="data-info">
-                            <div class="desc">Số bác sĩ</div>
-                            <div class="value"><span
-                                        class="indicator indicator-positive mdi mdi-chevron-up"></span>
-                                <span class="number"
-                                      data-toggle="counter"
-                                      data-end="80"
-                                      data-suffix="%">0</span>
+                            <div class="desc">Lịch khám đang chờ</div>
+                            <div class="value">
+                                <span class="indicator indicator-positive mdi mdi-chevron-up" style="color: #4182ff"></span>
+                                <span class="number" data-toggle="counter" data-end="<?php echo $appointmentProcess ?>">0</span>
                             </div>
                         </div>
                     </div>
                 </div>
-<!--                bieu do 3-->
                 <div class="col-12 col-lg-6 col-xl-3">
                     <div class="widget widget-tile">
-                        <div class="chart sparkline" id="spark3"></div>
+                        <div class="chart sparkline">
+                            <i class="fa-solid fa-rectangle-xmark fa-3x" style="color: #fc0303;"></i>
+                        </div>
                         <div class="data-info">
-                            <div class="desc">Số phụ tá</div>
-                            <div class="value"><span
-                                        class="indicator indicator-positive mdi mdi-chevron-up"></span>
-                                <span class="number"
-                                      data-toggle="counter"
-                                      data-end="532">0</span>
+                            <div class="desc">Lịch hẹn hủy</div>
+                            <div class="value"><span class="indicator indicator-negative mdi mdi-chevron-down"></span>
+                                <span class="number" data-toggle="counter"
+                                      data-end="<?php echo $appointmentCancel ?>">0</span>
                             </div>
-                        </div>
-                    </div>
-                </div>
-<!--                bieu do 4-->
-                <div class="col-12 col-lg-6 col-xl-3">
-                    <div class="widget widget-tile">
-                        <div class="chart sparkline" id="spark4"></div>
-                        <div class="data-info">
-                            <div class="desc">Số bệnh nhân</div>
-                            <div class="value"><span
-                                        class="indicator indicator-negative mdi mdi-chevron-down"></span><span
-                                        class="number" data-toggle="counter" data-end="113">0</span>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--          bieu do to-->
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="widget widget-fullwidth be-loading">
-                        <div class="widget-head">
-                            <div class="tools">
-                                <div class="dropdown">
-                                    <a class="dropdown-toggle" data-toggle="dropdown">
-                                        <span class="icon mdi mdi-more-vert d-inline-block d-md-none"></span>
-                                    </a>
-                                    <div class="dropdown-menu" role="menu">
-                                        <a class="dropdown-item" href="#">Tuần</a>
-                                        <a class="dropdown-item" href="#">Tháng</a>
-                                        <a class="dropdown-item" href="#">Năm</a>
-                                        <div class="dropdown-divider"></div>
-                                        <a class="dropdown-item" href="#">Hôm nay</a>
-                                    </div>
-                                </div>
-                                <span class="icon mdi mdi-chevron-down"></span><span
-                                        class="icon toggle-loading mdi mdi-refresh-sync"></span><span
-                                        class="icon mdi mdi-close"></span>
-                            </div>
-                            <div class="button-toolbar d-none d-md-block">
-                                <div class="btn-group">
-                                    <button class="btn btn-secondary" type="button">Tuần</button>
-                                    <button class="btn btn-secondary active" type="button">Tháng</button>
-                                    <button class="btn btn-secondary" type="button">Năm</button>
-                                </div>
-                                <div class="btn-group">
-                                    <button class="btn btn-secondary" type="button">Hôm nay</button>
-                                </div>
-                            </div>
-                            <span class="title">Thống kê lịch khám</span>
-                        </div>
-                        <div class="widget-chart-container">
-                            <div class="widget-chart-info">
-                                <ul class="chart-legend-horizontal">
-                                    <li><span data-color="main-chart-color1"></span>Đã hoàn thành</li>
-                                    <li><span data-color="main-chart-color2"></span> Plans</li>
-                                    <li><span data-color="main-chart-color3"></span> Services</li>
-                                </ul>
-                            </div>
-                            <div class="widget-counter-group widget-counter-group-right">
-                                <div class="counter counter-big">
-                                    <div class="value">25%</div>
-                                    <div class="desc">Purchase</div>
-                                </div>
-                                <div class="counter counter-big">
-                                    <div class="value">5%</div>
-                                    <div class="desc">Plans</div>
-                                </div>
-                                <div class="counter counter-big">
-                                    <div class="value">5%</div>
-                                    <div class="desc">Services</div>
-                                </div>
-                            </div>
-                            <div id="main-chart" style="height: 260px;"></div>
-                        </div>
-                        <div class="be-spinner">
-                            <svg width="40px" height="40px" viewbox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                <circle class="circle" fill="none" stroke-width="4" stroke-linecap="round" cx="33"
-                                        cy="33" r="30"></circle>
-                            </svg>
                         </div>
                     </div>
                 </div>
             </div>
 
-            <!--          2 bang-->
-            <div class="row">
-                <div class="col-12 col-lg-6">
-                    <div class="card card-table">
-                        <div class="card-header">
-                            <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a
-                                        class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"><span
-                                            class="icon mdi mdi-more-vert"></span></a>
-                                <div class="dropdown-menu" role="menu"><a class="dropdown-item" href="#">Action</a><a
-                                            class="dropdown-item" href="#">Another action</a><a class="dropdown-item"
-                                                                                                href="#">Something else
-                                        here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
-                                </div>
-                            </div>
-                            <div class="title">Purchases</div>
-                        </div>
-                        <div class="card-body table-responsive">
-                            <table class="table table-striped table-borderless">
-                                <thead>
-                                <tr>
-                                    <th style="width:40%;">Product</th>
-                                    <th class="number">Price</th>
-                                    <th style="width:20%;">Date</th>
-                                    <th style="width:20%;">State</th>
-                                    <th class="actions" style="width:5%;"></th>
-                                </tr>
-                                </thead>
-                                <tbody class="no-border-x">
-                                <tr>
-                                    <td>Sony Xperia M4</td>
-                                    <td class="number">$149</td>
-                                    <td>Aug 23, 2018</td>
-                                    <td class="text-success">Completed</td>
-                                    <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>Apple iPhone 6</td>
-                                    <td class="number">$535</td>
-                                    <td>Aug 20, 2018</td>
-                                    <td class="text-success">Completed</td>
-                                    <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>Samsung Galaxy S7</td>
-                                    <td class="number">$583</td>
-                                    <td>Aug 18, 2018</td>
-                                    <td class="text-warning">Pending</td>
-                                    <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>HTC One M9</td>
-                                    <td class="number">$350</td>
-                                    <td>Aug 15, 2018</td>
-                                    <td class="text-warning">Pending</td>
-                                    <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                </tr>
-                                <tr>
-                                    <td>Sony Xperia Z5</td>
-                                    <td class="number">$495</td>
-                                    <td>Aug 13, 2018</td>
-                                    <td class="text-danger">Cancelled</td>
-                                    <td class="actions"><a class="icon" href="#"><i
-                                                    class="mdi mdi-plus-circle-o"></i></a></td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-lg-6">
-                    <div class="card card-table">
-                        <div class="card-header">
-                            <div class="tools dropdown"><span class="icon mdi mdi-download"></span><a
-                                        class="dropdown-toggle" href="#" role="button" data-toggle="dropdown"><span
-                                            class="icon mdi mdi-more-vert"></span></a>
-                                <div class="dropdown-menu dropdown-menu-right" role="menu"><a class="dropdown-item"
-                                                                                              href="#">Action</a><a
-                                            class="dropdown-item" href="#">Another action</a><a class="dropdown-item"
-                                                                                                href="#">Something else
-                                        here</a>
-                                    <div class="dropdown-divider"></div>
-                                    <a class="dropdown-item" href="#">Separated link</a>
-                                </div>
-                            </div>
-                            <div class="title">Latest Commits</div>
-                        </div>
-                        <div class="card-body table-responsive">
-                            <table class="table table-striped table-hover">
-                                <thead>
-                                <tr>
-                                    <th style="width:37%;">User</th>
-                                    <th style="width:36%;">Commit</th>
-                                    <th>Date</th>
-                                    <th class="actions"></th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="user-avatar"><img src="assets/img/avatar6.png" alt="Avatar">Penelope
-                                        Thornton
-                                    </td>
-                                    <td>Topbar dropdown style</td>
-                                    <td>Aug 16, 2018</td>
-                                    <td class="actions"><a class="icon" href="#"><i class="mdi mdi-github-alt"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="user-avatar"><img src="assets/img/avatar4.png" alt="Avatar">Benji Harper
-                                    </td>
-                                    <td>Left sidebar adjusments</td>
-                                    <td>Jul 15, 2018</td>
-                                    <td class="actions"><a class="icon" href="#"><i class="mdi mdi-github-alt"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="user-avatar"><img src="assets/img/avatar5.png" alt="Avatar">Justine
-                                        Myranda
-                                    </td>
-                                    <td>Main structure markup</td>
-                                    <td>Jul 28, 2018</td>
-                                    <td class="actions"><a class="icon" href="#"><i class="mdi mdi-github-alt"></i></a>
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td class="user-avatar"><img src="assets/img/avatar3.png" alt="Avatar">Sherwood
-                                        Clifford
-                                    </td>
-                                    <td>Initial commit</td>
-                                    <td>Jun 30, 2018</td>
-                                    <td class="actions"><a class="icon" href="#"><i class="mdi mdi-github-alt"></i></a>
-                                    </td>
-                                </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <!--          3 thong ke hang 3-->
             <div class="row">
                 <div class="col-12 col-lg-4">
                     <div class="card">
-                        <div class="card-header card-header-divider pb-3">Current Progress</div>
+                        <div class="card-header card-header-divider pb-3">Phân bổ độ tuổi bệnh nhân</div>
                         <div class="card-body pt-5">
                             <div class="row user-progress user-progress-small">
-                                <div class="col-lg-5"><span class="title">Bootstrap Admin</span></div>
-                                <div class="col-lg-7">
+                                <div class="col-lg-4"><span class="title">Dưới 14 tuổi </span></div>
+                                <div class="col-lg-6">
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" style="width: 40%;"></div>
+                                        <div class="progress-bar bg-success"
+                                             style="width: <?php echo ($from0_14 / $appointmentSuccess) * 100 ?>%;"></div>
                                     </div>
+                                </div>
+                                <div class="col-lg-2"><span
+                                            class="title"><?php echo round(($from0_14 / $appointmentSuccess) * 100, 1) ?>%</span>
                                 </div>
                             </div>
                             <div class="row user-progress user-progress-small">
-                                <div class="col-lg-5"><span class="title">Custom Work</span></div>
-                                <div class="col-lg-7">
+                                <div class="col-lg-4"><span class="title">Từ 15 - 35 tuổi</span></div>
+                                <div class="col-lg-6">
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" style="width: 65%;"></div>
+                                        <div class="progress-bar bg-success"
+                                             style="width: <?php echo ($from15_35 / $appointmentSuccess) * 100 ?>5%;"></div>
                                     </div>
+                                </div>
+                                <div class="col-lg-2"><span
+                                            class="title"><?php echo round(($from15_35 / $appointmentSuccess) * 100, 1) ?>%</span>
                                 </div>
                             </div>
                             <div class="row user-progress user-progress-small">
-                                <div class="col-lg-5"><span class="title">Clients Module</span></div>
-                                <div class="col-lg-7">
+                                <div class="col-lg-4"><span class="title">Từ 36 - 64 tuổi</span></div>
+                                <div class="col-lg-6">
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" style="width: 30%;"></div>
+                                        <div class="progress-bar bg-success"
+                                             style="width: <?php echo ($from36_64 / $appointmentSuccess) * 100 ?>0%;"></div>
                                     </div>
+                                </div>
+                                <div class="col-lg-2"><span
+                                            class="title"><?php echo round(($from36_64 / $appointmentSuccess) * 100, 1) ?>%</span>
                                 </div>
                             </div>
                             <div class="row user-progress user-progress-small">
-                                <div class="col-lg-5"><span class="title">Email Templates</span></div>
-                                <div class="col-lg-7">
+                                <div class="col-lg-4"><span class="title">Từ 65 tuổi</span></div>
+                                <div class="col-lg-6">
                                     <div class="progress">
-                                        <div class="progress-bar bg-success" style="width: 80%;"></div>
+                                        <div class="progress-bar bg-success"
+                                             style="width: <?php echo ($from65 / $appointmentSuccess) * 100 ?>0%;"></div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="row user-progress user-progress-small">
-                                <div class="col-lg-5"><span class="title">Plans Module</span></div>
-                                <div class="col-lg-7">
-                                    <div class="progress">
-                                        <div class="progress-bar bg-success" style="width: 45%;"></div>
-                                    </div>
+                                <div class="col-lg-2"><span class="title">
+                                        <?php echo round(100
+                                            - round(($from0_14 / $appointmentSuccess) * 100, 1)
+                                            - round(($from15_35 / $appointmentSuccess) * 100, 1)
+                                            - round(($from36_64 / $appointmentSuccess) * 100, 1))
+                                        ?>%</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-12 col-lg-4">
                     <div class="widget be-loading">
                         <div class="widget-head">
-                            <div class="tools"><span class="icon mdi mdi-chevron-down"></span><span
-                                        class="icon mdi mdi-refresh-sync toggle-loading"></span><span
-                                        class="icon mdi mdi-close"></span></div>
-                            <div class="title">Top Sales</div>
-                        </div>
-                        <div class="widget-chart-container">
-                            <div id="top-sales" style="height: 178px;"></div>
-                            <div class="chart-pie-counter">36</div>
+                            <div class="title">Tỷ lệ trạng thái</div>
                         </div>
                         <div class="chart-legend">
-                            <table>
-                                <tr>
-                                    <td class="chart-legend-color"><span data-color="top-sales-color1"></span></td>
-                                    <td>Premium Purchases</td>
-                                    <td class="chart-legend-value">125</td>
-                                </tr>
-                                <tr>
-                                    <td class="chart-legend-color"><span data-color="top-sales-color2"></span></td>
-                                    <td>Standard Plans</td>
-                                    <td class="chart-legend-value">1569</td>
-                                </tr>
-                                <tr>
-                                    <td class="chart-legend-color"><span data-color="top-sales-color3"></span></td>
-                                    <td>Services</td>
-                                    <td class="chart-legend-value">824</td>
-                                </tr>
-                            </table>
-                        </div>
-                        <div class="be-spinner">
-                            <svg width="40px" height="40px" viewbox="0 0 66 66" xmlns="http://www.w3.org/2000/svg">
-                                <circle class="circle" fill="none" stroke-width="4" stroke-linecap="round" cx="33"
-                                        cy="33" r="30"></circle>
-                            </svg>
+                            <div class="chart-container">
+                                <canvas id="myPieChart"></canvas>
+                            </div>
                         </div>
                     </div>
                 </div>
+
                 <div class="col-12 col-lg-4">
                     <div class="widget widget-calendar">
                         <div id="calendar-widget"></div>
                     </div>
                 </div>
             </div>
+
+            <div class="row p-0">
+                <div class="col-12">
+                    <div class="widget widget-fullwidth be-loading">
+                        <div class="widget-chart-container">
+                            <div id="main-chart" style="height: 1px; background-color: #eee "></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
         </div>
     </div>
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
-
-
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery/jquery.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/perfect-scrollbar/js/perfect-scrollbar.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/bootstrap/dist/js/bootstrap.bundle.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/js/app.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/jquery.flot.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/jquery.flot.pie.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/jquery.flot.time.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/jquery.flot.resize.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/plugins/jquery.flot.orderBars.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/plugins/curvedLines.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-flot/plugins/jquery.flot.tooltip.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery.sparkline/jquery.sparkline.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/countup/countUp.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jquery-ui/jquery-ui.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jqvmap/jquery.vmap.min.js" type="text/javascript"></script>
-    <script src="http://localhost/Medicare/views/admin/assets/lib/jqvmap/maps/jquery.vmap.world.js" type="text/javascript"></script>
+</div>
+<?php include 'import_script.php' ?>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         //-initialize the javascript
         App.init();
         App.dashboard();
 
+        $('#calendar-widget').datepicker();
+
+        var ctx = document.getElementById('myPieChart').getContext('2d');
+        var myPieChart = new Chart(ctx, {
+            type: 'pie',
+            data: {
+                labels: ['Lịch đã được đặt', 'Lịch khám hoàn thành', 'Lịch khám bị hủy'],
+                datasets: [{
+                    data: [
+                        <?php echo $appointmentPending + $appointmentProcess ?>,
+                        <?php echo $appointmentSuccess ?>,
+                        <?php echo $appointmentCancel ?>],
+                    backgroundColor: [
+                        'rgba(255, 206, 86, 0.2)',
+                        'rgba(54, 162, 235, 0.2)',
+                        'rgba(255, 99, 132, 0.2)'
+                    ],
+                    borderColor: [
+                        'rgb(251,186,24)',
+                        'rgba(54, 162, 235, 1)',
+                        'rgba(255, 99, 132, 1)'
+                    ],
+                    borderWidth: 1
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                legend: {
+                    position: 'bottom',
+                    labels: {
+                        boxWidth: 20,
+                        padding: 20,
+                        fontColor: 'red',
+                        fontSize: 14,
+                        fontStyle: 'bold',
+                        usePointStyle: true
+                    }
+                }
+            }
+        });
     });
+    $.datepicker.regional['vi'] = {
+        closeText: 'Đóng',
+        prevText: '&#x3C;Trước',
+        nextText: 'Tiếp&#x3E;',
+        currentText: 'Hôm nay',
+        monthNames: ['Tháng Một', 'Tháng Hai', 'Tháng Ba', 'Tháng Tư', 'Tháng Năm', 'Tháng Sáu',
+            'Tháng Bảy', 'Tháng Tám', 'Tháng Chín', 'Tháng Mười', 'Tháng Mười Một', 'Tháng Mười Hai'],
+        monthNamesShort: ['Th1', 'Th2', 'Th3', 'Th4', 'Th5', 'Th6',
+            'Th7', 'Th8', 'Th9', 'Th10', 'Th11', 'Th12'],
+        dayNames: ['Chủ Nhật', 'Thứ Hai', 'Thứ Ba', 'Thứ Tư', 'Thứ Năm', 'Thứ Sáu', 'Thứ Bảy'],
+        dayNamesShort: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+        dayNamesMin: ['CN', 'T2', 'T3', 'T4', 'T5', 'T6', 'T7'],
+        weekHeader: 'Tu',
+        dateFormat: 'dd/mm/yy',
+        firstDay: 1,
+        isRTL: false,
+        showMonthAfterYear: false,
+        yearSuffix: ''
+    };
+    $.datepicker.setDefaults($.datepicker.regional['vi']);
 </script>
 </body>
 </html>

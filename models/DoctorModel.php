@@ -28,9 +28,8 @@ class DoctorModel  extends BaseModel {
                        e.specialty_id AS specialty_id,
                        p.name AS positionName
                 FROM employees AS e
-                JOIN roles AS r ON r.role_id = e.role_id
                 JOIN positions AS p ON e.position_id = p.position_id
-                WHERE r.role_name = 'doctor' AND e.employee_id = $id";
+                WHERE e.employee_id = $id";
 
         $query = $this->_query($sql);
         return mysqli_fetch_assoc($query);
@@ -72,12 +71,13 @@ class DoctorModel  extends BaseModel {
         return $result;
     }
 
-    public function addDoctor($name, $dob, $email, $phone,$gender, $address, $specialty_id, $position_id, $status, $avt): bool
+    public function addDoctor($name, $dob, $email, $phone,$gender, $address, $specialty_id, $status, $avt): bool
     {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $created_at = date("Y-m-d H:i:s");
         $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
         $role_id = 2;
+        $position_id = 1;
         $sql = "INSERT INTO employees (
                        specialty_id,
                        position_id,

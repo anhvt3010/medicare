@@ -8,31 +8,16 @@ if (!isset($_SESSION['admin_name'])) {
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="description" content="">
-    <meta name="author" content="">
-    <link href="assets/img/logo.png" rel="icon">
     <title>Danh sách lịch khám</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
-    <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\material-design-icons\css\material-design-iconic-font.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\select2\css\select2.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\bootstrap-slider\css\bootstrap-slider.min.css">
-    <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css\app.css" type="text/css">
-    <!--    icon-->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
-          integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
-          crossorigin="anonymous" referrerpolicy="no-referrer"/>
+    <?php include 'import_head.php' ?>
 </head>
 <body>
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="be-wrapper">
     <!--    Navbar-->
     <?php include 'navbar.php' ?>
@@ -43,7 +28,7 @@ if (!isset($_SESSION['admin_name'])) {
             <h2 class="page-head-title" style="font-size: 25px">Danh sách nhân viên</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
-                    <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="http://localhost/Medicare/index.php?controller=home&action=home_admin">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý nhân viên</li>
                     <li class="breadcrumb-item active">Danh sách nhân viên</li>
                 </ol>
@@ -136,6 +121,7 @@ if (!isset($_SESSION['admin_name'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('loading-spinner').style.display = 'none';
         App.init();
 
         const listEmployees = JSON.parse('<?php echo json_encode($listEmployees); ?>');
@@ -191,7 +177,8 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                    <button type='button' class='dropdown-item'>Xem chi tiết</button>
+                                    <a href='http://localhost/Medicare/index.php?controller=doctor&action=detail&doctor_id=${employee.id}'
+                                       type='button' class='dropdown-item'>Xem chi tiết</a>
                                 </div>
                             </div>
                         </td>
@@ -301,8 +288,7 @@ if (!isset($_SESSION['admin_name'])) {
             emEmail: 'Email không hợp lệ',
             emPhone: 'Số điện thoại không hợp lệ',
             emAddress: 'Địa chỉ không được để trống và không vượt quá 255 ký tự',
-            emPosition: 'Vui lòng chọn chức vụ',
-            emSpecialty: 'Vui lòng chọn chuyên khoa '
+            emPosition: 'Vui lòng chọn chức vụ'
         };
 
         document.getElementById('btnAddEm').addEventListener('click', function() {
@@ -313,8 +299,8 @@ if (!isset($_SESSION['admin_name'])) {
             const emPhone = document.getElementById('emPhone');
             const emAddress = document.getElementById('emAddress');
             const emPosition = document.getElementById('emPosition');
-            const emSpecialty = document.getElementById('emSpecialty');
             const emStatus= document.getElementById('emStatus');
+            const emAvt = document.getElementById('empAvt');
             let isValid = true;
 
             // Xóa thông báo lỗi trước
@@ -324,7 +310,7 @@ if (!isset($_SESSION['admin_name'])) {
             const errorEmPhone = document.getElementById('errorEmPhone');
             const errorEmAddress = document.getElementById('errorEmAddress');
             const errorEmPosition = document.getElementById('errorEmPosition');
-            const errorEmSpecialty = document.getElementById('errorEmSpecialty');
+            const errorEmAvt = document.getElementById('errorEmpAvt');
 
             document.querySelectorAll('.form-control').forEach(input => {
                 input.classList.remove('is-invalid');
@@ -349,8 +335,8 @@ if (!isset($_SESSION['admin_name'])) {
                     case 'emPosition':
                         errorElement = errorEmPosition;
                         break;
-                    case 'emSpecialty':
-                        errorElement = errorEmSpecialty;
+                    case 'errorEmpAvt':
+                        errorElement = errorEmAvt;
                         break;
                     default:
                         console.error('Không tìm thấy phần tử lỗi cho:', input.id);
@@ -415,47 +401,52 @@ if (!isset($_SESSION['admin_name'])) {
                 isValid = false;
             }
 
-            // Kiểm tra chuyên khoa làm việc
-            if (emSpecialty.value === '0') {
-                document.getElementById('errorEmSpecialty').textContent = errorMessages.emSpecialty;
-                emSpecialty.classList.add('is-invalid');
+            // Kiểm tra file ảnh
+            if (emAvt.files.length === 0) {
+                errorEmAvt.textContent = 'Vui lòng tải lên ảnh.';
+                emAvt.classList.add('is-invalid');
                 isValid = false;
+            } else {
+                const file = emAvt.files[0];
+                const fileType = file['type'];
+                const validImageTypes = ['image/jpeg', 'image/png', 'image/gif'];
+                if (!validImageTypes.includes(fileType)) {
+                    errorEmAvt.textContent = 'Chỉ chấp nhận file ảnh (JPEG, PNG, GIF).';
+                    emAvt.classList.add('is-invalid');
+                    isValid = false;
+                }
             }
 
             // Nếu tất cả thông tin hợp lệ
             if (isValid) {
-                console.log('emName: ', emName.value);
-                console.log('emGender: ', parseInt(emGender.value, 10));
-                console.log('emDob: ', emDob.value);
-                console.log('emEmail: ', emEmail.value);
-                console.log('emPhone: ', emPhone.value);
-                console.log('emAddress: ', emAddress.value);
-                console.log('emPosition: ', parseInt(emPosition.value, 10));
-                console.log('emSpecialty: ', parseInt(emSpecialty.value, 10));
-                console.log('emStatus: ', parseInt(emStatus.value, 10));
-
+                var formData = new FormData();
+                formData.append('name', emName.value);
+                formData.append('gender', parseInt(emGender.value, 10));
+                formData.append('dob', emDob.value);
+                formData.append('email', emEmail.value);
+                formData.append('phone', emPhone.value);
+                formData.append('address', emAddress.value);
+                formData.append('position_id', parseInt(emPosition.value, 10));
+                formData.append('status', parseInt(emStatus.value, 10));
+                formData.append('avt', emAvt.files[0]);
+                document.getElementById('loading-spinner').style.display = 'block';
                 $.ajax({
                     url: 'http://localhost/Medicare/index.php?controller=employee&action=add',
                     type: 'POST',
-                    data: {
-                        name: emName.value,
-                        gender: parseInt(emGender.value, 10),
-                        dob: emDob.value,
-                        email: emEmail.value,
-                        phone: emPhone.value,
-                        address: emAddress.value,
-                        position_id: parseInt(emPosition.value, 10),
-                        specialty_id: parseInt(emSpecialty.value, 10),
-                        status: parseInt(emStatus.value, 10)
-                    },
+                    data: formData,
+                    contentType: false,
+                    processData: false,
                     success: function(response) {
                         console.log(response);
-                        $('#staticBackdrop').modal('hide'); // Đóng modal
-                        location.reload(); // Tải lại trang để cập nhật danh sách nhân viên
+                        $('#staticBackdrop').modal('hide');
+                        location.reload();
                     },
                     error: function() {
                         alert('Có lỗi xảy ra, vui lòng thử lại.');
-                    }
+                    },
+                    complete: function() {
+                    $("#loading-spinner").hide();
+                }
                 });
             }
         });

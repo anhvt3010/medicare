@@ -24,7 +24,6 @@ if (!isset($_SESSION['admin_name'])) {
             border: none;
             box-shadow: none;
         }
-
     </style>
 </head>
 <body>
@@ -496,13 +495,6 @@ if (!isset($_SESSION['admin_name'])) {
         App.init();
         App.tableFilters();
 
-        function showSuccessNotification() {
-            $.gritter.add({
-                title: "Success",
-                text: "This is a simple Gritter Notification.",
-                class_name: "color success"
-            });
-        }
     });
 </script>
 <script>

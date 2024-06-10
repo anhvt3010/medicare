@@ -55,7 +55,7 @@ class SpecialtyModel extends Database{
     public function getSpecialtiesForAdmin(): array
     {
         $sql = "SELECT *
-            FROM specialties ORDER BY update_at desc";
+            FROM specialties ORDER BY create_at desc";
 
         $query = $this->_query($sql);
         $data = [];

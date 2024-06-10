@@ -1,4 +1,9 @@
-
+<?php
+if (isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=home_admin');
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -6,10 +11,10 @@
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
 
     <title>Đăng nhập</title>
-    <link href="assets/img/logo.png" rel="icon">
-    <link href="assets/img/favicon.png" rel="apple-touch-icon">
+    <link href="./assets/img/logo.png" rel="icon">
     <!-- Favicons -->
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-9/assets/css/login-9.css">
     <link href="assets/css/style.css" rel="stylesheet">
     <link href="assets/vendor/fontawesome-free/css/all.css" rel="stylesheet">
@@ -22,72 +27,6 @@
             top: 50%;
             transform: translateY(-50%);
         }
-        .toast {
-            visibility: hidden; /* Ẩn toast */
-            min-width: 250px; /* Đặt chiều rộng tối thiểu */
-            margin-left: -125px; /* Đẩy toast sang trái một nửa chiều rộng của nó */
-            background-color: #ff0000; /* Màu nền */
-            color: white; /* Màu chữ */
-            text-align: center; /* Căn giữa chữ */
-            border-radius: 10px; /* Bo góc */
-            padding: 16px; /* Đệm */
-            position: fixed; /* Đặt vị trí cố định */
-            z-index: 1; /* Đảm bảo toast nằm trên các thành phần khác */
-            left: 50%; /* Đặt ở giữa màn hình theo chiều ngang */
-            bottom: 30px; /* Khoảng cách từ dưới cùng */
-            font-size: 17px; /* Cỡ chữ */
-        }
-
-        .toast.show {
-            visibility: visible; /* Hiển thị toast */
-            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-
-        @-webkit-keyframes fadein {
-            from {
-                bottom: 0;
-                opacity: 0;
-            }
-            to {
-                bottom: 30px;
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadein {
-            from {
-                bottom: 0;
-                opacity: 0;
-            }
-            to {
-                bottom: 30px;
-                opacity: 1;
-            }
-        }
-
-        @-webkit-keyframes fadeout {
-            from {
-                bottom: 30px;
-                opacity: 1;
-            }
-            to {
-                bottom: 0;
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeout {
-            from {
-                bottom: 30px;
-                opacity: 1;
-            }
-            to {
-                bottom: 0;
-                opacity: 0;
-            }
-        }
-
 
         .error-message {
             color: red;
@@ -98,9 +37,15 @@
         .invalid-input {
             border-color: red;
         }
+
     </style>
 </head>
 <body style="background-color: #1f5d60; overflow-y: hidden ">
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <!-- Login 9 - Bootstrap Brain Component -->
 <section class="py-5 py-md-5 py-xl-8 mt-1" style="margin-top: 85px!important;">
     <div class="container">
@@ -194,9 +139,17 @@
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="http://localhost/Medicare/views/admin/assets/js/functions.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('loading-spinner').style.display = 'none';
+        
         var inputs = document.querySelectorAll('.form-control');
 
         inputs.forEach(function (input) {
@@ -254,6 +207,7 @@
         });
 
         if (isValid) {
+            document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
                 url: 'http://localhost/Medicare/index.php?controller=auth&action=processLoginAdmin',
                 type: 'POST',
@@ -263,31 +217,66 @@
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        showToast('Đăng nhập thành công', '#28a745', 800);
-                        console.log('Thông tin session:', response['sessionData']);
-                        // window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home_admin';
-                        window.location.href = 'http://localhost/Medicare/index.php?controller=appointment&action=index'
+                        var url = buildUrl('appointment', 'index');
+                        success_toast(url);
                     } else {
-                        showToast(response['message'], '#a7284e', 3000);
+                        inputs.forEach(function (input) {
+                            input.classList.add('invalid-input');
+                            isValid = false;
+                        });
+                        failed_toast()
                     }
                 },
                 error: function() {
                     alert('Có lỗi xảy ra, vui lòng thử lại.');
+                },
+                complete: function() {
+                    $("#loading-spinner").hide(); // Ẩn spinner khi yêu cầu hoàn thành
                 }
             });
         }
     }
 
-    function showToast(message, color, time, callback) {
-        var toast = document.getElementById("toast");
-        toast.textContent = message; // Cập nhật thông điệp
-        toast.style.backgroundColor = color; // Cập nhật màu nền
-        toast.className = "toast show";
-        setTimeout(function () {
-            toast.className = toast.className.replace("show", "");
-            if (callback) callback(); // Gọi callback sau khi Toast ẩn
-        }, time);
+    function success_toast(redirectUrl) {
+        toast({
+            classes: `text-bg-success border-0`,
+            body: `
+          <div class="d-flex w-100" data-bs-theme="dark">
+            <div class="flex-grow-1">
+              Đăng nhập thành công !
+            </div>
+            <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>`,
+            autohide: true,
+            delay: 2000  // Thời gian hiển thị toast là 5000ms (5 giây)
+        });
+
+        // Đợi DOM cập nhật
+        setTimeout(() => {
+            // Lấy phần tử toast mới nhất
+            var toastElement = document.querySelector('.toast.show');
+            if (toastElement) {
+                var bsToast = new bootstrap.Toast(toastElement); // Khởi tạo lại đối tượng Toast nếu cần
+                toastElement.addEventListener('hidden.bs.toast', function () {
+                    window.location.href = redirectUrl; // Sử dụng URL được truyền vào
+                });
+            }
+        }, 100); // Đợi 100ms để đảm bảo toast đã được thêm vào DOM
     }
+
+    function failed_toast() {
+        toast({
+            classes: `text-bg-danger border-0`,
+            body: `
+              <div class="d-flex w-100" data-bs-theme="dark">
+                <div class="flex-grow-1">
+                  Tài khoản hoặc mật khẩu không đúng !
+                </div>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>`,
+        })
+    }
+
 
 </script>
 </body>
