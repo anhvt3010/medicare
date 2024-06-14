@@ -1,6 +1,11 @@
-// xử ly chọn ngày ====================================================================================================
+document.addEventListener('DOMContentLoaded', function() {
+    timeSlots = [];
+    timeValue = '00:00:00'
+
+    displayTimeSlots(timeSlots, timeValue);
+});
 $(document).ready(function () {
-    // xxxxxx Cấu hình tiếng việt cho chọn lịch =======================================
+    // xxxxxx  Cấu hình tiếng việt cho chọn lịch =======================================
     $.datepicker.regional['vi'] = {
         closeText: 'Đóng',
         prevText: '&#x3C;Trước',
@@ -21,42 +26,37 @@ $(document).ready(function () {
         yearSuffix: ''
     };
     $.datepicker.setDefaults($.datepicker.regional['vi']);
-
-    // xxxxxx  Cấu hình giới hạn chọn ngày ============================================
+    // xxxxxx  Cấu hình giới hạn chọn ngày =============================================
     $('#input-otherDate').datepicker({
         minDate: 0, // Ngày hiện tại
-        maxDate: "+14D", // 14 ngày kể từ ngày hiện tại
-        dateFormat: 'dd/mm/yy',
-        beforeShowDay: function(date) {
-            var day = date.getDay();
-            // Kiểm tra nếu là thứ Bảy (6) hoặc Chủ Nhật (0)
-            if (day === 0 || day === 6) {
-                return [false];
-            } else {
-                return [true];
-            }
-        }
+        maxDate: "+7D", // 7 ngày kể từ ngày hiện tại
+        dateFormat: 'dd/mm/yy'
     });
 
     // Xử lý khi click vào nút "Ngày khác" =============================================
     $('#input-otherDate').datepicker({
-        dateFormat: 'dd/mm/yyyy'
+        dateFormat: 'dd/mm/yy'
     });
+
     $('#input-otherDate').change(function () {
         var inputDate = $(this).val();
+        var dateParts = inputDate.split('/');
 
-        var dateParts = inputDate.split('-');
-        var year = parseInt(dateParts[0], 10);
-        var month = parseInt(dateParts[1], 10) - 1; // Chuyển đổi tháng từ 1-12 sang 0-11
-        var day = parseInt(dateParts[2], 10);
-        var selectedDate= new Date(Date.UTC(year, month, day));
+        var day = parseInt(dateParts[0], 10);
+        var month = parseInt(dateParts[1], 10) - 1;
+        var year = parseInt(dateParts[2], 10);
+        var selectedDate = new Date(Date.UTC(year, month, day));
 
         selectDate(selectedDate);
+
+        document.getElementById('timeSlot').innerText = ''
+        document.getElementById('display-time-slot').style.display = 'block';
     });
 
-    // Hàm selectDate để xử lý việc chọn ngày
+    // Hàm selectDate để xử lý việc chọn ngày để đổ ra time slot còn trống
     function selectDate(date) {
         var dateTimestamp = convertDateToDayTimestamp(date.toLocaleDateString());
+
         var specialtyId = document.getElementById('selected-specialty').value;
 
         console.log('Ngày đã chọn:', dateTimestamp);
@@ -84,15 +84,6 @@ $(document).ready(function () {
     }
 
 });
-
-document.addEventListener('DOMContentLoaded', function() {
-    timeSlots = [];
-    timeValue = '00:00:00'
-
-    displayTimeSlots(timeSlots, timeValue);
-});
-
-
 
 function displayTimeSlots(timeSlots, timeValue) {
     var container = document.getElementById('display-time-slot');
@@ -153,25 +144,18 @@ function selectTimeSlot(element) {
     document.getElementById('time-slot').value = timeSlotValues[selectedTime];
 }
 
-// Chọn ngày khám ======================================================================================================
-function selectDateSlot(element) {
-    var dateSlots = document.querySelectorAll('.btn-select-day');
-    dateSlots.forEach(function (slot) {
-        slot.classList.remove('selected');
-    });
-    element.classList.add('selected');
-}
-
 // xxxxxxx    Timestamp by day =========================================================================================
 function convertDateToDayTimestamp(dateString) {
-    var parts = dateString.split('-'); // Tách chuỗi dựa trên dấu "-"
-    var year = parseInt(parts[0], 10);
-    var month = parseInt(parts[1], 10) - 1; // Lưu ý: tháng trong JavaScript bắt đầu từ 0
-    var day = parseInt(parts[2], 10);
+    if (!dateString) return null;
+
+    var parts = dateString.split('/');
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1;
+    var year = parseInt(parts[2], 10);
+
     var date = new Date(Date.UTC(year, month, day));
 
-    // Chuyển đổi ngày sang timestamp và chia cho số miligiây trong một ngày
-    return Math.floor(date.getTime() / 86400000); // 86400000 là số miligiây trong một ngày
+    return Math.floor(date.getTime() / 86400000);
 }
 
 

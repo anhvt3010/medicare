@@ -221,11 +221,9 @@ if (!isset($_SESSION['admin_name'])) {
                                                             <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
                                                         </svg>
                                                     </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <button type="button" data-bs-toggle="modal"
-                                                                class="dropdown-item" data-bs-target="#staticBackdrop"
-                                                                data-id="<?php echo $appointment['id'] ?>">Cập nhật
-                                                        </button>
+                                                    <div class='dropdown-menu dropdown-menu-right' role='menu'>
+                                                        <a href="http://localhost/Medicare/index.php?controller=appointment&action=update_show&appointmentId=<?php echo $appointment['id'] ?>"
+                                                           type='button' class='dropdown-item'>Cập nhật</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -294,268 +292,21 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!-- Modal -->
-    <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
-         aria-labelledby="staticBackdropLabel" aria-hidden="true">
-        <div class="modal-dialog modal-xl"
-        ">
-        <div class="modal-content" style="max-width: 900px!important;">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="staticBackdropLabel">Cập nhật lịch khám bệnh nhân</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <?php include 'appointment-update.php' ?>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-bs-dismiss="modal">Đóng</button>
-                <button type="button" class="btn btn-primary" id="update-appointment">Cập nhật</button>
-            </div>
-        </div>
-    </div>
 </div>
 
 <!--    pop-up sidebar-->
 <?php include 'pop-up-sidebar.php' ?>
 
+<?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<?php include 'import-script.php' ?>
 <script src="http://localhost/Medicare/assets/js/appointment-update.js"></script>
 <script src="http://localhost/Medicare/assets/js/validateAppointment.js"></script>
-<script type="text/javascript">
-    $(document).ready(function () {
-        var appointmentUpdate = [];
-        $('.dropdown-item').click(function () {
-            var appointmentId = $(this).data('id');
-            console.log('Hiển thị thông tin cho appointment ID:', appointmentId);
 
-            $.ajax({
-                url: 'http://localhost/Medicare/index.php',
-                type: 'GET',
-                data: {
-                    controller: 'appointment',
-                    action: 'get_one',
-                    appointmentId: appointmentId
-                },
-                success: function (response) {
-                    buildAppointment(response);
-                    showAppointmentUpdate(response)
-                },
-                error: function () {
-                    alert('Có lỗi xảy ra khi lấy dữ liệu');
-                }
-            });
-        });
-
-        function buildAppointment(response) {
-            appointmentUpdate['id'] = parseInt(response['id'], 10)
-            appointmentUpdate['employee_id'] = parseInt(response['employee_id'], 10)
-            appointmentUpdate['specialty_id'] = parseInt(response['specialty_id'], 10)
-            appointmentUpdate['date_slot'] = parseInt(response['date_slot'], 10)
-            appointmentUpdate['time_id'] = parseInt(response['time_id'], 10)
-            appointmentUpdate['patient_name'] = response['patient_name']
-            appointmentUpdate['patient_gender'] = parseInt(response['patient_gender'], 10)
-            appointmentUpdate['patient_dob'] = response['patient_dob']
-            appointmentUpdate['patient_phone'] = response['patient_phone']
-            appointmentUpdate['patient_email'] = response['patient_email']
-            appointmentUpdate['patient_description'] = response['patient_description']
-            appointmentUpdate['status'] = parseInt(response['status'], 10)
-            return appointmentUpdate;
-        }
-
-        document.getElementById('patient-name').addEventListener('change', function () {
-            appointmentUpdate['patient_name'] = this.value;
-        });
-
-        document.getElementById('patient-dob').addEventListener('change', function () {
-            appointmentUpdate['patient_dob'] = this.value;
-        });
-
-        document.getElementById('patient-phone').addEventListener('change', function () {
-            appointmentUpdate['patient_phone'] = this.value;
-        });
-
-        document.getElementById('patient-email').addEventListener('change', function () {
-            appointmentUpdate['patient_email'] = this.value;
-        });
-
-        document.getElementById('patient-description').addEventListener('change', function () {
-            appointmentUpdate['patient_description'] = this.value;
-        });
-
-        document.getElementById('status-appointment').addEventListener('change', function () {
-            appointmentUpdate['status'] = parseInt(this.value, 10);
-        });
-
-        var genderInputs = document.getElementsByName('gender');
-        Array.from(genderInputs).forEach(function (input) {
-            input.addEventListener('change', function () {
-                if (this.checked) {
-                    appointmentUpdate['patient_gender'] = parseInt(this.value, 10)
-                }
-            });
-        });
-
-        // event click Cập nhật
-        document.getElementById('update-appointment').addEventListener('click', function () {
-            var appointmentUpdated = appointmentUpdate;
-
-            appointmentUpdated['specialty_id'] = isNaN(parseInt(document.getElementById('selected-specialty')?.value, 10))
-                ? appointmentUpdate['specialty_id']
-                : parseInt(document.getElementById('selected-specialty')?.value, 10);
-
-            appointmentUpdated['employee_id'] = isNaN(parseInt(document.getElementById('selected-doctor')?.value, 10))
-                ? appointmentUpdate['employee_id']
-                : parseInt(document.getElementById('selected-doctor')?.value, 10);
-
-            appointmentUpdated['date_slot'] = isNaN(parseInt(document.getElementById('date-slot')?.value, 10))
-                ? appointmentUpdate['date_slot']
-                : parseInt(document.getElementById('date-slot')?.value, 10);
-
-            appointmentUpdated['time_id'] = isNaN(parseInt(document.getElementById('time-slot')?.value, 10))
-                ? appointmentUpdate['time_id']
-                : parseInt(document.getElementById('time-slot')?.value, 10);
-
-            console.log('appointmentUpdated', appointmentUpdated)
-
-            $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=appointment&action=update',
-                type: 'POST',
-                // contentType: 'application/json', // Thêm header này nếu bạn gửi JSON
-                data: {
-                    id: appointmentUpdated['id'],
-                    employee_id: appointmentUpdate['employee_id'],
-                    specialty_id: appointmentUpdate['specialty_id'],
-                    date_slot: appointmentUpdate['date_slot'],
-                    time_id: appointmentUpdate['time_id'],
-                    patient_name: appointmentUpdate['patient_name'],
-                    patient_gender: appointmentUpdate['patient_gender'],
-                    patient_email: appointmentUpdate['patient_email'],
-                    patient_description: appointmentUpdate['patient_description'],
-                    status: appointmentUpdate['status'],
-                },
-                success: function (response) {
-                    location.reload()
-                },
-                error: function () {
-                    alert('Có lỗi xảy ra khi gửi dữ liệu');
-                }
-            });
-        });
-
-        // in thong tin len man update
-        function showAppointmentUpdate(appointment) {
-            var specialty = document.getElementById('dropdownMenuButton');
-            var doctor = document.getElementById('dropdownMenuButtonDoctor');
-            var date_selected = document.getElementById('date_selected');
-            var patient_name = document.getElementById('patient-name');
-            var gender = document.getElementsByName('gender');
-            var patient_dob = document.getElementById('patient-dob');
-            var patient_phone = document.getElementById('patient-phone');
-            var patient_email = document.getElementById('patient-email');
-            var patient_description = document.getElementById('patient-description')
-            var status_appointment = document.getElementById('status-appointment');
-
-            // Hiển thị các khung giờ
-            displayTimeSlots([], appointment['time_slot']);
-
-            // Cập nhật thông tin chuyên khoa và bác sĩ
-            specialty.textContent = 'Chuyên khoa: ' + appointment['specialty_name'];
-            doctor.textContent = 'Bác sĩ: ' + appointment['doctor_name'];
-
-            patient_name.value = appointment['patient_name']
-            for (var i = 0; i < gender.length; i++) {
-                // Kiểm tra nếu giá trị của radio button trùng với 'patient_gender'
-                if (gender[i].value == appointment['patient_gender']) {
-                    gender[i].checked = true; // Đặt radio button này là checked
-                    break; // Thoát vòng lặp sau khi đã tìm thấy và đặt checked
-                }
-            }
-            patient_dob.value = appointment['patient_dob']
-            patient_phone.value = appointment['patient_phone']
-            patient_email.value = appointment['patient_email']
-            patient_description.value = appointment['patient_description']
-            status_appointment.value = parseInt(appointment['status'], 10);
-
-            // Tính toán timestamp từ số ngày kể từ ngày 1/1/1970
-            var timestamp = appointment['date_slot'] * 86400 * 1000; // Nhân với 1000 để chuyển từ giây sang miligiây
-
-            // Tạo đối tượng Date mới từ timestamp
-            var date = new Date(timestamp);
-
-            // Định dạng ngày tháng
-            var formattedDate = ('0' + date.getDate()).slice(-2) + '-' + ('0' + (date.getMonth() + 1)).slice(-2) + '-' + date.getFullYear();
-
-            // Hiển thị ngày đã định dạng
-            date_selected.textContent = formattedDate;
-        }
-
-
-        App.init();
-        App.tableFilters();
-
-    });
-</script>
 <script>
-    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=confirm&page=1'
-
-    document.getElementById('button').addEventListener('click', function () {
-        var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
-            ? null
-            : document.querySelector('.select2[name="specialty"]').value;
-        var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
-            ? null
-            : document.querySelector('.select2[name="doctor"]').value;
-        var searchInput = document.getElementById('searchInput').value.trim();
-
-
-        if (specialty) {
-            url_appointment += '&specialty=' + encodeURIComponent(specialty);
-        }
-        if (doctor) {
-            url_appointment += '&doctor=' + encodeURIComponent(doctor);
-        }
-        if (searchInput.length > 0) {
-            url_appointment += '&search=' + encodeURIComponent(searchInput);
-        }
-
-        console.log(url_appointment)
-
-        window.location.href = url_appointment
+    document.addEventListener('DOMContentLoaded', function () {
+        App.init();
     });
-
-    function getRowClass(status) {
-        switch (status) {
-            case 0:
-                return 'warning in-progress';
-            case 1:
-                return 'primary to-do';
-            case 2:
-                return 'success done';
-            case 3:
-                return 'danger in-review';
-            default:
-                return '';
-        }
-    }
-
-    function formatDate(timestamp) {
-        var date = new Date(timestamp * 1000);
-        return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
-    }
-
-    function convertDateToDayTimestamp(dateString) {
-        if (!dateString) return null;
-        var parts = dateString.split('/');
-        var day = parseInt(parts[0], 10);
-        var month = parseInt(parts[1], 10) - 1;
-        var year = parseInt(parts[2], 10);
-        var date = new Date(Date.UTC(year, month, day));
-
-        // Chuyển đổi ngày sang timestamp và chia cho số giây trong một ngày
-        return Math.floor(date.getTime() / 86400000); // 86400000 là số miligiây trong một ngày
-    }
 </script>
 </body>
 </html>

@@ -58,7 +58,9 @@
                             <option hidden="hidden" value="0">Chọn chức vụ</option>
                             <?php
                             foreach ($listPositions as $position) {
-                                echo "<option value='" . htmlspecialchars($position['position_id']) . "'>" . htmlspecialchars($position['name']) . "</option>";
+                                if ($position['position_id'] != 1) {  // Kiểm tra nếu id chức vụ không phải là 1
+                                    echo "<option value='" . htmlspecialchars($position['position_id']) . "'>" . htmlspecialchars($position['name']) . "</option>";
+                                }
                             }
                             ?>
                         </select>

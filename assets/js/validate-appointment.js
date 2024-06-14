@@ -27,10 +27,21 @@ function validateAppointment(specialId, doctorId, dateSlot, timeSlotId) {
     }
 
     var errorTime = document.getElementById('error-time');
+    // Lấy ngày hiện tại và thời gian hiện tại
+    var now = new Date();
+    var todayDateString = now.toLocaleDateString();
+    var currentHour = now.getHours();
+
     if (!timeSlotId) {
-        errorTime.style.display = 'block';
-        errorTime.textContent = 'Vui lòng chọn gi khám'
-        return false;
+        if (parseInt(dateSlot, 10) === convertDateToDayTimestamp(todayDateString) && currentHour >= 11) {
+            errorTime.style.display = 'block';
+            errorTime.textContent = 'Không thể đặt lịch hẹn. Vui lòng chọn ngày khác';
+            return false;
+        } else {
+            errorTime.style.display = 'block';
+            errorTime.textContent = 'Vui lòng chọn giờ khám'
+            return false;
+        }
     } else {
         errorTime.style.display = 'none';
     }
@@ -50,7 +61,7 @@ function validatePatientInfo(patientName, patientGender, patientDob, patientPhon
     }
 
     // Kiểm tra giới tính bệnh nhân
-    if (!patientGender) {
+    if (patientGender === null || isNaN(patientGender)) {
         errorName.style.display = 'block';
         errorName.textContent = 'Vui lòng chọn giới tính'
         return false;
@@ -114,4 +125,16 @@ function validatePatientInfo(patientName, patientGender, patientDob, patientPhon
     }
 
     return true;
+}
+
+// xxxxxxx    Timestamp by day =========================================================================================
+function convertDateToDayTimestamp(dateString) {
+    var parts = dateString.split('/');
+    var day = parseInt(parts[0], 10);
+    var month = parseInt(parts[1], 10) - 1; // Lưu ý: tháng trong JavaScript bắt đầu từ 0
+    var year = parseInt(parts[2], 10);
+    var date = new Date(Date.UTC(year, month, day));
+
+    // Chuyển đổi ngày sang timestamp và chia cho số giây trong một ngày
+    return Math.floor(date.getTime() / 86400000); // 86400000 là số miligiây trong một ngày
 }

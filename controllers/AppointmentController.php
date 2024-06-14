@@ -38,7 +38,12 @@ class AppointmentController extends BaseController
         }
     }
 
+    /**
+     * @throws Exception
+     */
     public function create(){
+        session_start();
+        $patient_id = $_SESSION['patient_id'] ?? null;
         $specialId = intval($_POST['specialId']);
         $doctorId = intval($_POST['doctorId']);
         $dateSlot = intval($_POST['dateSlot']);
@@ -51,7 +56,7 @@ class AppointmentController extends BaseController
         $patientDescription = $_POST['patientDescription'];
         $appointment = $this->appointmentModel->createAppointment(
             $specialId, $doctorId, $dateSlot, $timeSlotId,
-            $patientName, $patientGender, $patientDob, $patientPhone, $patientEmail, $patientDescription);
+            $patientName, $patientGender, $patientDob, $patientPhone, $patientEmail, $patientDescription,$patient_id);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
             echo json_encode($appointment);
@@ -63,36 +68,48 @@ class AppointmentController extends BaseController
         }
     }
 
+    public function update_show()
+    {
+        $listSpecialties = $this->specialtyModel->getSpecialtiesForAdmin();
+        $listDoctors = $this->doctorModel->getDoctorForAdmin();
+        return $this->view('admin.appointment-update', [
+            'listSpecialties' => $listSpecialties,
+            'listDoctors' => $listDoctors
+        ]);
+    }
+
     public function update()
     {
-//        Truyen mang bị loi, ko fix duoc
-//        $data = json_decode(file_get_contents("php://input"), true);
-//        $appointmentUpdated = $data['appointmentUpdated'];
-        $id = $_POST['id'];
-        $employee_id = $_POST['employee_id'];
-        $specialty_id = $_POST['specialty_id'];
-        $date_slot = $_POST['date_slot'];
-        $time_id = $_POST['time_id'];
-        $patient_name = $_POST['patient_name'];
-        $patient_gender = $_POST['patient_gender'];
-        $patient_email = $_POST['patient_email'];
-        $patient_description = $_POST['patient_description'];
-        $status = $_POST['status'];
+        session_start();
+        if (isset($_SESSION['admin_name'])) {
+            $update_by = $_SESSION['admin_id'];
 
+            $id = $_POST['id'];
+            $employee_id = $_POST['employee_id'];
+            $specialty_id = $_POST['specialty_id'];
+            $date_slot = $_POST['date_slot'];
+            $time_id = $_POST['time_id'];
+            $patient_name = $_POST['patient_name'];
+            $patient_gender = $_POST['patient_gender'];
+            $patient_email = $_POST['patient_email'];
+            $patient_description = $_POST['patient_description'];
+            $status = $_POST['status'];
 
-
-        $update = $this->appointmentModel->updateAppointment($id, $employee_id, $specialty_id, $date_slot, $time_id,
-            $patient_name, $patient_gender, $patient_email, $patient_description, $status);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($update);
-            exit;
+            $update = $this->appointmentModel->updateAppointment($id, $employee_id, $specialty_id, $date_slot, $time_id,
+                $patient_name, $patient_gender, $patient_email, $patient_description, $status, $update_by);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($update);
+                exit;
+            } else {
+                return $this->view('test', [
+                    'message' => $update
+                ]);
+            }
         } else {
-            return $this->view('test', [
-                'message' => $update
-            ]);
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
         }
-
     }
 
     public function index(){

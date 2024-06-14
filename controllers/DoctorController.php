@@ -37,7 +37,7 @@ class DoctorController extends BaseController {
             echo json_encode($doctor);
             exit;
         }
-        return $this->view('admin.employee-detail', [
+        return $this->view('admin.doctor-detail', [
             'doctor' => $doctor,
 //            'listPositions' => $listPositions,
             'listSpecialties' => $listSpecialties,

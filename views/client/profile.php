@@ -36,7 +36,7 @@
                         <div class="mb-3 row">
                             <div class="col-4">
                                 <label for="" class="form-label">Họ và tên</label>
-                                <input id="paName" type="text" class="form-control"
+                                <input id="paName" type="text" class="form-control" maxlength="50"
                                        value="<?php echo $patient['name'] ?>"
                                        disabled>
                                 <span id="error-paName" style="color: red; margin-left: 10px"></span>
@@ -78,7 +78,7 @@
                     <div class="mb-3 row">
                         <div class="col-12">
                             <label for="" class="form-label">Địa chỉ</label>
-                            <input type="text" class="form-control" id="paAddress"
+                            <input type="text" class="form-control" id="paAddress" maxlength="255"
                                    value="<?php echo $patient['address'] ?? '' ?>" disabled>
                             <span id="error-paAddress" style="color: red; margin-left: 10px"></span>
                         </div>
@@ -87,9 +87,9 @@
                     <div class="row">
                         <div class="col-sm-12 d-flex justify-content-between">
                             <button id="enableUpdate" style="background-color:#3fbbc0 !important; color: white"
-                                    class="btn">Chỉnh sửa
+                                    class="btn" >Chỉnh sửa
                             </button>
-                            <button id="updatePatient"
+                            <button id="updatePatient" data-bs-toggle="modal" data-bs-target="#staticBackdrop"
                                     style="background-color:#3fbbc0 !important; color: white; display: none"
                                     class="btn">Cập nhật
                             </button>
@@ -100,10 +100,30 @@
         </div>
     </div>
 </main>
+<!-- Modal -->
+<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="staticBackdropLabel">Thông báo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Bạn có cập nhật thông tin không ?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="confirmUpdate">Cập nhật</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include "components/footer.html" ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        var confirmUpdateButton = document.getElementById('confirmUpdate');
         var editButton = document.getElementById('enableUpdate');
         var updateButton = document.getElementById('updatePatient');
         var genderSelect = document.getElementById('paGender');
@@ -115,12 +135,13 @@
         var addressInput = document.getElementById('paAddress');
         var genderInput = document.getElementById('paGender')
 
-        updateButton.addEventListener('click', function () {
+
+        confirmUpdateButton.addEventListener('click', function () {
             var valid = true;
 
             // Kiểm tra tên
-            if (nameInput.value.trim() === '' || nameInput.value.length > 50) {
-                $('#error-paName').text('Tên không được để trống và không vượt quá 50 kí tự');
+            if (nameInput.value.trim() === '') {
+                $('#error-paName').text('Tên không được để trống');
                 nameInput.style.borderColor = 'red';
                 valid = false;
             } else {
@@ -132,7 +153,7 @@
             var dob = new Date(dobInput.value);
             var today = new Date();
             var age = today.getFullYear() - dob.getFullYear();
-            if (dobInput.value.trim() === '' || age < 16 || age > 90) {
+            if (dobInput.value.trim() === '' || age < 10 || age > 90) {
                 $('#error-paDob').text('Ngày sinh không hợp lệ');
                 dobInput.style.borderColor = 'red';
                 valid = false;
@@ -152,15 +173,7 @@
                 emailInput.style.borderColor = '';
             }
 
-            // Kiểm tra địa chỉ
-            if (addressInput.value.trim() === '' || addressInput.value.length > 255) {
-                $('#error-paAddress').text('Địa chỉ không được để trống và không vượt quá 255 kí tự');
-                addressInput.style.borderColor = 'red';
-                valid = false;
-            } else {
-                $('#error-paAddress').text('');
-                addressInput.style.borderColor = '';
-            }
+
 
             // Nếu tất cả thông tin hợp lệ, có thể gửi dữ liệu
             if (valid) {

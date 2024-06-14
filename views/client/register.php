@@ -1,61 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
     <meta charset="utf-8">
     <meta content="width=device-width, initial-scale=1.0" name="viewport">
-
     <title>Đăng Kí</title>
     <link href="assets/img/logo.png" rel="icon">
     <link href="assets/img/favicon.png" rel="apple-touch-icon">
-    <!-- Favicons -->
-    <link rel="stylesheet" href="https://unpkg.com/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <script src="https://unpkg.com/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/bs-brain@2.0.4/components/logins/login-9/assets/css/login-9.css">
-
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
-        .toast {
-            visibility: hidden; /* Ẩn toast */
-            min-width: 250px; /* Đặt chiều rộng tối thiểu */
-            margin-left: -125px; /* Đẩy toast sang trái một nửa chiều rộng của nó */
-            background-color: #173777; /* Màu nền */
-            color: white; /* Màu chữ */
-            text-align: center; /* Căn giữa chữ */
-            border-radius: 2px; /* Bo góc */
-            padding: 16px; /* Đệm */
-            position: fixed; /* Đặt vị trí cố định */
-            z-index: 1; /* Đảm bảo toast nằm trên các thành phần khác */
-            left: 50%; /* Đặt ở giữa màn hình theo chiều ngang */
-            bottom: 30px; /* Khoảng cách từ dưới cùng */
-            font-size: 17px; /* Cỡ chữ */
-        }
-
-        .toast.show {
-            visibility: visible; /* Hiển thị toast */
-            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-
-        @-webkit-keyframes fadein {
-            from {bottom: 0; opacity: 0;}
-            to {bottom: 30px; opacity: 1;}
-        }
-
-        @keyframes fadein {
-            from {bottom: 0; opacity: 0;}
-            to {bottom: 30px; opacity: 1;}
-        }
-
-        @-webkit-keyframes fadeout {
-            from {bottom: 30px; opacity: 1;}
-            to {bottom: 0; opacity: 0;}
-        }
-
-        @keyframes fadeout {
-            from {bottom: 30px; opacity: 1;}
-            to {bottom: 0; opacity: 0;}
-        }
-
         .error-message {
             color: red;
             font-size: 0.8rem;
@@ -68,7 +21,6 @@
     </style>
 </head>
 <body style="background-color: #3fbbc0; color: white">
-<!-- Login 9 - Bootstrap Brain Component -->
 <section class=" py-3 py-md-5 py-xl-8" style=" margin-top: 40px">
     <div class="container">
         <div class="row gy-4 align-items-center">
@@ -116,12 +68,18 @@
                                     <div class="form-floating">
                                         <input type="password" class="form-control" name="password" id="password" value="" placeholder="Mật khẩu" required>
                                         <label for="password" class="form-label">Mật khẩu</label>
+                                        <i class="fas fa-eye password-toggle" id="togglePasswordRe"
+                                           style="position: absolute; right: 10px; top: 50%;
+                                           transform: translateY(-50%); cursor: pointer;"></i>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
                                         <input type="password" class="form-control" name="re-password" id="re-password" value="" placeholder="Xác nhận mật khẩu" required>
                                         <label for="password" class="form-label">Xác nhận mật khẩu</label>
+                                        <i class="fas fa-eye password-toggle" id="togglePasswordReCon"
+                                           style="position: absolute; right: 10px; top: 50%;
+                                           transform: translateY(-50%); cursor: pointer;"></i>
                                     </div>
                                 </div>
                                 <div class="col-12 mb-2">
@@ -139,7 +97,28 @@
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
 <script>
+    document.addEventListener('DOMContentLoaded', function () {
+
+        document.getElementById('togglePasswordRe').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+        document.getElementById('togglePasswordReCon').addEventListener('click', function (e) {
+            const passwordInput = document.getElementById('re-password');
+            const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+            passwordInput.setAttribute('type', type);
+            this.classList.toggle('fa-eye-slash');
+        });
+    });
     function validateAndSubmit() {
         var isValid = true;
         var formData = new FormData();
@@ -156,7 +135,19 @@
                 error = 'Trường này không được để trống';
             } else if (input.name === 'phone' && !/^\d{10}$/.test(input.value)) {
                 error = 'Số điện thoại phải là 10 chữ số';
-            } else if (input.name === 're-password' && input.value !== document.getElementById('password').value) {
+            }
+            else if (input.name === 'password') {
+                if (input.value.length < 8) {
+                    error = 'Mật khẩu phải có ít nhất 8 ký tự';
+                } else if (!/[A-Z]/.test(input.value)) {
+                    error = 'Mật khẩu phải có ít nhất một chữ cái in hoa';
+                } else if (!/[a-z]/.test(input.value)) {
+                    error = 'Mật khẩu phải có ít nhất một chữ cái thường';
+                } else if (!/[0-9]/.test(input.value)) {
+                    error = 'Mật khẩu phải có ít nhất một chữ số';
+                }
+            }
+            else if (input.name === 're-password' && input.value !== document.getElementById('password').value) {
                 error = 'Mật khẩu xác nhận không khớp';
             }
 
@@ -174,35 +165,75 @@
         });
 
         if (isValid) {
-            fetch('services/registerService.php', {
-                method: 'POST',
-                body: formData
-            })
-                .then(response => response.text())
-                .then(data => {
-                    document.getElementById('response').innerHTML = data;
-                    if (data.includes('Đăng ký thành công!')) {
-                        showToast('Đăng ký thành công!', redirectToLogin);
+            $.ajax({
+                url: 'http://localhost/Medicare/index.php?controller=auth&action=processRegister',
+                type: 'POST',
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(response) {
+                    console.log(response);
+                    if(response['success'] === true) {
+                        success_toast('http://localhost/Medicare/index.php?controller=auth&action=login')
+                        console.log('Thông tin session:', response['sessionData']);
+                    } else {
+                        if (response['message'] === 'Số điện thoại đã được đăng ký') {
+                            failed_toast('Số điện thoại đã được đăng ký')
+                            var phoneInput = document.getElementById('phone');
+                            phoneInput.classList.add('invalid-input');
+                            var errorMessage = document.createElement('div');
+                            errorMessage.classList.add('error-message');
+                            errorMessage.textContent = response['message'];
+                            phoneInput.parentElement.appendChild(errorMessage);
+                        } else {
+                            failed_toast('Đã có lỗi xảy ra, vui lòng thử lại sau')
+                        }
                     }
-                })
-                .catch(error => console.error('Error:', error));
+                },
+                error: function() {
+                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                }
+            });
         }
     }
-
     document.getElementById('registerButton').addEventListener('click', validateAndSubmit);
 </script>
 <script>
-    function showToast(message, callback) {
-        var toast = document.getElementById("toast");
-        toast.textContent = message; // Cập nhật thông điệp
-        toast.className = "toast show";
-        setTimeout(function() {
-            toast.className = toast.className.replace("show", "");
-            callback(); // Gọi callback sau khi Toast ẩn
-        }, 2000); // Toast hiển thị trong 3 giây
+    function success_toast(redirectUrl) {
+        toast({
+            classes: `text-bg-success border-0`,
+            body: `
+          <div class="d-flex w-100" data-bs-theme="dark">
+            <div class="flex-grow-1">
+              Đăng kí thành công !
+            </div>
+            <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>`,
+            autohide: true,
+            delay: 1000
+        });
+        setTimeout(() => {
+            var toastElement = document.querySelector('.toast.show');
+            if (toastElement) {
+                var bsToast = new bootstrap.Toast(toastElement);
+                toastElement.addEventListener('hidden.bs.toast', function () {
+                    window.location.href = redirectUrl;
+                });
+            }
+        }, 100);
     }
-    function redirectToLogin() {
-        window.location.href = "http://localhost/Medicare/index.php?controller=login&action=login";
+
+    function failed_toast(message) {
+        toast({
+            classes: `text-bg-danger border-0`,
+            body: `
+              <div class="d-flex w-100" data-bs-theme="dark">
+                <div class="flex-grow-1">
+                  ${message}
+                </div>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>`,
+        })
     }
 </script>
 </body>

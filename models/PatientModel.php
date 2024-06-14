@@ -70,5 +70,21 @@ class PatientModel extends Database {
         }
     }
 
+    public function updateStatus($patient_id, $status, $employee_id) {
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
+        $update_at = date('Y-m-d H:i:s');
+        $sql = "UPDATE patients SET 
+                    status = '" . intval($status) . "',
+                    update_at = '" . mysqli_real_escape_string($this->connection, $update_at) . "',
+                    update_by = '" . intval($employee_id) . "'
+                WHERE patient_id = " . $patient_id;
 
+        $query = $this->_query($sql);
+
+        if ($query) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 }

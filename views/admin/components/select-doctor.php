@@ -115,6 +115,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($data)) {
                     document.getElementById('dropdownMenuButtonDoctor').textContent = 'Bác sĩ: ' + doctor.name;
                     document.getElementById('selected-doctor').value = doctor.employee_id; // Lưu ID bác sĩ vào input
                     console.log('Bac si: ', document.getElementById('selected-doctor').value)
+                    document.getElementById('input-otherDate').disabled = false;
                     $('#dropdownMenuButtonDoctor').dropdown('toggle'); // Đóng dropdown menu
                 };
                 ul.appendChild(li);

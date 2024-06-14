@@ -26,72 +26,6 @@ if (isset($_SESSION['user_phone'])) {
             top: 50%;
             transform: translateY(-50%);
         }
-        .toast {
-            visibility: hidden; /* Ẩn toast */
-            min-width: 250px; /* Đặt chiều rộng tối thiểu */
-            margin-left: -125px; /* Đẩy toast sang trái một nửa chiều rộng của nó */
-            background-color: #ff0000; /* Màu nền */
-            color: white; /* Màu chữ */
-            text-align: center; /* Căn giữa chữ */
-            border-radius: 10px; /* Bo góc */
-            padding: 16px; /* Đệm */
-            position: fixed; /* Đặt vị trí cố định */
-            z-index: 1; /* Đảm bảo toast nằm trên các thành phần khác */
-            left: 50%; /* Đặt ở giữa màn hình theo chiều ngang */
-            bottom: 30px; /* Khoảng cách từ dưới cùng */
-            font-size: 17px; /* Cỡ chữ */
-        }
-
-        .toast.show {
-            visibility: visible; /* Hiển thị toast */
-            -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
-            animation: fadein 0.5s, fadeout 0.5s 2.5s;
-        }
-
-        @-webkit-keyframes fadein {
-            from {
-                bottom: 0;
-                opacity: 0;
-            }
-            to {
-                bottom: 30px;
-                opacity: 1;
-            }
-        }
-
-        @keyframes fadein {
-            from {
-                bottom: 0;
-                opacity: 0;
-            }
-            to {
-                bottom: 30px;
-                opacity: 1;
-            }
-        }
-
-        @-webkit-keyframes fadeout {
-            from {
-                bottom: 30px;
-                opacity: 1;
-            }
-            to {
-                bottom: 0;
-                opacity: 0;
-            }
-        }
-
-        @keyframes fadeout {
-            from {
-                bottom: 30px;
-                opacity: 1;
-            }
-            to {
-                bottom: 0;
-                opacity: 0;
-            }
-        }
-
 
         .error-message {
             color: red;
@@ -162,9 +96,6 @@ if (isset($_SESSION['user_phone'])) {
                                            transform: translateY(-50%); cursor: pointer;"></i>
                                     </div>
                                 </div>
-                                <div class="col-12">
-                                    <span id="login-false"></span>
-                                </div>
                                 <div class="col-12 mt-4">
                                     <div class="d-grid">
                                         <button id="loginButton"
@@ -201,6 +132,10 @@ if (isset($_SESSION['user_phone'])) {
         </div>
     </div>
 </section>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+        crossorigin="anonymous"></script>
+<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -269,33 +204,61 @@ if (isset($_SESSION['user_phone'])) {
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        showToast('Đăng nhập thành công', '#28a745', 8000);
+                        success_toast('http://localhost/Medicare/index.php?controller=home&action=home')
                         console.log('Thông tin session:', response['sessionData']);
-                        window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home';
                     } else {
-                        showToast(response['message'], '#a7284e', 3000);
+                        // failed_toast(response['message'])
+                        document.getElementById('phone').classList.add('invalid-input');
+                        document.getElementById('password').classList.add('invalid-input');
+                        var errorMessage = document.createElement('div');
+                        errorMessage.classList.add('error-message');
+                        errorMessage.textContent = response['message'];
+                        document.getElementById('password').parentElement.appendChild(errorMessage);
                     }
                 },
                 error: function() {
-                    alert('Có lỗi xảy ra, vui lòng thử lại.');
+                    failed_toast("Có lỗi xảy ra, vui lòng thử lại.")
                 }
             });
         }
     }
-
-    function showToast(message, color, time, callback) {
-        var toast = document.getElementById("toast");
-        toast.textContent = message; // Cập nhật thông điệp
-        toast.style.backgroundColor = color; // Cập nhật màu nền
-        toast.className = "toast show";
-        setTimeout(function () {
-            toast.className = toast.className.replace("show", "");
-            if (callback) callback(); // Gọi callback sau khi Toast ẩn
-        }, time);
+</script>
+<script>
+    function success_toast(redirectUrl) {
+        toast({
+            classes: `text-bg-success border-0`,
+            body: `
+          <div class="d-flex w-100" data-bs-theme="dark">
+            <div class="flex-grow-1">
+              Đăng nhập thành công !
+            </div>
+            <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>`,
+            autohide: true,
+            delay: 1000
+        });
+        setTimeout(() => {
+            var toastElement = document.querySelector('.toast.show');
+            if (toastElement) {
+                var bsToast = new bootstrap.Toast(toastElement);
+                toastElement.addEventListener('hidden.bs.toast', function () {
+                    window.location.href = redirectUrl;
+                });
+            }
+        }, 100);
     }
 
-    function redirectToHome() {
-        window.location.href = 'http://localhost/Medicare/index.php?controller=home&action=home'; // Điều hướng đến trang chủ sau khi đăng nhập thành công
+    function failed_toast(message) {
+        toast({
+            classes: `text-bg-danger border-0`,
+            body: `
+              <div class="d-flex w-100" data-bs-theme="dark">
+                <div class="flex-grow-1">
+                  ${message}
+                </div>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>`,
+        })
     }
 </script>
 </body>

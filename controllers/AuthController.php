@@ -16,6 +16,21 @@
             return include './views/client/register.php';
         }
 
+        public function processRegister() {
+            $phone = $_POST['phone'];
+            $name = $_POST['name'];
+            $password = $_POST['password'];
+            $result = $this->authModel->registerClient($phone, $password, $name);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            return $this->view('client.register', [
+                'result' => $result,
+            ]);
+        }
+
         public function loginAdmin() {
             return $this->view('admin.login');
         }

@@ -4,10 +4,12 @@
         <div class="mb-3 col-sm-11">
             <?php include "select-specialty.php" ?>
             <input type="text" hidden="hidden" id="selected-specialty"/>
+            <input type="text" hidden="hidden" id="selected-specialty-name"/>
         </div>
         <div class="mb-3 col-sm-11">
             <?php include "select-doctor.php" ?>
             <input type="text" hidden="hidden" id="selected-doctor"/>
+            <input type="text" hidden="hidden" id="selected-doctor-name"/>
         </div>
     </div>
 </div>
@@ -36,6 +38,7 @@
                                autocomplete="off">
                     </div>
                     <input type="text" id="date-slot" hidden="hidden">
+                    <input type="text" id="selected-date-slot" hidden="hidden">
                 </form>
 
             </div>
@@ -46,6 +49,7 @@
         <div class="col-12" id="display-time-slot">
         </div>
         <input type="text" id="time-slot" hidden="hidden">
+        <input type="text" id="selected-time-slot" hidden="hidden">
         <span id="error-time" class="ml-2" style="color: red;"></span>
         <strong style="font-style: italic; font-size: 13px">Lưu ý: Thời gian khám trên chỉ là thời gian dự kiến,
             tổng

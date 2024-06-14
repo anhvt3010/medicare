@@ -47,8 +47,10 @@ class PatientController extends BaseController
     {
         $id = $_GET['patient_id'] ?? null;
         $patient = $this->patientModel->findById($id);
+        $listAppointments = $this->appointmentModel->getAppointmentsByPatient($patient['phone'], $patient['patient_id']);
         return $this->view('admin.patient-detail', [
             'patient' => $patient,
+            'listAppointments' => $listAppointments,
         ]);
     }
 
@@ -83,10 +85,34 @@ class PatientController extends BaseController
         session_start();
         if (isset($_SESSION['user_phone'])) {
             $phone = $_SESSION['user_phone'];
-            $listAppointments = $this->appointmentModel->getAppointmentsByPhone($phone);
+            $patient_id = $_SESSION['patient_id'];
+            $listAppointments = $this->appointmentModel->getAppointmentsByPatient($phone, $patient_id);
             return $this->view('client.history', [
                 'listAppointments' => $listAppointments,
             ]);
+        } else {
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
+        }
+    }
+
+    public function update_status()
+    {
+        session_start();
+        if (isset($_SESSION['admin_name'])) {
+            $employee_id = $_SESSION['admin_id'];
+            $status = $_POST['status'];
+            $patient_id = $_POST['patient_id'];
+            $result = $this->patientModel->updateStatus($patient_id, $status, $employee_id );
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            } else {
+                return $this->view('404', [
+                    'result' => $result,
+                ]);
+            }
         } else {
             header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
             exit();

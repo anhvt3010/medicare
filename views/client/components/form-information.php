@@ -62,9 +62,9 @@
     </div>
     <hr>
     <div class="text-center mt-3">
-        <button id="submit-button" class="btn btn-success" type="button"
-                style="background-color:#3fbbc0 !important; width: 20%; font-weight: bold; border: none">
-            ĐẶT LỊCH
+        <button id="openConfirm" type="button" class="btn btn-primary"
+                style="background-color:#3fbbc0 !important; width: 25%; font-weight: bold; border: none">
+            Xem lại thông tin và xác nhận
         </button>
     </div>
 </div>

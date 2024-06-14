@@ -206,14 +206,31 @@ if (!isset($_SESSION['admin_name'])) {
             let ul = document.createElement('ul');
             ul.className = 'pagination';
 
-            // Tạo và thêm nút "Previous"
+            // Tạo và thêm nút "Trang đầu"
+            let startLi = document.createElement('li');
+            startLi.className = 'page-item';
+            if (currentPage === 1) startLi.classList.add('disabled');
+            let startLink = document.createElement('a');
+            startLink.className = 'page-link';
+            startLink.href = '#';
+            startLink.innerText = '<<';
+            startLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    changePage(1);
+                }
+            });
+            startLi.appendChild(startLink);
+            ul.appendChild(startLi);
+
+            // Tạo và thêm nút "Trang trước"
             let prevLi = document.createElement('li');
             prevLi.className = 'page-item';
             if (currentPage === 1) prevLi.classList.add('disabled');
             let prevLink = document.createElement('a');
             prevLink.className = 'page-link';
             prevLink.href = '#';
-            prevLink.innerText = 'Trang trước';
+            prevLink.innerText = '<';
             prevLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 if (currentPage > 1) {
@@ -223,20 +240,56 @@ if (!isset($_SESSION['admin_name'])) {
             prevLi.appendChild(prevLink);
             ul.appendChild(prevLi);
 
-            // Tạo các nút số trang
-            for (let i = 1; i <= pageCount; i++) {
+            // Tạo các nút số trang với dấu "..."
+            let maxPageNumberShown = 4; // Số lượng nút trang tối đa hiển thị cùng một lúc
+            let startPage, endPage;
+            if (pageCount <= maxPageNumberShown) {
+                startPage = 1;
+                endPage = pageCount;
+            } else {
+                startPage = Math.max(currentPage - 2, 1);
+                endPage = Math.min(startPage + maxPageNumberShown - 1, pageCount);
+
+                if (endPage === pageCount) {
+                    startPage = pageCount - maxPageNumberShown + 1;
+                }
+            }
+
+            if (startPage > 1) {
+                let li = paginationButton(1, items);
+                ul.appendChild(li);
+                if (startPage > 2) {
+                    let dots = document.createElement('li');
+                    dots.className = 'page-item disabled';
+                    dots.innerHTML = '<a class="page-link" href="#">...</a>';
+                    ul.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
                 let li = paginationButton(i, items);
                 ul.appendChild(li);
             }
 
-            // Tạo và thêm nút "Next"
+            if (endPage < pageCount) {
+                if (endPage < pageCount - 1) {
+                    let dots = document.createElement('li');
+                    dots.className = 'page-item disabled';
+                    dots.innerHTML = '<a class="page-link" href="#">...</a>';
+                    ul.appendChild(dots);
+                }
+                let li = paginationButton(pageCount, items);
+                ul.appendChild(li);
+            }
+
+            // Tạo và thêm nút "Trang sau"
             let nextLi = document.createElement('li');
             nextLi.className = 'page-item';
             if (currentPage === pageCount) nextLi.classList.add('disabled');
             let nextLink = document.createElement('a');
             nextLink.className = 'page-link';
             nextLink.href = '#';
-            nextLink.innerText = 'Trang tiếp';
+            nextLink.innerText = '>';
             nextLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 if (currentPage < pageCount) {
@@ -245,6 +298,23 @@ if (!isset($_SESSION['admin_name'])) {
             });
             nextLi.appendChild(nextLink);
             ul.appendChild(nextLi);
+
+            // Tạo và thêm nút "Trang cuối"
+            let endLi = document.createElement('li');
+            endLi.className = 'page-item';
+            if (currentPage === pageCount) endLi.classList.add('disabled');
+            let endLink = document.createElement('a');
+            endLink.className = 'page-link';
+            endLink.href = '#';
+            endLink.innerText = '>>';
+            endLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage < pageCount) {
+                    changePage(pageCount);
+                }
+            });
+            endLi.appendChild(endLink);
+            ul.appendChild(endLi);
 
             wrapper.appendChild(ul);
         }
@@ -338,7 +408,6 @@ if (!isset($_SESSION['admin_name'])) {
 
 
         App.init();
-        App.tableFilters();
     });
 </script>
 </body>

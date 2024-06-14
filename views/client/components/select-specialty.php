@@ -99,7 +99,7 @@
 
             var selectedSpecialty = $(this).data('filter');
             $('#dropdownMenuButton').text('Chuyên khoa: ' + selectedSpecialty); // Cập nhật nội dung của nút button
-
+            document.getElementById("selected-specialty-name").value = selectedSpecialty;
             // Gửi yêu cầu AJAX tới select-doctor.php
             var xhr = new XMLHttpRequest();
             xhr.open('POST', './views/client/components/select-doctor.php', true);

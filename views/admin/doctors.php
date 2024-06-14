@@ -108,11 +108,13 @@ if (!isset($_SESSION['admin_name'])) {
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
-                                        <th style="width:20%;">Tên bác sĩ</th>
-                                        <th style="width:17%;">Chức vụ</th>
-                                        <th style="width:17%;">Chuyên khoa</th>
-                                        <th style="width:15%;">Thông tin liên hệ</th>
-                                        <th style="width:15%;">Đánh giá</th>
+                                        <th style="width:13%;">Tên bác sĩ</th>
+                                        <th style="width:8%;">Mã nhân viên</th>
+                                        <th style="width:5%;">Chức vụ</th>
+                                        <th style="width:15%;">Chuyên khoa</th>
+                                        <th style="width:5%;">Ngày sinh</th>
+                                        <th style="width:10%;">Thông tin liên hệ</th>
+                                        <th style="width:10%;">Trạng thái</th>
                                         <th style="width:2%;"></th>
                                     </tr>
                                     </thead>
@@ -181,17 +183,26 @@ if (!isset($_SESSION['admin_name'])) {
                             <span>${doctor.name}</span>
                             <span class='cell-detail-description'>${doctor.specialty}</span>
                         </td>
+                        <td>
+                            <span>${doctor.employee_code ?? '...'}</span>
+                        </td>
                         <td class='cell-detail milestone' data-project='Bootstrap'>
                             <span style='font-size: 13px; color: black'>${doctor.position}</span>
                         </td>
                         <td class='cell-detail'>
                             <span>${doctor.specialty}</span>
                         </td>
+                        <td class='cell-detail milestone'>
+                            <span class='cell-detail-description' style='font-size: 13px; color: black'>${doctor.dob ?? '...'}</span>
+                            <span>${doctor.gender == 1 ? 'Nam' : 'Nũ'}</span>
+                        </td>
                         <td class='milestone'>
                             <span class='version'>${doctor.email}</span>
                             <div>${doctor.phone}</div>
                         </td>
-                        <td class='cell-detail'></td>
+                        <td class='cell-detail'>
+                            <span>${doctor.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</span>
+                        </td>
                         <td class='text-right p-0'>
                             <div class='btn-group btn-hspace'>
                                 <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
@@ -220,14 +231,31 @@ if (!isset($_SESSION['admin_name'])) {
             let ul = document.createElement('ul');
             ul.className = 'pagination';
 
-            // Tạo và thêm nút "Previous"
+            // Tạo và thêm nút "Trang đầu"
+            let startLi = document.createElement('li');
+            startLi.className = 'page-item';
+            if (currentPage === 1) startLi.classList.add('disabled');
+            let startLink = document.createElement('a');
+            startLink.className = 'page-link';
+            startLink.href = '#';
+            startLink.innerText = '<<';
+            startLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage > 1) {
+                    changePage(1);
+                }
+            });
+            startLi.appendChild(startLink);
+            ul.appendChild(startLi);
+
+            // Tạo và thêm nút "Trang trước"
             let prevLi = document.createElement('li');
             prevLi.className = 'page-item';
             if (currentPage === 1) prevLi.classList.add('disabled');
             let prevLink = document.createElement('a');
             prevLink.className = 'page-link';
             prevLink.href = '#';
-            prevLink.innerText = 'Trang trước';
+            prevLink.innerText = '<';
             prevLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 if (currentPage > 1) {
@@ -237,20 +265,56 @@ if (!isset($_SESSION['admin_name'])) {
             prevLi.appendChild(prevLink);
             ul.appendChild(prevLi);
 
-            // Tạo các nút số trang
-            for (let i = 1; i <= pageCount; i++) {
+            // Tạo các nút số trang với dấu "..."
+            let maxPageNumberShown = 3; // Số lượng nút trang tối đa hiển thị cùng một lúc
+            let startPage, endPage;
+            if (pageCount <= maxPageNumberShown) {
+                startPage = 1;
+                endPage = pageCount;
+            } else {
+                startPage = Math.max(currentPage - 2, 1);
+                endPage = Math.min(startPage + maxPageNumberShown - 1, pageCount);
+
+                if (endPage === pageCount) {
+                    startPage = pageCount - maxPageNumberShown + 1;
+                }
+            }
+
+            if (startPage > 1) {
+                let li = paginationButton(1, items);
+                ul.appendChild(li);
+                if (startPage > 2) {
+                    let dots = document.createElement('li');
+                    dots.className = 'page-item disabled';
+                    dots.innerHTML = '<a class="page-link" href="#">...</a>';
+                    ul.appendChild(dots);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
                 let li = paginationButton(i, items);
                 ul.appendChild(li);
             }
 
-            // Tạo và thêm nút "Next"
+            if (endPage < pageCount) {
+                if (endPage < pageCount - 1) {
+                    let dots = document.createElement('li');
+                    dots.className = 'page-item disabled';
+                    dots.innerHTML = '<a class="page-link" href="#">...</a>';
+                    ul.appendChild(dots);
+                }
+                let li = paginationButton(pageCount, items);
+                ul.appendChild(li);
+            }
+
+            // Tạo và thêm nút "Trang sau"
             let nextLi = document.createElement('li');
             nextLi.className = 'page-item';
             if (currentPage === pageCount) nextLi.classList.add('disabled');
             let nextLink = document.createElement('a');
             nextLink.className = 'page-link';
             nextLink.href = '#';
-            nextLink.innerText = 'Trang tiếp';
+            nextLink.innerText = '>';
             nextLink.addEventListener('click', function (e) {
                 e.preventDefault();
                 if (currentPage < pageCount) {
@@ -259,6 +323,23 @@ if (!isset($_SESSION['admin_name'])) {
             });
             nextLi.appendChild(nextLink);
             ul.appendChild(nextLi);
+
+            // Tạo và thêm nút "Trang cuối"
+            let endLi = document.createElement('li');
+            endLi.className = 'page-item';
+            if (currentPage === pageCount) endLi.classList.add('disabled');
+            let endLink = document.createElement('a');
+            endLink.className = 'page-link';
+            endLink.href = '#';
+            endLink.innerText = '>>';
+            endLink.addEventListener('click', function (e) {
+                e.preventDefault();
+                if (currentPage < pageCount) {
+                    changePage(pageCount);
+                }
+            });
+            endLi.appendChild(endLink);
+            ul.appendChild(endLi);
 
             wrapper.appendChild(ul);
         }

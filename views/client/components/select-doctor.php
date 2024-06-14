@@ -69,6 +69,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($data)) {
     document.addEventListener('DOMContentLoaded', function() {
         var specialtyItems = document.querySelectorAll('.filter-item-specialty-specialty');
         var selectedSpecialty = document.getElementById("selected-specialty");
+
         specialtyItems.forEach(function(item) {
             item.addEventListener('click', function() {
                 var specialtyId = this.getAttribute('data-value');
@@ -116,6 +117,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($data)) {
                 li.textContent = doctor.name;
                 li.onclick = function() {
                     document.getElementById('dropdownMenuButtonDoctor').textContent = 'Bác sĩ: ' + doctor.name;
+                    document.getElementById('selected-doctor-name').value = doctor.name
                     document.getElementById('selected-doctor').value = doctor.employee_id; // Lưu ID bác sĩ vào input
                     console.log('Bac si: ', document.getElementById('selected-doctor').value)
                     $('#dropdownMenuButtonDoctor').dropdown('toggle'); // Đóng dropdown menu

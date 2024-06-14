@@ -21,14 +21,14 @@
         <?php
         if (isset($_SESSION['user_phone'])) {
             // Lấy số điện thoại người dùng từ session
-            $userPhone = $_SESSION['user_phone'];
+            $username =  $_SESSION['user_name'];
 
             // Hiển thị số điện thoại người dùng
             echo '<div class="user-dropdown">
                     <div class="dropdown">
                       <button class="btn btn-secondary dropdown-toggle"  style="background-color: #3FBBC0FF !important; border-color: #3FBBC0FF"
                               type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Xin chào: ' . htmlspecialchars($userPhone) . '
+                        Xin chào: ' . htmlspecialchars($username) . '
                       </button>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=patient&action=profile">

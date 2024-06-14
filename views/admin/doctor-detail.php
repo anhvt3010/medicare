@@ -14,11 +14,9 @@ if (!isset($_SESSION['admin_name'])) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
-    <title>Chi tiết nhân viên</title>
-    <link href="assets/css/style.css" rel="stylesheet">
+    <title>Chi tiết bác sĩ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'import-link-tag.php'?>
-
     <style>
         .picture {
             position: relative;
@@ -77,9 +75,9 @@ if (!isset($_SESSION['admin_name'])) {
     </style>
 </head>
 <body>
-<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1100; display: flex; align-items: center; justify-content: center;">
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center;">
     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
-        <span class="sr-only" style="z-index: 1151">Loading...</span>
+        <span class="sr-only">Loading...</span>
     </div>
 </div>
 <div class="be-wrapper">
@@ -89,12 +87,12 @@ if (!isset($_SESSION['admin_name'])) {
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="page-head">
-            <h2 class="page-head-title" style="font-size: 25px">Chi tiết nhân viên</h2>
+            <h2 class="page-head-title" style="font-size: 25px">Chi tiết bác sĩ</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
                     <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
-                    <li class="breadcrumb-item">Quán lý nhân viên</li>
-                    <li class="breadcrumb-item active">Danh sách nhân viên</li>
+                    <li class="breadcrumb-item">Quán lý bác sĩ</li>
+                    <li class="breadcrumb-item active">Danh sách bác sĩ</li>
                     <li class="breadcrumb-item active">Chi tiết</li>
                 </ol>
             </nav>
@@ -105,15 +103,15 @@ if (!isset($_SESSION['admin_name'])) {
                     <div class="col-md-3 border-right">
                         <div class="d-flex flex-column align-items-center text-center p-3 py-5">
                             <div class="picture">
-                                <img src="<?php echo $employee['avt'] ?>" width="150px" height="150px"
+                                <img src="<?php echo $doctor['avt'] ?>" width="150px" height="150px"
                                      class="picture-src" id="docUpAvt" title="">
                                 <input type="file" id="wizard-picture" class="">
                                 <div class="overlay">
                                     <i class="fa fa-plus"></i>
                                 </div>
                             </div>
-                            <span class="font-weight-bold mt-2"><?php echo $employee['name'] ?></span>
-                            <span class="text-black-50"><?php echo $employee['email'] ?></span>
+                            <span class="font-weight-bold mt-2"><?php echo $doctor['name'] ?></span>
+                            <span class="text-black-50"><?php echo $doctor['email'] ?></span>
                         </div>
                     </div>
                     <div class="col-md-5 border-right">
@@ -125,35 +123,29 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="col-md-6 pr-0">
                                     <label class="labels">Họ và tên</label>
                                     <input id="docUpName" type="text" class="form-control" placeholder="Nhập họ và tên"
-                                           value="<?php echo $employee['name'] ?>" disabled>
+                                           value="<?php echo $doctor['name'] ?>" disabled>
                                     <span id="errorDocName" style="color: red"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="labels">Mã nhân viên</label>
-                                    <div id="docUpUsername" type="text" class="form-control"
+                                    <div type="text" class="form-control"
                                          style="line-height: 30px; background-color: #eee">
-                                        <?php echo $employee['employee_code'] ?>
+                                        <?php echo $doctor['employee_code'] ?>
                                     </div>
-                                    <span id="errorDocUsername" style="color: red"></span>
                                 </div>
                             </div>
                             <div class="row mt-3">
                                 <div class="col-md-6 pr-0">
                                     <label for="docUpGender" class="form-label">Giới tính</label>
-                                    <select id="docUpGender" class="form-select mb-3" aria-label="Large select example"
-                                            style="height: 50px" disabled>
-                                        <option value="1" <?php echo ($employee['gender'] == 1) ? 'selected' : ''; ?>>
-                                            Nam
-                                        </option>
-                                        <option value="0" <?php echo ($employee['gender'] == 0) ? 'selected' : ''; ?>>
-                                            Nữ
-                                        </option>
+                                    <select id="docUpGender" class="form-select mb-3" aria-label="Large select example" style="height: 50px" disabled>
+                                        <option value="1" <?php echo ($doctor['gender'] == 1) ? 'selected' : ''; ?>>Nam</option>
+                                        <option value="0" <?php echo ($doctor['gender'] == 0) ? 'selected' : ''; ?>>Nữ</option>
                                     </select>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="labels">Ngày sinh</label>
                                     <input id="docUpDob" type="date" class="form-control"
-                                           value="<?php echo $employee['dob'] ?>" disabled>
+                                           value="<?php echo $doctor['dob'] ?>" disabled>
                                     <span id="errorDocDob" style="color: red"></span>
                                 </div>
                             </div>
@@ -161,14 +153,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="col-md-6 pr-0">
                                     <label class="labels">Email</label>
                                     <input id="docUpEmail" type="text" class="form-control" placeholder="Nhập email"
-                                           value="<?php echo $employee['email'] ?>" disabled>
+                                           value="<?php echo $doctor['email'] ?>" disabled>
                                     <span id="errorDocEmail" style="color: red"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="labels">Số điện thoại</label>
                                     <input id="docUpPhone" type="text" class="form-control"
-                                           value="<?php echo $employee['phone'] ?>" disabled
-                                           placeholder="Nhập số điện thoại">
+                                           value="<?php echo $doctor['phone'] ?>" disabled placeholder="Nhập số điện thoại">
                                     <span id="errorDocPhone" style="color: red"></span>
                                 </div>
                             </div>
@@ -176,19 +167,14 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="col-md-6 pr-0">
                                     <label class="labels">Địa chỉ</label>
                                     <input id="docUpAddress" type="text" class="form-control" placeholder="Nhập địa chỉ"
-                                           value="<?php echo $employee['address'] ?>" disabled>
+                                           value="<?php echo $doctor['address'] ?>" disabled>
                                     <span id="errorDocAddress" style="color: red"></span>
                                 </div>
                                 <div class="col-md-6">
                                     <label class="labels">Trạng thái</label>
-                                    <select id="docUpStatus" class="form-select mb-3" aria-label="Large select example"
-                                            style="height: 50px" disabled>
-                                        <option value="0" <?php echo ($employee['status'] == 0) ? 'selected' : ''; ?>>
-                                            Đóng
-                                        </option>
-                                        <option value="1" <?php echo ($employee['status'] == 1) ? 'selected' : ''; ?>>
-                                            Mở
-                                        </option>
+                                    <select id="docUpStatus" class="form-select mb-3" aria-label="Large select example" style="height: 50px" disabled>
+                                        <option value="0" <?php echo ($doctor['status'] == 0) ? 'selected' : ''; ?>>Đóng</option>
+                                        <option value="1" <?php echo ($doctor['status'] == 1) ? 'selected' : ''; ?>>Mở</option>
                                     </select>
                                 </div>
                             </div>
@@ -202,24 +188,32 @@ if (!isset($_SESSION['admin_name'])) {
                             <label class="labels">Chức vụ</label>
                             <div id="docUpPosition" class="form-control"
                                  style="height: 50px; background-color: #eee; line-height: 30px; font-size: 13px">
-                                <?php echo $employee['positionName'] ?>
+                                <?php echo $doctor['positionName'] ?>
                             </div>
+                        </div>
+                        <br>
+                        <div class="col-md-12">
+                            <label class="labels">Chuyên khoa</label>
+                            <select id="docUpSpecialty" class="form-select" style="height: 50px" disabled>
+                                <option hidden="hidden" value="0">Chọn chuyên khoa</option>
+                                <?php
+                                foreach ($listSpecialties as $specialty) {
+                                    echo "<option value='" . htmlspecialchars($specialty['specialty_id']) . "'>" . htmlspecialchars($specialty['name']) . "</option>";
+                                }
+                                ?>
+                            </select>
                         </div>
                     </div>
                 </div>
                 <div class="d-flex justify-content-between p-3">
-                    <a id="backButton" class="btn btn-danger"
-                       href="http://localhost/Medicare/index.php?controller=employee&action=index">Quay lại danh
-                        sách</a>
-                    <button type="button" class="btn btn-primary" id="editButtonDoctor">
-                        Chỉnh sửa
-                    </button>
+                    <a id="backButton" class="btn btn-danger" href="http://localhost/Medicare/index.php?controller=doctor&action=index">Quay lại danh sách</a>
+                    <button id="editButtonDoctor" class="btn btn-primary">Chỉnh sửa</button>
                 </div>
             </div>
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="detailModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 1049!important;">
+    <div class="modal fade" id="detailDoctorModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" style="z-index: 1049!important;">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -231,7 +225,7 @@ if (!isset($_SESSION['admin_name'])) {
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-primary" id="saveUpdate">Lưu lại</button>
+                    <button type="button" class="btn btn-primary" id="saveDoctorUpdate">Lưu lại</button>
                 </div>
             </div>
         </div>
@@ -245,18 +239,22 @@ if (!isset($_SESSION['admin_name'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function () {
-        App.init();
+    window.onload = function() {
         document.getElementById('loading-spinner').style.display = 'none';
+        // Thiết lập giá trị cho select chuyên khoa
+        var specialtySelect = document.getElementById('docUpSpecialty');
+        specialtySelect.value = '<?php echo $doctor['specialty_id']; ?>';
+    };
+    document.addEventListener('DOMContentLoaded', function () {
+        // document.getElementById('fullScreenSpinner').style.display = 'none';
+        var exampleModal = new bootstrap.Modal(document.getElementById('detailDoctorModal'));
+        App.init();
 
-
-        $("#wizard-picture").change(function () {
+        $("#wizard-picture").change(function(){
             readURL(this);
         });
 
-        var exampleModal = new bootstrap.Modal(document.getElementById('detailModal'));
-
-        document.getElementById('editButtonDoctor').addEventListener('click', function () {
+        document.getElementById('editButtonDoctor').addEventListener('click', function() {
             var inputs = document.querySelectorAll('.form-control');
             var selects = document.querySelectorAll('.form-select');
             var fileInput = document.getElementById('wizard-picture');
@@ -264,10 +262,10 @@ if (!isset($_SESSION['admin_name'])) {
             var pictureDiv = document.querySelector('.picture');
 
             // Bỏ thuộc tính disabled để cho phép chỉnh sửa
-            inputs.forEach(function (input) {
+            inputs.forEach(function(input) {
                 input.disabled = false;
             });
-            selects.forEach(function (select) {
+            selects.forEach(function(select) {
                 select.disabled = false;
             });
 
@@ -277,61 +275,57 @@ if (!isset($_SESSION['admin_name'])) {
             pictureDiv.classList.add('editable'); // Thêm class để kích hoạt hover
 
             // Đổi tên nút từ "Chỉnh sửa" thành "Lưu lại"
-            this.textContent = 'Cập nhật';
+            this.textContent = 'Lưu lại';
 
             // Thêm sự kiện click cho nút "Lưu lại" để xử lý lưu thông tin
             this.removeEventListener('click', arguments.callee);
-
-            this.addEventListener('click', function () {
+            this.addEventListener('click', function() {
                 if (validateDoctorInfo()) {
-                    exampleModal.show();
+                    exampleModal.show()
                 }
             });
-
-
         });
 
-        document.getElementById('saveUpdate').addEventListener('click', function () {
-            exampleModal.hide();
+        document.getElementById('saveDoctorUpdate').addEventListener('click', function () {
+            exampleModal.hide()
             const formData = new FormData();
 
-            formData.append('id', <?php echo $employee['id'] ?>);
+            formData.append('id', <?php echo $doctor['id'] ?>);
             formData.append('name', document.getElementById('docUpName').value);
-            formData.append('username', document.getElementById('docUpUsername').value);
             formData.append('gender', parseInt(document.getElementById('docUpGender').value, 10));
             formData.append('dob', document.getElementById('docUpDob').value);
             formData.append('email', document.getElementById('docUpEmail').value);
             formData.append('phone', document.getElementById('docUpPhone').value);
             formData.append('address', document.getElementById('docUpAddress').value);
             formData.append('status', parseInt(document.getElementById('docUpStatus').value, 10));
-            formData.append('avt', '<?php echo $employee['avt'] ?>');
+            formData.append('specialty_id', parseInt(document.getElementById('docUpSpecialty').value, 10));
+            formData.append('avt', '<?php echo $doctor['avt'] ?>');
 
             // Thêm file vào FormData nếu có
-            const fileInput = document.getElementById('wizard-picture');
+            var fileInput = document.getElementById('wizard-picture');
             if (fileInput.files.length > 0) {
                 formData.append('avtUpdate', fileInput.files[0]);
             }
             // Log dữ liệu trong FormData
             for (var pair of formData.entries()) {
-                console.log(pair[0] + ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
+                console.log(pair[0]+ ': ' + (pair[1] instanceof File ? pair[1].name : pair[1]));
             }
 
             document.getElementById('loading-spinner').style.display = 'block';
-
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=employee&action=update',
+                url: 'http://localhost/Medicare/index.php?controller=doctor&action=update',
                 type: 'POST',
                 data: formData,
                 contentType: false, // Không set contentType
                 processData: false, // Không xử lý dữ liệu
-                success: function (response) {
+                success: function(response) {
                     console.log(response);
-                    success_toast('http://localhost/Medicare/index.php?controller=employee&action=index');
-                    $("#loading-spinner").hide()
+                    success_toast('http://localhost/Medicare/index.php?controller=doctor&action=index')
+                    $("#loading-spinner").hide();
                 },
-                error: function () {
+                error: function() {
                     failed_toast()
-                    $("#loading-spinner").hide()
+                    $("#loading-spinner").hide();
                 }
             });
         });
@@ -400,6 +394,7 @@ if (!isset($_SESSION['admin_name'])) {
         } else {
             document.getElementById('errorDocAddress').textContent = '';
         }
+
 
         return isValid;
     }

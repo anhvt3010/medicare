@@ -212,10 +212,9 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-<!--                                                        <button type="button" class="dropdown-item" data-id="--><?php //echo $appointment['id'] ?><!--">Chi tiết</button>-->
-                                                        <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-                                                            Chi tiết
-                                                        </button>
+                                                        <a type="button" class="dropdown-item"
+                                                           href="http://localhost/Medicare/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>"
+                                                           data-id="<?php echo $appointment['id'] ?>">Chi tiết</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -226,34 +225,59 @@ if (!isset($_SESSION['admin_name'])) {
                                     </tbody>
                                 </table>
                                 <div class="row be-datatable-footer">
-                                    <div class="col-sm-10 dataTables_paginate" id="pagination"
-                                         style="margin-bottom: 0px!important;">
+                                    <div class="col-sm-10 dataTables_paginate" id="pagination" style="margin-bottom: 0px!important;">
                                         <nav aria-label="Page navigation example">
                                             <?php
                                             $currentPage = $_GET['page'] ?? 1;
-                                            $queryString = $_SERVER['QUERY_STRING']; // Lấy chuỗi truy vấn hiện tại
-                                            parse_str($queryString, $queryParams); // Phân tích chuỗi truy vấn thành mảng
-                                            unset($queryParams['page']); // Loại bỏ tham số 'page' để tránh trùng lặp
-                                            $newQueryString = http_build_query($queryParams); // Tạo lại chuỗi truy vấn mà không có 'page'
+                                            $queryString = $_SERVER['QUERY_STRING'];
+                                            parse_str($queryString, $queryParams);
+                                            unset($queryParams['page']);
+                                            $newQueryString = http_build_query($queryParams);
+
+                                            $totalPages = ceil($totalAppointment / 10);
+                                            $range = 2; // Số trang hiển thị xung quanh trang hiện tại
+                                            $initialNum = $currentPage - $range;
+                                            $conditionLimitNum = ($currentPage + $range)  + 1;
                                             ?>
                                             <ul class="pagination">
                                                 <li class="page-item <?php if ($currentPage == 1) echo 'disabled'; ?>">
                                                     <a class="page-link" href="?<?php echo $newQueryString; ?>&page=1" aria-label="Previous">
-                                                        <span aria-hidden="true">&laquo;</span>
+                                                        <span aria-hidden="true">&lt;&lt;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item <?php if ($currentPage == 1) echo 'disabled'; ?>">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo max(1, $currentPage - 1); ?>" aria-label="Previous">
+                                                        <span aria-hidden="true">&lt;</span>
                                                     </a>
                                                 </li>
                                                 <?php
-                                                $totalPages = ceil($totalAppointment / 10); // Tính tổng số trang
-                                                for ($i = 1; $i <= $totalPages; $i++) {
+                                                if ($initialNum > 1) {
+                                                    echo '<li class="page-item"><a class="page-link" href="?'.$newQueryString.'&page=1">1</a></li>';
+                                                    if ($initialNum > 2) {
+                                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                                    }
+                                                }
+
+                                                for ($i = max($initialNum, 1); $i < min($conditionLimitNum, $totalPages + 1); $i++) {
                                                     $activeClass = ($i == $currentPage) ? 'active' : '';
-                                                    echo '<li class="page-item ' . $activeClass . '">
-                                                <a class="page-link" 
-                                                   href="?'.$newQueryString.'&page=' . $i . '">' . $i . '</a></li>';
+                                                    echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?'.$newQueryString.'&page=' . $i . '">' . $i . '</a></li>';
+                                                }
+
+                                                if ($conditionLimitNum < $totalPages + 1) {
+                                                    if ($conditionLimitNum < $totalPages) {
+                                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                                    }
+                                                    echo '<li class="page-item"><a class="page-link" href="?'.$newQueryString.'&page=' . $totalPages . '">' . $totalPages . '</a></li>';
                                                 }
                                                 ?>
                                                 <li class="page-item <?php if ($currentPage == $totalPages) echo 'disabled'; ?>">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo min($totalPages, $currentPage + 1); ?>" aria-label="Next">
+                                                        <span aria-hidden="true">&gt;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item <?php if ($currentPage == $totalPages) echo 'disabled'; ?>">
                                                     <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo $totalPages; ?>" aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
+                                                        <span aria-hidden="true">&gt;&gt;</span>
                                                     </a>
                                                 </li>
                                             </ul>

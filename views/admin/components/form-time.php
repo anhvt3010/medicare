@@ -29,21 +29,22 @@
     </div>
 </div>
 <div class="col-6">
-    <h5 class="mt-0">Ngày khám <strong id="date_selected"></strong></h5>
-    <div class="row">
-        <div class="btn-select-day col-10" id="otherDay" style="margin-left: 12px!important;" onclick="selectDateSlot(this)">
+    <div class="row mb-2">
+        <p>Ngày khám (*)</p>
+        <div class="btn-select-day col-10" id="otherDay" style="margin-left: 12px!important;">
             <div class="input-group">
-                <input type="date" class="form-control" id="input-otherDate" placeholder="Chọn ngày khác" autocomplete="off">
+                <input type="text" class="form-control" value="" id="input-otherDate" placeholder="Chọn ngày khác" autocomplete="off" readonly>
             </div>
             <input type="text" id="date-slot" hidden="hidden">
         </div>
     </div>
-    <span id="error-date" class="ml-2" style="color: red;"></span>
-</div>
-<div class="row">
-    <p>Giờ khám (*)</p>
-    <div class="col-12" id="display-time-slot">
+    <div class="row">
+        <p>Giờ khám (*) <strong id="timeSlot" class="ml-3" style="font-size: 15px"></strong></p>
+        <div class="col-12" id="display-time-slot">
+
+        </div>
+        <input type="text" id="time-slot" hidden="hidden">
+        <span id="error-time" class="ml-2" style="color: red;"></span>
     </div>
-    <input type="text" id="time-slot" hidden="hidden">
-    <span id="error-time" class="ml-2" style="color: red;"></span>
 </div>
+

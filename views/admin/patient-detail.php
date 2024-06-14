@@ -15,9 +15,31 @@ if (!isset($_SESSION['admin_name'])) {
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
     <title>Chi tiết bệnh nhân</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'import-link-tag.php' ?>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <link href="https://gitcdn.github.io/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css" rel="stylesheet">
+    <script src="https://gitcdn.github.io/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js"></script>
+    <style>
+        /* Tùy chỉnh line-height cho nội dung toggle */
+        .toggle-handle {
+            line-height: 40px; /* Đặt line-height bằng với chiều cao của toggle */
+        }
+
+        /* Đảm bảo các icon và text được căn giữa */
+        .toggle-on, .toggle-off {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 <body>
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1051; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <div class="be-wrapper">
     <!--    Navbar-->
     <?php include 'navbar.php' ?>
@@ -40,7 +62,7 @@ if (!isset($_SESSION['admin_name'])) {
                 <div class="col-12">
                     <div class="row card card-table pt-1 pb-3">
                         <div class="row p-3">
-                            <div class="col">
+                            <div class="col-6">
                                 <h4>
                                     <strong>Thông tin cá nhân</strong>
                                     <hr>
@@ -89,30 +111,69 @@ if (!isset($_SESSION['admin_name'])) {
                                     </div>
                                     <div class="col-9">
                                         <input type="text" class="form-control"
-                                               value="<?php echo $patient['status'] == 0 ? 'Mở' : 'Đóng' ?>" disabled>
+                                               value="<?php echo $patient['status'] == 1 ? 'Mở' : 'Đóng' ?>" disabled>
                                     </div>
                                 </div>
+                                <button type="button" class="btn btn-danger" id="btnLock"
+                                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                    <i class="fa-solid fa-triangle-exclamation"></i>
+                                    Thay đổi trạng thái tài khoản
+                                </button>
                             </div>
-                            <div class="col">
+                            <div class="col-6">
                                 <h4>
                                     <strong>Lịch sử khám</strong>
                                     <hr>
                                 </h4>
-                                <div class="mb-3 row">
-                                    <div class="col-12">
-                                        <input type="text" class="form-control"
-                                               value="<?php echo $patient['status'] == 0 ? 'Mở' : 'Đóng' ?>" disabled>
-                                    </div>
-                                </div>
+                                <?php include 'patient-detail-history.php'?>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div class="col-12">
-                <div class="d-flex justify-content-between">
-                    <a id="backButton" class="btn btn-danger" href="http://localhost/Medicare/index.php?controller=patient&action=index">Quay lại danh sách</a>
-                    <button id="editButton" class="btn btn-primary">Chỉnh sửa</button>
+        </div>
+    </div>
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body pt-0">
+                    Việc thay đổi trạng thái sẽ tiếp tục, bạn chắc chắn chứ ?
+                </div>
+                <div class="modal-footer pt-0">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-warning"
+                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                    >Tiếp tục</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body row pt-0">
+                    <div class="col-3 pt-2">Chuyển trạng thái</div>
+                    <div class="col-6">
+                        <input type="checkbox" id="statusToggle" data-toggle="toggle"
+                               data-width="100" data-height="30" data-onstyle="success" data-offstyle="danger"
+                               data-on="<i class='fas fa-unlock mr-2'></i> Mở"
+                               data-off="<i class='fas fa-lock mr-2'></i> Đóng"
+                            <?php echo $patient['status'] == 1 ? 'checked' : ''; ?>>
+                    </div>
+                </div>
+                <div class="modal-footer pt-0">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="btnUpdateStatus">Lưu thay đổi</button>
                 </div>
             </div>
         </div>
@@ -120,13 +181,86 @@ if (!isset($_SESSION['admin_name'])) {
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
 </div>
-<?php include 'import-script.php' ?>
+
+<?php include 'import-script.php'?>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('loading-spinner').style.display = 'none';
+        var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+
+        document.getElementById('btnUpdateStatus').addEventListener('click', function() {
+            confirmModal.hide()
+            const formData = new FormData();
+            formData.append('patient_id', <?php echo $patient['patient_id'] ?>);
+            formData.append('status', document.getElementById('statusToggle').checked ? 1 : 0);
+
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url: 'http://localhost/Medicare/index.php?controller=patient&action=update_status',
+                type: 'POST',
+                data: formData,
+                contentType: false, // Không set contentType
+                processData: false, // Không xử lý dữ liệu
+                success: function(response) {
+                    console.log(response);
+                    success_toast('http://localhost/Medicare/index.php?controller=patient&action=index')
+                },
+                error: function() {
+                    failed_toast()
+                    $("#loading-spinner").hide();
+                }
+            });
+        });
+
 
         App.init();
-        App.tableFilters();
     });
+</script>
+<script>
+    function success_toast(redirectUrl) {
+        toast({
+            classes: `text-bg-success border-0`,
+            body: `
+          <div class="d-flex w-100" data-bs-theme="dark">
+            <div class="flex-grow-1">
+              Cập nhật thành công !
+            </div>
+            <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>`,
+            autohide: true,
+            delay: 1000
+        });
+
+        // Đợi DOM cập nhật
+        setTimeout(() => {
+            // Lấy phần tử toast mới nhất
+            var toastElement = document.querySelector('.toast.show');
+            if (toastElement) {
+                var bsToast = new bootstrap.Toast(toastElement);
+                toastElement.addEventListener('hidden.bs.toast', function () {
+                    window.location.href = redirectUrl;
+                    $("#loading-spinner").hide();
+                });
+            }
+        }, 100); // Đợi 100ms để đảm bảo toast đã được thêm vào DOM
+    }
+
+    function failed_toast() {
+        toast({
+            classes: `text-bg-danger border-0`,
+            body: `
+              <div class="d-flex w-100" data-bs-theme="dark">
+                <div class="flex-grow-1">
+                  Đã có lỗi xảy ra !
+                </div>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>`,
+        })
+    }
 </script>
 </body>
 </html>

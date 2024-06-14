@@ -27,17 +27,8 @@ $(document).ready(function () {
     // xxxxxx  Cấu hình giới hạn chọn ngày ============================================
     $('#input-otherDate').datepicker({
         minDate: 0, // Ngày hiện tại
-        maxDate: "+14D", // 14 ngày kể từ ngày hiện tại
-        dateFormat: 'dd/mm/yy',
-        beforeShowDay: function(date) {
-            var day = date.getDay();
-            // Kiểm tra nếu là thứ Bảy (6) hoặc Chủ Nhật (0)
-            if (day === 0 || day === 6) {
-                return [false];
-            } else {
-                return [true];
-            }
-        }
+        maxDate: "+7D", // 7 ngày kể từ ngày hiện tại
+        dateFormat: 'dd/mm/yy'
     });
 
 
@@ -78,28 +69,42 @@ $(document).ready(function () {
         var specialtyId = document.getElementById('selected-specialty').value;
 
         console.log('Ngày đã chọn:', dateTimestamp);
-        console.log('ngày chưa cỷenen', date.toLocaleDateString())
+        console.log('ngày chưa chuyển', date.toLocaleDateString())
         document.getElementById('date-slot').value = dateTimestamp
+        document.getElementById('selected-date-slot').value = date.toLocaleDateString()
         console.log('Chuyen khoa: + ', specialtyId)
         console.log('Bác sĩ:  + ', parseInt(document.getElementById('selected-doctor').value,10))
 
-        $.ajax({
-            url: 'http://localhost/Medicare/index.php',
-            type: 'GET',
-            data: {
-                controller: 'appointment',
-                action: 'getByDateAndDoctor',
-                dateSlot: dateTimestamp,
-                doctorId: parseInt(document.getElementById('selected-doctor').value,10)
-            },
-            success: function(timeSlots) {
-                console.log(timeSlots)
-                displayTimeSlots(timeSlots);
-            },
-            error: function(error) {
-                console.error('Error:', error);
-            }
-        });
+        // Lấy ngày hiện tại và thời gian hiện tại
+        var now = new Date();
+        var todayDateString = now.toLocaleDateString();
+        var currentHour = now.getHours();
+
+        // Kiểm tra nếu ngày được chọn là hôm nay và sau 11 giờ sáng
+        if (date.toLocaleDateString() === todayDateString && currentHour >= 11) {
+
+            displayTimeSlots(["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00",
+                "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]);
+            console.log('Chọn giờ hẹn: Không thể đặt lịch hẹn sau 11 giờ sáng cho ngày hôm nay.');
+        } else {
+            $.ajax({
+                url: 'http://localhost/Medicare/index.php',
+                type: 'GET',
+                data: {
+                    controller: 'appointment',
+                    action: 'getByDateAndDoctor',
+                    dateSlot: dateTimestamp,
+                    doctorId: parseInt(document.getElementById('selected-doctor').value,10)
+                },
+                success: function(timeSlots) {
+                    console.log(timeSlots)
+                    displayTimeSlots(timeSlots);
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+        }
     }
 
 });
@@ -161,6 +166,7 @@ function selectTimeSlot(element) {
         "13:00": 8, "13:30": 9, "14:00": 10, "14:30": 11, "15:00": 12, "15:30": 13, "16:00": 14, "16:30": 15
     };
     document.getElementById('time-slot').value = timeSlotValues[selectedTime];
+    document.getElementById('selected-time-slot').value = selectedTime;
 }
 
 // Chọn ngày khám ======================================================================================================

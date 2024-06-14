@@ -19,7 +19,33 @@ class AuthModel extends BaseModel {
         return mysqli_query($this->connection, $sql);
     }
 
-    public function loginClient($phone, $password)
+    public function registerClient($phone, $password, $name)
+    {
+        $phone = mysqli_real_escape_string($this->connection, $phone);
+        $password = mysqli_real_escape_string($this->connection, $password);
+        $name = mysqli_real_escape_string($this->connection, $name);
+
+        // Kiểm tra xem số điện thoại đã được đăng ký chưa
+        $sql = "SELECT phone FROM " . self::TABLE_NAME . " WHERE phone = '$phone'";
+        $result = $this->_query($sql);
+        if ($result && mysqli_num_rows($result) > 0) {
+            return ['success' => false, 'message' => 'Số điện thoại đã được đăng ký'];
+        }
+
+        $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
+
+        $sql = "INSERT INTO " . self::TABLE_NAME . " (phone, password, name) VALUES ('$phone', '$hashedPassword', '$name')";
+        $result = $this->_query($sql);
+
+        if ($result) {
+            return ['success' => true, 'message' => 'Đăng ký thành công'];
+        } else {
+            return ['success' => false, 'message' => 'Đăng ký không thành công'];
+        }
+    }
+
+
+    public function loginClient($phone, $password): array
     {
         $phone = mysqli_real_escape_string($this->connection, $phone);
         $password = mysqli_real_escape_string($this->connection, $password);
@@ -27,8 +53,10 @@ class AuthModel extends BaseModel {
         $sql = "SELECT * FROM patients WHERE phone = '$phone'";
         $result = $this->_query($sql);
         if ($result && mysqli_num_rows($result) > 0) {
-            $user = mysqli_fetch_assoc($result);
-            if (password_verify($password, $user['password'])) {
+            $patient = mysqli_fetch_assoc($result);
+            if (password_verify($password, $patient['password'])) {
+                $_SESSION['patient_id'] = $patient['patient_id'];
+                $_SESSION['user_name'] = $patient['name'];
                 $_SESSION['user_phone'] = $phone;
                 return [
                     'success' => true,
@@ -59,6 +87,7 @@ class AuthModel extends BaseModel {
                 $_SESSION['admin_phone'] = $admin['phone'];
                 $_SESSION['role_id'] = $admin['role_id'];
                 $_SESSION['admin_name'] = $admin['name'];
+                $_SESSION['admin_id'] = $admin['employee_id'];
                 $_SESSION['admin_avt'] = $admin['avt'];
                 return [
                     'success' => true,

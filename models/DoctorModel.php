@@ -26,7 +26,8 @@ class DoctorModel  extends BaseModel {
                        e.address AS address,
                        e.status AS status,
                        e.specialty_id AS specialty_id,
-                       p.name AS positionName
+                       p.name AS positionName,
+                       e.employee_code AS employee_code
                 FROM employees AS e
                 JOIN positions AS p ON e.position_id = p.position_id
                 WHERE e.employee_id = $id";
@@ -71,28 +72,30 @@ class DoctorModel  extends BaseModel {
         return $result;
     }
 
-    public function addDoctor($name, $dob, $email, $phone,$gender, $address, $specialty_id, $status, $avt): bool
+    public function addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt): bool
     {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $created_at = date("Y-m-d H:i:s");
         $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
         $role_id = 2;
-        $position_id = 1;
+        $position_id = 1; // Giả sử mã vị trí cho bác sĩ là 1
+
+        // Bước 1: Thêm bác sĩ mà không có employee_code
         $sql = "INSERT INTO employees (
-                       specialty_id,
-                       position_id,
-                       role_id,
-                       name,
-                       password,
-                       phone,
-                       email,
-                       dob,
-                       gender,
-                       address, 
-                       status,
-                       create_at,
-                       avt)
-                VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                   specialty_id,
+                   position_id,
+                   role_id,
+                   name,
+                   password,
+                   phone,
+                   email,
+                   dob,
+                   gender,
+                   address, 
+                   status,
+                   create_at,
+                   avt)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($this->connection, $sql);
         if ($stmt === false) {
@@ -100,15 +103,34 @@ class DoctorModel  extends BaseModel {
         }
 
         mysqli_stmt_bind_param($stmt, 'iiisssssisiss',
-            $specialty_id, $position_id, $role_id,$name, $hashedPassword, $phone, $email, $dob, $gender,
-            $address, $status,$created_at, $avt);
+            $specialty_id, $position_id, $role_id, $name, $hashedPassword, $phone, $email, $dob, $gender,
+            $address, $status, $created_at, $avt);
         $result = mysqli_stmt_execute($stmt);
         if ($result === false) {
             throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));
         }
 
+        // Lấy ID của bác sĩ vừa được thêm
+        $doctor_id = mysqli_insert_id($this->connection);
+
+        // Bước 2: Tạo employee_code và cập nhật
+        $employee_code = 'DOC' . $doctor_id; // Sử dụng tiền tố 'DOC' cho bác sĩ
+        $sqlUpdate = "UPDATE employees SET employee_code = ? WHERE employee_id = ?";
+        $stmtUpdate = mysqli_prepare($this->connection, $sqlUpdate);
+        if ($stmtUpdate === false) {
+            throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
+        }
+
+        mysqli_stmt_bind_param($stmtUpdate, 'si', $employee_code, $doctor_id);
+        $resultUpdate = mysqli_stmt_execute($stmtUpdate);
+        if ($resultUpdate === false) {
+            throw new Exception('Failed to update employee code: ' . mysqli_stmt_error($stmtUpdate));
+        }
+
         mysqli_stmt_close($stmt);
-        return $result;
+        mysqli_stmt_close($stmtUpdate);
+
+        return $result && $resultUpdate;
     }
 
     public function getDoctorForHome(): array
@@ -137,7 +159,11 @@ class DoctorModel  extends BaseModel {
                     p.name AS position,
                     s.name AS specialty,
                     e.email AS email,
-                    e.phone AS phone
+                    e.phone AS phone,
+                    e.gender AS gender,
+                    e.dob AS dob,
+                    e.employee_code AS employee_code,
+                    e.status AS status
                 FROM employees AS e
                 JOIN positions AS p ON e.position_id = p.position_id
                 JOIN specialties AS s ON e.specialty_id = s.specialty_id

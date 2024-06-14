@@ -109,9 +109,9 @@ class HomeController extends BaseController
         ]);
     }
 
-    public function test_toast()
+    public function test()
     {
-        return $this->view('toast');
+        return $this->view('test');
     }
 
     public function logout()

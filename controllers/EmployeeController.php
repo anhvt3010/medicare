@@ -61,6 +61,49 @@ class EmployeeController extends BaseController {
         ]);
     }
 
+    public function detail()
+    {
+        $employee_id = $_GET['employee_id'] ?? '';
+        $employee = $this->employeeModel->getById($employee_id);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($employee);
+            exit;
+        }
+        return $this->view('admin.employee-detail', [
+            'employee' => $employee,
+        ]);
+    }
+
+    public function update()
+    {
+        $employee_id = $_POST['id'];
+        $name = $_POST['name'];
+        $phone  = $_POST['phone'];
+        $email = $_POST['email'];
+        $dob = $_POST['dob'];
+        $gender = $_POST['gender'];
+        $address  = $_POST['address'];
+        $status  = $_POST['status'];
+
+        // Xử lý upload ảnh đại diện
+        if (isset($_FILES['avtUpdate']) && $_FILES['avtUpdate']['error'] == 0) {
+            $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avtUpdate']['tmp_name']));
+        } else {
+            $avt = $_POST['avt'];
+        }
+
+        $result = $this->employeeModel->updateEmployee($employee_id, $name, $dob, $email, $phone, $gender, $address, $status, $avt);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+        }
+        return $this->view('admin.employees', [
+            'result' => $result,
+        ]);
+    }
+
     public function uploadImageToCloudinary($imagePath): string
     {
         try {

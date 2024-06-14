@@ -20,7 +20,7 @@
                             <i class="fa-solid fa-bed-pulse fa-3x"  style="color: #34a853"></i>
                         </div>
                         <div class="data-info">
-                            <div class="desc">Bệnh nhân đã phục vụ</div>
+                            <div class="desc">Ca khám đã phục vụ</div>
                             <div class="value">
                                 <span class="indicator indicator-positive mdi mdi-chevron-up"></span>
                                 <span class="number" data-toggle="counter"

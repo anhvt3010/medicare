@@ -1,6 +1,6 @@
 <div class="row">
     <hr>
-    <h5 class="col-12"><strong>Nhập thông tin cá nhân</strong></h5>
+    <h4 class="col-12"><strong>Nhập thông tin cá nhân</strong></h4>
     <div class="col-6">
         <div class="row mb-2">
             <div class="col-8">
@@ -29,7 +29,7 @@
                 </div>
                 <span id="error-dob" class="ml-2" style="color: red; display: none"></span>
             </div>
-            <div class="col-7 m-0 p-0 ml-1">
+            <div class="col-7 m-0 p-0 ml-4">
                 <div class="input-group-sm">
                     <input type="text" class="form-control" id="patient-phone"
                            placeholder="Nhập số điện thoại(*)">
@@ -44,12 +44,12 @@
             </div>
             <span id="error-email" class="ml-2" style="color: red;"></span>
         </div>
-        <div class="row" style="margin-top:-8px!important;">
+        <div class="row" style="margin-top:-8px!important; padding-left: 2px">
             <div class="col-3">
                 <p style="margin-top: 8px">Trạng thái</p>
             </div>
             <div class="col-9">
-                <select id="status-appointment" class="form-select form-select" aria-label="Small select example">
+                <select id="status-appointment" class="form-select" aria-label="Small select example" style="background-color: #61d4d8">
                     <option selected hidden="true">Chọn trạng thái</option>
                     <option value="0">Chờ xác nhận</option>
                     <option value="1">Đã xác nhận</option>

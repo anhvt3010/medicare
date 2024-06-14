@@ -50,10 +50,10 @@ class SpecialtyController extends BaseController
 
     public function update()
     {
-        $specialty_id = $_GET['specialtyId'];
-        $specialtyName = $_GET['specialtyName'];
-        $specialtyDescription = $_GET['specialtyDescription'];
-        $specialtyStatus = $_GET['specialtyStatus'];
+        $specialty_id = $_POST['specialtyId'];
+        $specialtyName = $_POST['specialtyName'];
+        $specialtyDescription = $_POST['specialtyDescription'];
+        $specialtyStatus = $_POST['specialtyStatus'];
 
         $specialty = $this->specialtyModel->updateSpecialtyById($specialty_id, $specialtyName, $specialtyDescription, $specialtyStatus);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
