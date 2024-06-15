@@ -224,7 +224,7 @@ if (isset($_SESSION['admin_name'])) {
                             input.classList.add('invalid-input');
                             isValid = false;
                         });
-                        failed_toast()
+                        failed_toast(response['message'])
                     }
                 },
                 error: function() {
@@ -261,23 +261,21 @@ if (isset($_SESSION['admin_name'])) {
                     window.location.href = redirectUrl; // Sử dụng URL được truyền vào
                 });
             }
-        }, 100); // Đợi 100ms để đảm bảo toast đã được thêm vào DOM
+        }, 100);
     }
 
-    function failed_toast() {
+    function failed_toast(message) {
         toast({
             classes: `text-bg-danger border-0`,
             body: `
               <div class="d-flex w-100" data-bs-theme="dark">
                 <div class="flex-grow-1">
-                  Tài khoản hoặc mật khẩu không đúng !
+                  ${message}
                 </div>
                 <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>`,
         })
     }
-
-
 </script>
 </body>
 </html>

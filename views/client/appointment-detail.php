@@ -152,8 +152,7 @@
             </div>
             <hr>
             <div class="mt-3 d-flex justify-content-between">
-                <a id="backButton" class="btn btn-danger"
-                   href="http://localhost/Medicare/index.php?controller=patient&action=history">Quay lại</a>
+                <button id="backButton" class="btn btn-danger">Quay lại</button>
             </div>
         </div>
     </div>
@@ -188,6 +187,10 @@
         return date('d/m/Y', $timestamp); // Định dạng lại timestamp thành ngày tháng
     }
     ?>
+
+    document.getElementById('backButton').addEventListener('click', function() {
+        window.history.back();
+    });
 
 </script>
 </body>

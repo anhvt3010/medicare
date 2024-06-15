@@ -46,62 +46,77 @@ class DoctorController extends BaseController {
 
     public function update()
     {
-        $doctor_id = $_POST['id'];
-        $specialty_id = $_POST['specialty_id'];
-        $name = $_POST['name'];
-        $phone  = $_POST['phone'];
-        $email = $_POST['email'];
-        $dob = $_POST['dob'];
-        $gender = $_POST['gender'];
-        $address  = $_POST['address'];
-        $status  = $_POST['status'];
+        session_start();
+        if (isset($_SESSION['admin_name'])) {
+            $doctor_id = $_POST['id'];
+            $specialty_id = $_POST['specialty_id'];
+            $name = $_POST['name'];
+            $phone  = $_POST['phone'];
+            $email = $_POST['email'];
+            $dob = $_POST['dob'];
+            $gender = $_POST['gender'];
+            $address  = $_POST['address'];
+            $status  = $_POST['status'];
 
-        // Xử lý upload ảnh đại diện
-        if (isset($_FILES['avtUpdate']) && $_FILES['avtUpdate']['error'] == 0) {
-            $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avtUpdate']['tmp_name']));
+            $update_by = $_SESSION['admin_id'];
+
+            // Xử lý upload ảnh đại diện
+            if (isset($_FILES['avtUpdate']) && $_FILES['avtUpdate']['error'] == 0) {
+                $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avtUpdate']['tmp_name']));
+            } else {
+                $avt = $_POST['avt'];
+            }
+
+            $result = $this->doctorModel->updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            return $this->view('admin.employee-detail', [
+                'result' => $result,
+            ]);
         } else {
-            $avt = $_POST['avt'];
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
         }
-
-        $result = $this->doctorModel->updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($result);
-            exit;
-        }
-        return $this->view('admin.employee-detail', [
-            'result' => $result,
-        ]);
     }
-
 
     public function add()
     {
-        $specialty_id = $_POST['specialty_id'];
-        $name = $_POST['name'];
-        $phone  = $_POST['phone'];
-        $email = $_POST['email'];
-        $dob = $_POST['dob'];
-        $gender = $_POST['gender'];
-        $address  = $_POST['address'];
-        $status  = $_POST['status'];
+        session_start();
+        if (isset($_SESSION['admin_name'])) {
+            $specialty_id = $_POST['specialty_id'];
+            $name = $_POST['name'];
+            $phone  = $_POST['phone'];
+            $email = $_POST['email'];
+            $dob = $_POST['dob'];
+            $gender = $_POST['gender'];
+            $address  = $_POST['address'];
+            $status  = $_POST['status'];
 
-        // Xử lý upload ảnh đại diện
-        if (isset($_FILES['avt']) && $_FILES['avt']['error'] == 0) {
-            $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avt']['tmp_name']));
+            $update_by = $_SESSION['admin_id'];
+
+            // Xử lý upload ảnh đại diện
+            if (isset($_FILES['avt']) && $_FILES['avt']['error'] == 0) {
+                $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avt']['tmp_name']));
+            } else {
+                $avt = 'http://localhost/Medicare/assets/img/doctors/doctor_default.png';
+            }
+
+            $result = $this->doctorModel->addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($result);
+                exit;
+            }
+            return $this->view('test', [
+                'result' => $result,
+            ]);
         } else {
-            $avt = 'http://localhost/Medicare/assets/img/doctors/doctor_default.png';
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
         }
-
-        $result = $this->doctorModel->addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($result);
-            exit;
-        }
-        return $this->view('test', [
-            'result' => $result,
-        ]);
     }
 
     public function uploadImageToCloudinary($imagePath): string

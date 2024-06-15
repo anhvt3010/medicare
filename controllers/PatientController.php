@@ -96,6 +96,22 @@ class PatientController extends BaseController
         }
     }
 
+    public function search()
+    {
+        $phone = $_POST['phone'];
+        $listAppointments = $this->appointmentModel->getAppointmentsByPatient($phone);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($listAppointments);
+            exit;
+        } else {
+            return $this->view('client.history', [
+                'listAppointments' => $listAppointments,
+            ]);
+        }
+
+    }
+
     public function update_status()
     {
         session_start();

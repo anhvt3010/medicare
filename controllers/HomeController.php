@@ -109,9 +109,9 @@ class HomeController extends BaseController
         ]);
     }
 
-    public function test()
+    public function search_client()
     {
-        return $this->view('test');
+        return $this->view('client.search');
     }
 
     public function logout()

@@ -10,7 +10,8 @@
           <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#about">Giới thiệu</a></li>
           <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#services">Chuyên khoa</a></li>
           <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#doctors">Bác sĩ</a></li>
-          <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#contact">Liên hệ</a></li>
+            <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#contact">Liên hệ</a></li>
+            <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=search_client">Tra cứu</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>

@@ -466,6 +466,41 @@ class AppointmentModel extends Database {
         }
     }
 
+    public function getAppointmentsByPhone($phone = null): array
+    {
+        $sql = "SELECT a.appointment_id AS id,
+                   a.status AS status,
+                   a.result AS result,
+                   a.patient_name AS patient_name,
+                   a.patient_phone AS patient_phone,
+                   a.patient_email AS patient_email,
+                   a.date_slot AS date_slot,
+                   e.name AS doctor_name,
+                   e.avt AS doctor_avt,
+                   s.name AS specialty_name,
+                   ts.slot_time AS time_slot
+            FROM appointments AS a
+                     JOIN employees AS e ON e.employee_id = a.employee_id
+                     JOIN time_slots AS ts ON ts.time_id = a.time_id
+                     JOIN specialties AS s ON s.specialty_id = a.specialty_id
+            WHERE a.patient_phone = ?
+            ORDER BY a.date_slot ASC";
+
+        if ($stmt = $this->connection->prepare($sql)) {
+            $stmt->bind_param("s", $phone, $patient_id);
+            $stmt->execute();
+            $result = $stmt->get_result();
+            $data = [];
+            while ($row = $result->fetch_assoc()) {
+                $data[] = $row;
+            }
+            $stmt->close();
+            return $data;
+        } else {
+            return [];
+        }
+    }
+
     public function getTotalAppointmentsCancel() {
         $sql = "SELECT COUNT(*) AS total 
             FROM appointments AS a

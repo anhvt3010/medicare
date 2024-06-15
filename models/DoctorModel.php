@@ -36,7 +36,7 @@ class DoctorModel  extends BaseModel {
         return mysqli_fetch_assoc($query);
     }
 
-    public function updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt): bool
+    public function updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by): bool
     {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $updated_at = date("Y-m-d H:i:s");
@@ -51,7 +51,8 @@ class DoctorModel  extends BaseModel {
                 address = ?, 
                 status = ?,
                 update_at = ?,
-                avt = ?
+                avt = ?,
+                update_by = ?
             WHERE employee_id = ?";
 
         $stmt = mysqli_prepare($this->connection, $sql);
@@ -59,9 +60,9 @@ class DoctorModel  extends BaseModel {
             throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
         }
 
-        mysqli_stmt_bind_param($stmt, 'issssisissi',
+        mysqli_stmt_bind_param($stmt, 'issssisissii',
             $specialty_id, $name, $phone, $email, $dob, $gender,
-            $address, $status, $updated_at, $avt, $doctor_id);
+            $address, $status, $updated_at, $avt, $update_by, $doctor_id);
 
         $result = mysqli_stmt_execute($stmt);
         if ($result === false) {
@@ -72,7 +73,7 @@ class DoctorModel  extends BaseModel {
         return $result;
     }
 
-    public function addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt): bool
+    public function addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by): bool
     {
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $created_at = date("Y-m-d H:i:s");
@@ -94,17 +95,18 @@ class DoctorModel  extends BaseModel {
                    address, 
                    status,
                    create_at,
-                   avt)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+                   avt,
+                   update_by)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($this->connection, $sql);
         if ($stmt === false) {
             throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
         }
 
-        mysqli_stmt_bind_param($stmt, 'iiisssssisiss',
+        mysqli_stmt_bind_param($stmt, 'iiisssssisissi',
             $specialty_id, $position_id, $role_id, $name, $hashedPassword, $phone, $email, $dob, $gender,
-            $address, $status, $created_at, $avt);
+            $address, $status, $created_at, $avt, $update_by);
         $result = mysqli_stmt_execute($stmt);
         if ($result === false) {
             throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));

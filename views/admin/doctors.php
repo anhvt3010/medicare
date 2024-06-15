@@ -33,7 +33,7 @@ if (!isset($_SESSION['admin_name'])) {
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
-<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center;">
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;">
     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -141,6 +141,7 @@ if (!isset($_SESSION['admin_name'])) {
 <?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -545,20 +546,58 @@ if (!isset($_SESSION['admin_name'])) {
                     contentType: false, // Không set contentType
                     processData: false, // Không xử lý dữ liệu
                     success: function(response) {
-                        console.log(response);
-                        $('#staticBackdrop').modal('hide');
-                        location.reload();
+                        success_toast('Thêm mới thành công')
                     },
                     error: function() {
-                        alert('Có lỗi xảy ra, vui lòng thử lại.');
-                    },
-                    complete: function() {
-                        $("#loading-spinner").hide(); // Ẩn spinner khi yêu cầu hoàn thành
+                        failed_toast('Có lỗi xảy ra, vui lòng thử lại.')
+                        $("#loading-spinner").hide();
                     }
                 });
             }
         });
     });
+</script>
+<script>
+    function success_toast(message) {
+        toast({
+            classes: `text-bg-success border-0`,
+            body: `
+          <div class="d-flex w-100" data-bs-theme="dark">
+            <div class="flex-grow-1">
+              ${message}
+            </div>
+            <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>`,
+            autohide: true,
+            delay: 800
+        });
+
+        // Đợi DOM cập nhật
+        setTimeout(() => {
+            // Lấy phần tử toast mới nhất
+            var toastElement = document.querySelector('.toast.show');
+            if (toastElement) {
+                var bsToast = new bootstrap.Toast(toastElement); // Khởi tạo lại đối tượng Toast nếu cần
+                toastElement.addEventListener('hidden.bs.toast', function () {
+                    window.location.reload(); // Sử dụng URL được truyền vào
+                    document.getElementById('loading-spinner').style.display = 'none';
+                });
+            }
+        }, 100);
+    }
+
+    function failed_toast(message) {
+        toast({
+            classes: `text-bg-danger border-0`,
+            body: `
+              <div class="d-flex w-100" data-bs-theme="dark">
+                <div class="flex-grow-1">
+                  ${message}
+                </div>
+                <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+              </div>`,
+        })
+    }
 </script>
 </body>
 </html>

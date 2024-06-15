@@ -85,7 +85,9 @@ class AuthModel extends BaseModel {
 
         if ($result && mysqli_num_rows($result) > 0) {
             $admin = mysqli_fetch_assoc($result);
-            // Giả sử mật khẩu được lưu dưới dạng băm
+            if($admin['status'] == 0) {
+                return ['success' => false, 'message' => 'Tài khoản đóng. Hãy liên hệ với quản trị viên của bạn'];
+            }
             if (password_verify($password, $admin['password'])) {
                 // Lưu thông tin vào session
                 $_SESSION['admin_phone'] = $admin['phone'];
