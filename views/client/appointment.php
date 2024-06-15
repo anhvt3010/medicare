@@ -133,20 +133,16 @@
 <script src="assets/js/appointment.js"></script>
 <script src="assets/js/validate-appointment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-
-<!--<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"-->
-<!--        integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"-->
-<!--        crossorigin="anonymous"></script>-->
 <script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
-        var informationNoti = new bootstrap.Modal(document.getElementById('informationNoti'));
 
         const formTimeContainer = document.getElementById('form-time-container');
         const formInfoContainer = document.getElementById('form-info-container');
         const buttonAction = document.getElementById('action-button');
 
+        var informationNoti = new bootstrap.Modal(document.getElementById('informationNoti'));
         // Ban đầu ẩn form thông tin
         formInfoContainer.style.display = 'none';
 
@@ -155,6 +151,15 @@
             formInfoContainer.style.display = 'none';
         });
 
+        const patientId = <?php echo isset($_SESSION['patient_id']) ? json_encode($_SESSION['patient_id']) : 'null'; ?>;
+        var autoInformationButton = document.getElementById('autoInformation');
+
+
+        if (patientId !== null) {
+            autoInformationButton.style.display = 'block';
+        } else {
+            autoInformationButton.style.display = 'none';
+        }
 
         document.getElementById('autoInformation').addEventListener('click', function () {
             document.getElementById('loading-spinner').style.display = 'block';
@@ -162,7 +167,7 @@
                 url: 'http://localhost/Medicare/index.php?controller=patient&action=get_one',
                 type: 'POST',
                 data: {
-                    patient_id: <?php echo $_SESSION['patient_id'] ?>
+                    patient_id: patientId
                 },
                 success: function (response) {
                     if (response.name && response.gender && response.dob && response.email && response.phone) {
@@ -183,7 +188,7 @@
                 error: function (error) {
                     console.error('Error:', error);
                     failed_toast()
-                },
+                }
             });
         });
 

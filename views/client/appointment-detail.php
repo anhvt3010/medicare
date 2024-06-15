@@ -119,7 +119,7 @@
                         <label for="" class="form-label">Kết quả</label>
                         <!-- Liên kết để mở modal -->
                         <div class="form-control-sm" style="background-color: #eee; line-height: 30px">
-                            <?php if ($appointment['result'] === null): ?>
+                            <?php if (empty($appointment['result'])): ?>
                                 Chưa có kết quả
                             <?php else: ?>
                                 <a href="#" data-bs-toggle="modal" data-bs-target="#resultModal" data-result="<?php echo htmlspecialchars($appointment['result']); ?>">Xem kết quả</a>
