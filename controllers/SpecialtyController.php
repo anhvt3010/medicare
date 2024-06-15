@@ -19,19 +19,27 @@ class SpecialtyController extends BaseController
 
     public function add()
     {
-        $specialtyName = $_GET['specialtyName'];
-        $specialtyDescription = $_GET['specialtyDescription'];
-        $specialtyStatus = $_GET['specialtyStatus'];
+        session_start();
+        if (isset($_SESSION['admin_name'])) {
+            $specialtyName = $_GET['specialtyName'];
+            $specialtyDescription = $_GET['specialtyDescription'];
+            $specialtyStatus = $_GET['specialtyStatus'];
 
-        $specialty = $this->specialtyModel->addSpecialty($specialtyName, $specialtyDescription, $specialtyStatus);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($specialty);
-            exit;
+            $employee_id = $_SESSION['admin_id'];
+
+            $specialty = $this->specialtyModel->addSpecialty($specialtyName, $specialtyDescription, $specialtyStatus, $employee_id);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($specialty);
+                exit;
+            }
+            return $this->view('admin.specialties', [
+                'specialty' => $specialty,
+            ]);
+        } else {
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
         }
-        return $this->view('admin.specialties', [
-            'specialty' => $specialty,
-        ]);
     }
 
     public function get_one()
@@ -50,19 +58,27 @@ class SpecialtyController extends BaseController
 
     public function update()
     {
-        $specialty_id = $_POST['specialtyId'];
-        $specialtyName = $_POST['specialtyName'];
-        $specialtyDescription = $_POST['specialtyDescription'];
-        $specialtyStatus = $_POST['specialtyStatus'];
+        session_start();
+        if (isset($_SESSION['admin_name'])) {
+            $specialty_id = $_POST['specialtyId'];
+            $specialtyName = $_POST['specialtyName'];
+            $specialtyDescription = $_POST['specialtyDescription'];
+            $specialtyStatus = $_POST['specialtyStatus'];
 
-        $specialty = $this->specialtyModel->updateSpecialtyById($specialty_id, $specialtyName, $specialtyDescription, $specialtyStatus);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($specialty);
-            exit;
+            $employee_id = $_SESSION['admin_id'];
+
+            $specialty = $this->specialtyModel->updateSpecialtyById($specialty_id, $specialtyName, $specialtyDescription, $specialtyStatus, $employee_id);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($specialty);
+                exit;
+            }
+            return $this->view('admin.specialty-detail', [
+                'specialty' => $specialty,
+            ]);
+        } else {
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
         }
-        return $this->view('admin.specialty-detail', [
-            'specialty' => $specialty,
-        ]);
     }
 }

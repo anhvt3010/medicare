@@ -12,18 +12,19 @@ class SpecialtyModel extends Database{
         return mysqli_query($this->connection, $sql);
     }
 
-    public function addSpecialty($name, $description, $status) {
+    public function addSpecialty($name, $description, $status, $update_by) {
         $name = mysqli_real_escape_string($this->connection, $name);
         $description = mysqli_real_escape_string($this->connection, $description);
         $status = mysqli_real_escape_string($this->connection, $status);
         $created_at = date("Y-m-d H:i:s");
 
-        $sql = "INSERT INTO specialties (name, description, status, create_at) VALUES ('$name', '$description', '$status', '$created_at')";
+        $sql = "INSERT INTO specialties (name, description, status, create_at, update_by) 
+                VALUES ('$name', '$description', '$status', '$created_at', $update_by)";
 
         return $this->_query($sql);
     }
 
-    public function updateSpecialtyById($specialty_id, $specialtyName, $specialtyDescription, $specialtyStatus): mysqli_result|bool
+    public function updateSpecialtyById($specialty_id, $specialtyName, $specialtyDescription, $specialtyStatus, $employee_id): mysqli_result|bool
     {
         $specialtyName = mysqli_real_escape_string($this->connection, $specialtyName);
         $specialtyDescription = mysqli_real_escape_string($this->connection, $specialtyDescription);
@@ -33,7 +34,8 @@ class SpecialtyModel extends Database{
                 name = '{$specialtyName}', 
                 description = '{$specialtyDescription}', 
                 status = '{$specialtyStatus}', 
-                update_at = NOW()
+                update_at = NOW(),
+                update_by = $employee_id
                 WHERE specialty_id = {$specialty_id}";
         return $this->_query($sql);
     }
@@ -55,7 +57,7 @@ class SpecialtyModel extends Database{
     public function getSpecialtiesForAdmin(): array
     {
         $sql = "SELECT *
-            FROM specialties WHERE status = 1";
+            FROM specialties ORDER BY create_at DESC ";
 
         $query = $this->_query($sql);
         $data = [];

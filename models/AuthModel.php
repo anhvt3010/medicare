@@ -34,7 +34,7 @@ class AuthModel extends BaseModel {
 
         $hashedPassword = password_hash($password, PASSWORD_BCRYPT, ['cost' => 12]);
 
-        $sql = "INSERT INTO " . self::TABLE_NAME . " (phone, password, name) VALUES ('$phone', '$hashedPassword', '$name')";
+        $sql = "INSERT INTO " . self::TABLE_NAME . " (phone, password, name, status) VALUES ('$phone', '$hashedPassword', '$name', 1)";
         $result = $this->_query($sql);
 
         if ($result) {
@@ -55,15 +55,19 @@ class AuthModel extends BaseModel {
         if ($result && mysqli_num_rows($result) > 0) {
             $patient = mysqli_fetch_assoc($result);
             if (password_verify($password, $patient['password'])) {
-                $_SESSION['patient_id'] = $patient['patient_id'];
-                $_SESSION['user_name'] = $patient['name'];
-                $_SESSION['user_phone'] = $phone;
-                return [
-                    'success' => true,
-                    'sessionData' => [
-                        'user_phone' => $_SESSION['user_phone']
-                    ]
-                ];
+                if($patient['status'] == 1){
+                    $_SESSION['patient_id'] = $patient['patient_id'];
+                    $_SESSION['user_name'] = $patient['name'];
+                    $_SESSION['user_phone'] = $phone;
+                    return [
+                        'success' => true,
+                        'sessionData' => [
+                            'user_phone' => $_SESSION['user_phone']
+                        ]
+                    ];
+                } else {
+                    return ['success' => false, 'message' => 'Tài khoản đóng. Hãy thử lại sau'];
+                }
             } else {
                 return ['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng'];
             }

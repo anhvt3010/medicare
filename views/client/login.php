@@ -207,7 +207,7 @@ if (isset($_SESSION['user_phone'])) {
                         success_toast('http://localhost/Medicare/index.php?controller=home&action=home')
                         console.log('Thông tin session:', response['sessionData']);
                     } else {
-                        // failed_toast(response['message'])
+                        failed_toast(response['message'])
                         document.getElementById('phone').classList.add('invalid-input');
                         document.getElementById('password').classList.add('invalid-input');
                         var errorMessage = document.createElement('div');

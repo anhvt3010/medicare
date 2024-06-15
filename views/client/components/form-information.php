@@ -1,5 +1,8 @@
 <div class="row">
-    <h5 class="col-12" >Nhập thông tin cá nhân</h5>
+    <div class="col-12  mb-3 d-flex justify-content-between">
+        <h5>Nhập thông tin cá nhân</h5>
+        <button id="autoInformation" class="btn btn-warning">Tự động nhập thông tin</button>
+    </div>
     <div class="col-6">
         <div class="row mb-4">
             <div class="col-8">
@@ -61,7 +64,11 @@
         <span id="error-description" class="ml-2" style="color: red;"></span>
     </div>
     <hr>
-    <div class="text-center mt-3">
+    <div class="text-center mt-3 d-flex justify-content-between">
+        <button id="backAppointment" type="button" class="btn btn-primary"
+                style="background-color:#3fbbc0 !important; width: 15%; font-weight: bold; border: none">
+            Quay lại
+        </button>
         <button id="openConfirm" type="button" class="btn btn-primary"
                 style="background-color:#3fbbc0 !important; width: 25%; font-weight: bold; border: none">
             Xem lại thông tin và xác nhận

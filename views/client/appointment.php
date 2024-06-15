@@ -31,7 +31,7 @@
         <h2>Đặt Lịch Khám</h2>
         <hr>
         <form method="GET" action="#">
-            <div class="row" id="form-time-container">
+            <div id="form-time-container">
                 <?php include "components/form-time.php" ?>
             </div>
             <div id="form-info-container">
@@ -107,6 +107,24 @@
         </div>
     </div>
 </div>
+<!-- Modal -->
+<div class="modal fade" id="informationNoti" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Thông báo</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Thông tin không đầy đủ để tự động điền, bạn cần bổ sung thông tin tài khoản.
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <a href="http://localhost/Medicare/index.php?controller=patient&action=profile" class="btn btn-primary">Thêm thông tin tài khoản</a>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include "components/footer.html" ?>
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <!-- Thêm JavaScript của jQuery UI -->
@@ -123,6 +141,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
+        var informationNoti = new bootstrap.Modal(document.getElementById('informationNoti'));
 
         const formTimeContainer = document.getElementById('form-time-container');
         const formInfoContainer = document.getElementById('form-info-container');
@@ -130,6 +149,43 @@
 
         // Ban đầu ẩn form thông tin
         formInfoContainer.style.display = 'none';
+
+        document.getElementById('backAppointment').addEventListener('click' , function (){
+            formTimeContainer.style.display = 'block';
+            formInfoContainer.style.display = 'none';
+        });
+
+
+        document.getElementById('autoInformation').addEventListener('click', function () {
+            document.getElementById('loading-spinner').style.display = 'block';
+            $.ajax({
+                url: 'http://localhost/Medicare/index.php?controller=patient&action=get_one',
+                type: 'POST',
+                data: {
+                    patient_id: <?php echo $_SESSION['patient_id'] ?>
+                },
+                success: function (response) {
+                    if (response.name && response.gender && response.dob && response.email && response.phone) {
+                        document.getElementById('patient-name').value = response.name;
+                        document.querySelector('input[name="gender"][value="' + response.gender + '"]').checked = true;
+                        document.getElementById('patient-dob').value = response.dob;
+                        document.getElementById('patient-phone').value = response.phone;
+                        document.getElementById('patient-email').value = response.email;
+
+                        document.getElementById('loading-spinner').style.display = 'none';
+                        document.getElementById('autoInformation').style.display = 'none';
+                        success_toast_2('Điền thông tin thành công')
+                    } else {
+                        informationNoti.show()
+                        document.getElementById('loading-spinner').style.display = 'none';
+                    }
+                },
+                error: function (error) {
+                    console.error('Error:', error);
+                    failed_toast()
+                },
+            });
+        });
 
         // Kiểm tra các giá trị khi nút được nhấn
         buttonAction.addEventListener('click', function () {
@@ -221,7 +277,7 @@
                     },
                     error: function (error) {
                         console.error('Error:', error);
-                        failed_toast()
+                        failed_toast('Có lỗi xảy ra khi tạo lịch hẹn.')
                     },
                 });
             }
@@ -255,13 +311,28 @@
         }, 100);
     }
 
-    function failed_toast() {
+    function success_toast_2(message) {
+        toast({
+            classes: `text-bg-success border-0`,
+            body: `
+          <div class="d-flex w-100" data-bs-theme="dark">
+            <div class="flex-grow-1">
+              ${message}
+            </div>
+            <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
+          </div>`,
+            autohide: true,
+            delay: 1000
+        });
+    }
+
+    function failed_toast(message) {
         toast({
             classes: `text-bg-danger border-0`,
             body: `
               <div class="d-flex w-100" data-bs-theme="dark">
                 <div class="flex-grow-1">
-                  Có lỗi xảy ra khi tạo lịch hẹn.
+                  ${message}
                 </div>
                 <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>`,

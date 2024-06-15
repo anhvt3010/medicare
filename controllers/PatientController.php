@@ -118,4 +118,19 @@ class PatientController extends BaseController
             exit();
         }
     }
+
+    public function get_one()
+    {
+        $patient_id = $_POST['patient_id'];
+        $patient = $this->patientModel->findById($patient_id);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($patient);
+            exit;
+        } else {
+            return $this->view('404', [
+                'patient' => $patient,
+            ]);
+        }
+    }
 }
