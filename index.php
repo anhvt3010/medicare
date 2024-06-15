@@ -4,7 +4,7 @@
     require './models/BaseModel.php';
 
     $controllerName = ucfirst(strtolower($_REQUEST['controller'] ?? 'Home')) . 'Controller';
-    $actionName = strtolower($_REQUEST['action'] ?? 'login');
+    $actionName = strtolower($_REQUEST['action'] ?? 'home');
     require "./controllers/$controllerName.php";
 
     $controllerObj = new $controllerName();

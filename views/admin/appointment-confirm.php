@@ -240,32 +240,55 @@ if (!isset($_SESSION['admin_name'])) {
                                         <nav aria-label="Page navigation example">
                                             <?php
                                             $currentPage = $_GET['page'] ?? 1;
-                                            $queryString = $_SERVER['QUERY_STRING']; // Lấy chuỗi truy vấn hiện tại
-                                            parse_str($queryString, $queryParams); // Phân tích chuỗi truy vấn thành mảng
-                                            unset($queryParams['page']); // Loại bỏ tham số 'page' để tránh trùng lặp
-                                            $newQueryString = http_build_query($queryParams); // Tạo lại chuỗi truy vấn mà không có 'page'
+                                            $queryString = $_SERVER['QUERY_STRING'];
+                                            parse_str($queryString, $queryParams);
+                                            unset($queryParams['page']);
+                                            $newQueryString = http_build_query($queryParams);
+
+                                            $totalPages = ceil($totalAppointment / 10);
+                                            $range = 2; // Số trang hiển thị xung quanh trang hiện tại
+                                            $initialNum = $currentPage - $range;
+                                            $conditionLimitNum = ($currentPage + $range)  + 1;
                                             ?>
                                             <ul class="pagination">
                                                 <li class="page-item <?php if ($currentPage == 1) echo 'disabled'; ?>">
-                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=1"
-                                                       aria-label="Previous">
-                                                        <span aria-hidden="true">&laquo;</span>
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=1" aria-label="First">
+                                                        <span aria-hidden="true">&lt;&lt;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item <?php if ($currentPage == 1) echo 'disabled'; ?>">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo max(1, $currentPage - 1); ?>" aria-label="Previous">
+                                                        <span aria-hidden="true">&lt;</span>
                                                     </a>
                                                 </li>
                                                 <?php
-                                                $totalPages = ceil($totalAppointment / 10); // Tính tổng số trang
-                                                for ($i = 1; $i <= $totalPages; $i++) {
+                                                if ($initialNum > 1) {
+                                                    echo '<li class="page-item"><a class="page-link" href="?'.$newQueryString.'&page=1">1</a></li>';
+                                                    if ($initialNum > 2) {
+                                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                                    }
+                                                }
+
+                                                for ($i = max($initialNum, 1); $i < min($conditionLimitNum, $totalPages + 1); $i++) {
                                                     $activeClass = ($i == $currentPage) ? 'active' : '';
-                                                    echo '<li class="page-item ' . $activeClass . '">
-                                                <a class="page-link" 
-                                                   href="?' . $newQueryString . '&page=' . $i . '">' . $i . '</a></li>';
+                                                    echo '<li class="page-item ' . $activeClass . '"><a class="page-link" href="?'.$newQueryString.'&page=' . $i . '">' . $i . '</a></li>';
+                                                }
+
+                                                if ($conditionLimitNum < $totalPages + 1) {
+                                                    if ($conditionLimitNum < $totalPages) {
+                                                        echo '<li class="page-item disabled"><span class="page-link">...</span></li>';
+                                                    }
+                                                    echo '<li class="page-item"><a class="page-link" href="?'.$newQueryString.'&page=' . $totalPages . '">' . $totalPages . '</a></li>';
                                                 }
                                                 ?>
                                                 <li class="page-item <?php if ($currentPage == $totalPages) echo 'disabled'; ?>">
-                                                    <a class="page-link"
-                                                       href="?<?php echo $newQueryString; ?>&page=<?php echo $totalPages; ?>"
-                                                       aria-label="Next">
-                                                        <span aria-hidden="true">&raquo;</span>
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo min($totalPages, $currentPage + 1); ?>" aria-label="Next">
+                                                        <span aria-hidden="true">&gt;</span>
+                                                    </a>
+                                                </li>
+                                                <li class="page-item <?php if ($currentPage == $totalPages) echo 'disabled'; ?>">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo $totalPages; ?>" aria-label="Last">
+                                                        <span aria-hidden="true">&gt;&gt;</span>
                                                     </a>
                                                 </li>
                                             </ul>

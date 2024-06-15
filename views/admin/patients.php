@@ -1,7 +1,10 @@
 <?php
-session_start(); // Khởi động session
+session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    exit();
+} else if ($_SESSION['role_id'] != 1){  // Chỉ admin
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
     exit();
 }
 ?>

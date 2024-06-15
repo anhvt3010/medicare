@@ -114,6 +114,11 @@ class HomeController extends BaseController
         return $this->view('client.search');
     }
 
+    public function unauthorized()
+    {
+        return $this->view('admin.unauthorized');
+    }
+
     public function logout()
     {
         $this->authModel->logout();

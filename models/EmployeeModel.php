@@ -102,7 +102,7 @@ class EmployeeModel  extends BaseModel {
     {
         $created_at = date("Y-m-d H:i:s");
         $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
-        $role_id = 1;
+        $role_id = 3;
 
         $sql = "INSERT INTO employees (
                    position_id,

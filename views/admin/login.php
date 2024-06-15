@@ -217,7 +217,7 @@ if (isset($_SESSION['admin_name'])) {
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        var url = buildUrl('appointment', 'index');
+                        var url = buildUrl('home', 'home_admin');
                         success_toast(url);
                     } else {
                         inputs.forEach(function (input) {

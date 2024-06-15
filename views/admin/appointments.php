@@ -1,7 +1,7 @@
 <?php
-session_start(); // Khởi động session
+session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
     exit();
 }
 ?>
@@ -277,7 +277,7 @@ if (!isset($_SESSION['admin_name'])) {
                                             ?>
                                             <ul class="pagination">
                                                 <li class="page-item <?php if ($currentPage == 1) echo 'disabled'; ?>">
-                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=1" aria-label="Previous">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=1" aria-label="First">
                                                         <span aria-hidden="true">&lt;&lt;</span>
                                                     </a>
                                                 </li>
@@ -307,12 +307,12 @@ if (!isset($_SESSION['admin_name'])) {
                                                 }
                                                 ?>
                                                 <li class="page-item <?php if ($currentPage == $totalPages) echo 'disabled'; ?>">
-                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo $totalPages; ?>" aria-label="Next">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo min($totalPages, $currentPage + 1); ?>" aria-label="Next">
                                                         <span aria-hidden="true">&gt;</span>
                                                     </a>
                                                 </li>
                                                 <li class="page-item <?php if ($currentPage == $totalPages) echo 'disabled'; ?>">
-                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo $totalPages; ?>" aria-label="Next">
+                                                    <a class="page-link" href="?<?php echo $newQueryString; ?>&page=<?php echo $totalPages; ?>" aria-label="Last">
                                                         <span aria-hidden="true">&gt;&gt;</span>
                                                     </a>
                                                 </li>
