@@ -210,6 +210,7 @@
             });
 
             genderSelect.disabled = false;
+            nameInput.focus();
         });
     });
 </script>
