@@ -27,10 +27,11 @@
             // Hiển thị số điện thoại người dùng
             echo '<div class="user-dropdown">
                     <div class="dropdown">
-                      <button class="btn btn-secondary dropdown-toggle"  style="background-color: #3FBBC0FF !important; border-color: #3FBBC0FF"
-                              type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                      <a class="dropdown-toggle appointment-btn m-0"
+                            style="background-color: #3FBBC0FF !important; border-color: #3FBBC0FF; color: whitesmoke"
+                            type="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Xin chào: ' . htmlspecialchars($username) . '
-                      </button>
+                      </a>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=patient&action=profile">
                             <i class="fa-solid fa-user"></i>&nbsp;&nbsp;Thông tin cá nhân
