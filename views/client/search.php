@@ -78,28 +78,28 @@
     </div>
 </main>
 
-<!--<div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
-<!--    <div class="modal-dialog">-->
-<!--        <div class="modal-content">-->
-<!--            <div class="modal-header">-->
-<!--                <h5 class="modal-title" id="exampleModalLabel">Vui lòng xác minh số điện thoại</h5>-->
-<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
-<!--                    <span aria-hidden="true">&times;</span>-->
-<!--                </button>-->
-<!--            </div>-->
-<!--            <div class="modal-body">-->
-<!--                <div class="mb-3">-->
-<!--                    <label for="exampleInputPassword1" class="form-label">Nhập mã OTP được gửi tới số điện thoại của bạn</label>-->
-<!--                    <input type="tel" class="form-control" id="phoneSearch">-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="modal-footer d-flex justify-content-between">-->
-<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>-->
-<!--                <button type="button" class="btn btn-primary" id="verifyOTP">Xác minh</button>-->
-<!--            </div>-->
-<!--        </div>-->
-<!--    </div>-->
-<!--</div>-->
+<div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Vui lòng xác minh số điện thoại</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label for="exampleInputPassword1" class="form-label">Nhập mã OTP được gửi tới số điện thoại của bạn</label>
+                    <input type="tel" class="form-control" id="phoneSearch">
+                </div>
+            </div>
+            <div class="modal-footer d-flex justify-content-between">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                <button type="button" class="btn btn-primary" id="verifyOTP">Xác minh</button>
+            </div>
+        </div>
+    </div>
+</div>
 <?php include "components/footer.html" ?>
 
 <script src="http://localhost/Medicare/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
@@ -123,9 +123,10 @@
         }
 
         btnSearch.addEventListener('click', function () {
-            const phoneRegex = /^(\+84)(3[2-9]|5[689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$/;
+            const phoneRegex = /(84|0[3|5|7|8|9])+([0-9]{8})\b/g;
             if (!phoneRegex.test(searchInput.value)) {
                 searchInput.style.borderColor = 'red';
+                failed_toast('Số diện thoại không hợp lệ')
                 return; // Nếu số điện thoại không hợp lệ, không làm gì cả
             } else {
                 searchInput.style.borderColor = ''; // Reset màu border nếu trước đó có lỗi
@@ -159,7 +160,7 @@
                     phoneSearch.style.borderColor = ''
                 },
                 error: function (error) {
-                    failed_toast();
+                    failed_toast(error);
                     loadingSpinner.style.display = 'none';
                 },
             });
@@ -314,13 +315,13 @@
         }, 100); // Đợi 100ms để đảm bảo toast đã được thêm vào DOM
     }
 
-    function failed_toast() {
+    function failed_toast(message) {
         toast({
             classes: `text-bg-danger border-0`,
             body: `
               <div class="d-flex w-100" data-bs-theme="dark">
                 <div class="flex-grow-1">
-                  Đã có lỗi xảy ra !
+                  ${message}
                 </div>
                 <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>`,
