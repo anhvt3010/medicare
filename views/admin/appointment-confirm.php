@@ -18,7 +18,7 @@ if (!isset($_SESSION['admin_name'])) {
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
     <title>Xác nhận lịch khám</title>
-    <?php include 'import-linzk-tag.php' ?>
+    <?php include 'import-link-tag.php' ?>
 
     <style>
         #btn-action:focus {
@@ -54,7 +54,8 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="filter-container">
                                     <label class="control-label table-filter-title">Lọc chuyên khoa:</label>
                                     <form>
-                                        <select class="select2" name="specialty">
+                                        <select class="select2" name="specialty"
+                                                style="height: 50px; border-color: #cac9c9; padding: 10px; width:250px">
                                             <option value="All" <?php echo($specialtySelected == 'All' ? 'selected' : ''); ?>>
                                                 Tất cả chuyên khoa
                                             </option>
@@ -74,7 +75,8 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="filter-container">
                                     <label class="control-label table-filter-title">Lọc bác sĩ:</label>
                                     <form>
-                                        <select class="select2" name="doctor">
+                                        <select class="select2" name="doctor"
+                                                style="height: 50px; border-color: #cac9c9; padding: 10px; width:250px ">
                                             <option value="All" <?php echo($doctorSelected == 'All' ? 'selected' : ''); ?>>
                                                 Tất cả bác sĩ
                                             </option>

@@ -201,7 +201,7 @@ class DoctorModel  extends BaseModel {
                 FROM employees AS e
                 JOIN specialties AS s ON e.specialty_id = s.specialty_id
                 JOIN roles AS r ON r.role_id = e.role_id
-                WHERE r.role_name = 'doctor' AND s.specialty_id = $specialty";
+                WHERE r.role_name = 'doctor' AND e.status = 1 AND s.specialty_id = $specialty";
 
         $query = $this->_query($sql);
         $data = [];
