@@ -44,7 +44,8 @@
                             </div>
                             <div class="col-2 table-filters pb-0">
                                 <div class="filter-container">
-                                    <button id="btnSearch" type="button" class="btn btn-success form-control">Tìm kiếm</button>
+                                    <button id="btnSearch" type="button" class="btn btn-success form-control"
+                                            data-toggle="modal" data-target="#modalSearch">Tìm kiếm</button>
                                 </div>
                             </div>
                         </div>
@@ -75,8 +76,30 @@
             </div>
         </div>
     </div>
-
 </main>
+
+<!--<div class="modal fade" id="modalSearch" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">-->
+<!--    <div class="modal-dialog">-->
+<!--        <div class="modal-content">-->
+<!--            <div class="modal-header">-->
+<!--                <h5 class="modal-title" id="exampleModalLabel">Vui lòng xác minh số điện thoại</h5>-->
+<!--                <button type="button" class="close" data-dismiss="modal" aria-label="Close">-->
+<!--                    <span aria-hidden="true">&times;</span>-->
+<!--                </button>-->
+<!--            </div>-->
+<!--            <div class="modal-body">-->
+<!--                <div class="mb-3">-->
+<!--                    <label for="exampleInputPassword1" class="form-label">Nhập mã OTP được gửi tới số điện thoại của bạn</label>-->
+<!--                    <input type="tel" class="form-control" id="phoneSearch">-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="modal-footer d-flex justify-content-between">-->
+<!--                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>-->
+<!--                <button type="button" class="btn btn-primary" id="verifyOTP">Xác minh</button>-->
+<!--            </div>-->
+<!--        </div>-->
+<!--    </div>-->
+<!--</div>-->
 <?php include "components/footer.html" ?>
 
 <script src="http://localhost/Medicare/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
@@ -86,34 +109,40 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
-
         const btnSearch = document.getElementById('btnSearch');
         const searchInput = document.getElementById('searchInput');
+        const phoneSearch = document.getElementById('phoneSearch');
+        const modal = new bootstrap.Modal(document.getElementById('modalSearch'));
         const loadingSpinner = document.getElementById('loading-spinner');
+        const resultTable = document.getElementById('resultTable');
 
-        // Hàm throttle
-        function throttle(func, limit) {
-            let lastFunc;
-            let lastRan;
-            return function() {
-                const context = this;
-                const args = arguments;
-                if (!lastRan) {
-                    func.apply(context, args);
-                    lastRan = Date.now();
-                } else {
-                    clearTimeout(lastFunc);
-                    lastFunc = setTimeout(function() {
-                        if ((Date.now() - lastRan) >= limit) {
-                            func.apply(context, args);
-                            lastRan = Date.now();
-                        }
-                    }, limit - (Date.now() - lastRan));
-                }
-            }
+        // Khôi phục kết quả tìm kiếm khi trang được tải
+        if (localStorage.getItem('searchResults')) {
+            resultTable.innerHTML = localStorage.getItem('searchResults');
+            searchInput.value = localStorage.getItem('lastSearch');
         }
 
-        // Hàm xử lý tìm kiếm
+        btnSearch.addEventListener('click', function () {
+            const phoneRegex = /^(\+84)(3[2-9]|5[689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$/;
+            if (!phoneRegex.test(searchInput.value)) {
+                searchInput.style.borderColor = 'red';
+                return; // Nếu số điện thoại không hợp lệ, không làm gì cả
+            } else {
+                searchInput.style.borderColor = ''; // Reset màu border nếu trước đó có lỗi
+                modal.show(); // Hiển thị modal để nhập OTP
+            }
+        });
+
+        document.getElementById('verifyOTP').addEventListener('click', function () {
+            const otp = phoneSearch.value;
+            if (otp === '123456') {
+                // Nếu mã OTP đúng, tiến hành tìm kiếm và hiển thị dữ liệu
+                handleSearch();
+            } else {
+                phoneSearch.style.borderColor = 'red'; // Nếu mã OTP sai, bôi đỏ border của input
+            }
+        });
+
         function handleSearch() {
             loadingSpinner.style.display = 'block';
             $.ajax({
@@ -124,17 +153,21 @@
                 },
                 success: function (response) {
                     updateTable(response);
+                    localStorage.setItem('searchResults', resultTable.innerHTML); // Lưu kết quả vào localStorage
+                    localStorage.setItem('lastSearch', searchInput.value); // Lưu giá trị tìm kiếm vào localStorage
                     loadingSpinner.style.display = 'none';
+                    phoneSearch.style.borderColor = ''
                 },
                 error: function (error) {
                     failed_toast();
                     loadingSpinner.style.display = 'none';
                 },
             });
+            phoneSearch.value = ''; // Xóa dữ liệu trong trường nhập OTP
+            searchInput.value = '';
+            phoneSearch.style.borderColor = ''
+            modal.hide(); // Ẩn modal sau khi xác minh thành công
         }
-
-        btnSearch.addEventListener('click', throttle(handleSearch, 5000));
-
     });
 
     function updateTable(appointments) {
