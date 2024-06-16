@@ -20,7 +20,7 @@
                             <div class="user-name"><?php echo $_SESSION['admin_name'] ?></div>
                             <div class="user-position online">Hoạt động</div>
                         </div>
-                        <a class="dropdown-item" href="pages-profile.html">
+                        <a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=employee&action=profile">
                             <span class="icon mdi mdi-face"></span>Tài khoản
                         </a>
                         <a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=auth&action=logout">

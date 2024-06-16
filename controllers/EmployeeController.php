@@ -120,6 +120,26 @@ class EmployeeController extends BaseController {
         }
     }
 
+    public function profile()
+    {
+        session_start();
+        if (isset($_SESSION['admin_id'])) {
+            $id = $_SESSION['admin_id'];
+            $employee = $this->employeeModel->getById($id);
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode($employee);
+                exit;
+            }
+            return $this->view('admin.profile', [
+                'employee' => $employee,
+            ]);
+        } else {
+            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            exit();
+        }
+    }
+
     public function uploadImageToCloudinary($imagePath): string
     {
         try {

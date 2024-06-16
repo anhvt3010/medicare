@@ -37,6 +37,7 @@
 
         public function processLoginAdmin()
         {
+
             $phone = $_POST['phone'];
             $password = $_POST['password'];
 //            $hashedPassword = password_hash($_POST['password'], PASSWORD_BCRYPT, ['cost' => 12]);
@@ -49,6 +50,50 @@
             return $this->view('admin.login', [
                 'result' => $result,
             ]);
+        }
+
+        public function processChangePasswordAdmin()
+        {
+
+            if (isset($_SESSION['admin_id'])) {
+                $employee_id = $_SESSION['admin_id'];
+
+                $currentPassword = $_POST['currentPassword'];
+                $newPassword = $_POST['newPassword'];
+
+                $result = $this->authModel->changePasswordAdmin($employee_id, $currentPassword, $newPassword);
+                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    header('Content-Type: application/json');
+                    echo json_encode($result);
+                    exit;
+                }
+                return $this->view('404');
+            } else {
+                header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+                exit();
+            }
+        }
+
+        public function processChangePasswordClient()
+        {
+
+            if (isset($_SESSION['patient_id'])) {
+                $employee_id = $_SESSION['patient_id'];
+
+                $currentPassword = $_POST['currentPassword'];
+                $newPassword = $_POST['newPassword'];
+
+                $result = $this->authModel->changePasswordClient($employee_id, $currentPassword, $newPassword);
+                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    header('Content-Type: application/json');
+                    echo json_encode($result);
+                    exit;
+                }
+                return $this->view('404');
+            } else {
+                header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+                exit();
+            }
         }
 
         public function processLoginClient()

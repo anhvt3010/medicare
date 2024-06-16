@@ -19,7 +19,7 @@ class AuthModel extends BaseModel {
         return mysqli_query($this->connection, $sql);
     }
 
-    public function registerClient($phone, $password, $name)
+    public function registerClient($phone, $password, $name): array
     {
         $phone = mysqli_real_escape_string($this->connection, $phone);
         $password = mysqli_real_escape_string($this->connection, $password);
@@ -43,7 +43,6 @@ class AuthModel extends BaseModel {
             return ['success' => false, 'message' => 'Đăng ký không thành công'];
         }
     }
-
 
     public function loginClient($phone, $password): array
     {
@@ -110,7 +109,71 @@ class AuthModel extends BaseModel {
         return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
     }
 
-    function logout() {
+    public function changePasswordAdmin($adminId, $currentPassword, $newPassword): array
+    {
+        $adminId = mysqli_real_escape_string($this->connection, $adminId);
+        $currentPassword = mysqli_real_escape_string($this->connection, $currentPassword);
+        $newPassword = mysqli_real_escape_string($this->connection, $newPassword);
+
+        // Lấy mật khẩu hiện tại từ cơ sở dữ liệu
+        $sql = "SELECT password FROM employees WHERE employee_id = '$adminId'";
+        $result = $this->_query($sql);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $admin = mysqli_fetch_assoc($result);
+
+            // Kiểm tra mật khẩu hiện tại
+            if (password_verify($currentPassword, $admin['password'])) {
+                // Mã hóa mật khẩu mới
+                $newPasswordHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+
+                // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+                $updateSql = "UPDATE employees SET password = '$newPasswordHash' WHERE employee_id = '$adminId'";
+                if ($this->_query($updateSql)) {
+                    return ['success' => true, 'message' => 'Mật khẩu đã được thay đổi thành công'];
+                } else {
+                    return ['success' => false, 'message' => 'Lỗi khi cập nhật mật khẩu'];
+                }
+            } else {
+                return ['success' => false, 'message' => 'Mật khẩu hiện tại không đúng'];
+            }
+        }
+        return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
+    }
+
+    public function changePasswordClient($patientId, $currentPassword, $newPassword): array
+    {
+        $patientId = mysqli_real_escape_string($this->connection, $patientId);
+        $currentPassword = mysqli_real_escape_string($this->connection, $currentPassword);
+        $newPassword = mysqli_real_escape_string($this->connection, $newPassword);
+
+        // Lấy mật khẩu hiện tại từ cơ sở dữ liệu
+        $sql = "SELECT password FROM patients WHERE patient_id = '$patientId'";
+        $result = $this->_query($sql);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $patient = mysqli_fetch_assoc($result);
+
+            // Kiểm tra mật khẩu hiện tại
+            if (password_verify($currentPassword, $patient['password'])) {
+                // Mã hóa mật khẩu mới
+                $newPasswordHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+
+                // Cập nhật mật khẩu mới vào cơ sở dữ liệu
+                $updateSql = "UPDATE patients SET password = '$newPasswordHash' WHERE patient_id = '$patientId'";
+                if ($this->_query($updateSql)) {
+                    return ['success' => true, 'message' => 'Mật khẩu đã được thay đổi thành công'];
+                } else {
+                    return ['success' => false, 'message' => 'Lỗi khi cập nhật mật khẩu'];
+                }
+            } else {
+                return ['success' => false, 'message' => 'Mật khẩu hiện tại không đúng'];
+            }
+        }
+        return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
+    }
+
+    public function logout() {
         // Khởi động session nếu chưa được khởi động
         if (session_status() == PHP_SESSION_NONE) {
             session_start();
