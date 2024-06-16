@@ -109,7 +109,7 @@ if (isset($_SESSION['user_phone'])) {
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end mt-3">
-                                    <a href="#!">Quên mật khẩu</a>
+                                    <a href="http://localhost/Medicare/index.php?controller=auth&action=confirm_phone">Quên mật khẩu</a>
                                 </div>
                             </div>
                         </div>

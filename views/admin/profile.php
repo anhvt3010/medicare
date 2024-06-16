@@ -126,7 +126,7 @@
                             <label class="labels">Chuyên khoa</label>
                             <div id="docUpPosition" class="form-control"
                                  style="height: 50px; background-color: #eee; line-height: 30px; font-size: 13px">
-                                <?php echo $employee['specialty_name'] ?>
+                                <?php echo $employee['specialty_name'] ?? " không có" ?>
                             </div>
                         </div>
                     </div>

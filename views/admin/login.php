@@ -117,7 +117,8 @@ if (isset($_SESSION['admin_name'])) {
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end mt-3">
-                                    <a href="#!">Quên mật khẩu</a>
+                                    <a href="#!" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                                    style="color: #1F5D60FF">Quên mật khẩu</a>
                                 </div>
                             </div>
                             <div class="row mt-3">
@@ -139,6 +140,24 @@ if (isset($_SESSION['admin_name'])) {
         </div>
     </div>
 </section>
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Thông báo</h1>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Hãy liên hệ quản trị viên của bạn để được cấp lại mật khẩu
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+
+            </div>
+        </div>
+    </div>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>

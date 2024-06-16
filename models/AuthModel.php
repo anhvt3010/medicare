@@ -173,6 +173,28 @@ class AuthModel extends BaseModel {
         return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
     }
 
+    public function forgotPasswordClient($phone, $newPassword): array
+    {
+        $phone = mysqli_real_escape_string($this->connection, $phone);
+        $newPassword = mysqli_real_escape_string($this->connection, $newPassword);
+
+        // Lấy mật khẩu hiện tại từ cơ sở dữ liệu
+        $sql = "SELECT password FROM patients WHERE phone = '$phone'";
+        $result = $this->_query($sql);
+
+        if ($result && mysqli_num_rows($result) > 0) {
+            $newPasswordHash = password_hash($newPassword, PASSWORD_BCRYPT, ['cost' => 12]);
+
+            $updateSql = "UPDATE patients SET password = '$newPasswordHash' WHERE phone = '$phone'";
+            if ($this->_query($updateSql)) {
+                return ['success' => true, 'message' => 'Mật khẩu đã được thay đổi thành công'];
+            } else {
+                return ['success' => false, 'message' => 'Lỗi khi cập nhật mật khẩu'];
+            }
+        }
+        return ['success' => false, 'message' => 'Lỗi khi cập nhật mật khẩu'];
+    }
+
     public function logout() {
         // Khởi động session nếu chưa được khởi động
         if (session_status() == PHP_SESSION_NONE) {

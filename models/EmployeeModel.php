@@ -24,9 +24,11 @@ class EmployeeModel  extends BaseModel {
                        e.address AS address,
                        e.status AS status,
                        e.employee_code AS employee_code,
-                       p.name AS position_name
+                       p.name AS position_name,
+                        s.name AS specialty_name
                 FROM employees AS e
-                JOIN positions AS p ON e.position_id = p.position_id
+                LEFT JOIN specialties AS s ON e.specialty_id = s.specialty_id
+                LEFT JOIN positions AS p ON e.position_id = p.position_id
                 WHERE e.employee_id = $id";
 
         $query = $this->_query($sql);

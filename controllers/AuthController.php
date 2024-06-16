@@ -111,6 +111,32 @@
             ]);
         }
 
+        public function forgot_password()
+        {
+            return include './views/client/forgot-password.php';
+        }
+
+        public function confirm_phone()
+        {
+            return include './views/client/confirm-phone.php';
+        }
+
+        public function process_forgot_password()
+        {
+            if (isset($_POST['phone'])) {
+                $encodedPhone = $_POST['phone'];
+                $phone = urldecode($encodedPhone);
+                $newPassword = $_POST['newPassword'];
+                $result = $this->authModel->forgotPasswordClient($phone, $newPassword);
+                if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                    header('Content-Type: application/json');
+                    echo json_encode($result);
+                    exit;
+                }
+            }
+            return $this->view('404', []);
+        }
+
         public function logout()
         {
             $this->authModel->logout();
