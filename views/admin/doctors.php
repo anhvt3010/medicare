@@ -163,7 +163,11 @@ if (!isset($_SESSION['admin_name'])) {
 
         function searchDoctor() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredDoctors = listDoctors.filter(doctor => doctor.name.toLowerCase().includes(input));
+            const filteredDoctors = listDoctors.filter(doctor =>
+                doctor.name.toLowerCase().includes(input) ||
+                (doctor.employee_code && doctor.employee_code.toLowerCase().includes(input)) ||
+                (doctor.phone && doctor.phone.includes(input))
+            );
             currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
             setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
             renderDoctors(currentPage, filteredDoctors); // Cập nhật lại hàm renderDoctors để nhận thêm tham số filteredDoctors

@@ -68,7 +68,7 @@ class AuthModel extends BaseModel {
                     return ['success' => false, 'message' => 'Tài khoản đóng. Hãy thử lại sau'];
                 }
             } else {
-                return ['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng'];
+                return ['success' => false, 'message' => 'Mật khẩu không đúng'];
             }
         }
         return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];
@@ -103,7 +103,7 @@ class AuthModel extends BaseModel {
                     ]
                 ];
             } else {
-                return ['success' => false, 'message' => 'Số điện thoại hoặc mật khẩu không đúng'];
+                return ['success' => false, 'message' => 'Mật khẩu không đúng'];
             }
         }
         return ['success' => false, 'message' => 'Không tìm thấy tài khoản'];

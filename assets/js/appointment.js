@@ -86,6 +86,8 @@ $(document).ready(function () {
             displayTimeSlots(["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00",
                 "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]);
             console.log('Chọn giờ hẹn: Không thể đặt lịch hẹn sau 11 giờ sáng cho ngày hôm nay.');
+        } else if (date.toLocaleDateString() === todayDateString && currentHour < 11) {
+            displayTimeSlots(["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]);
         } else {
             $.ajax({
                 url: 'http://localhost/Medicare/index.php',

@@ -52,7 +52,7 @@ if (!isset($_SESSION['admin_name'])) {
                             </div>
 
 
-                            <div class="col-2 table-filters pb-0">
+                            <div class="col-1 table-filters pb-0">
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
@@ -61,11 +61,11 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
 
-                            <div class="col-4 table-filters pb-0">
+                            <div class="col-5 table-filters pb-0">
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên bệnh nhân..."
+                                            <input id="searchInput" placeholder="Nhập tên/số điện thoại bệnh nhân..."
                                                    autocomplete="off" class="form-control">
                                         </div>
                                     </div>
@@ -120,10 +120,13 @@ if (!isset($_SESSION['admin_name'])) {
 
         function searchSpecialty() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredDoctors = listSpecialties.filter(doctor => doctor.name.toLowerCase().includes(input));
+            const filteredPatients = listSpecialties.filter(patient =>
+                patient.name.toLowerCase().includes(input) ||
+                (patient.phone && patient.phone.includes(input))
+            );
             currentPage = 1;
-            setupPagination(filteredDoctors, paginationElement, itemsPerPage);
-            renderSpecialties(currentPage, filteredDoctors);
+            setupPagination(filteredPatients, paginationElement, itemsPerPage);
+            renderSpecialties(currentPage, filteredPatients);
         }
 
         function renderSpecialties(page, items = listSpecialties) {

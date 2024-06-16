@@ -1,4 +1,11 @@
-﻿<!DOCTYPE html>
+﻿<?php
+session_start();
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    exit();
+}
+?>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <title>Trang chủ - QTV</title>
@@ -125,10 +132,10 @@
                                     </div>
                                 </div>
                                 <div class="col-lg-2"><span class="title">
-                                        <?php echo round(100
-                                            - round(($from0_14 / $appointmentSuccess) * 100, 1)
-                                            - round(($from15_35 / $appointmentSuccess) * 100, 1)
-                                            - round(($from36_64 / $appointmentSuccess) * 100, 1))
+                                        <?php echo - round(100
+                                            - ($from0_14 / $appointmentSuccess) * 100
+                                            - ($from15_35 / $appointmentSuccess) * 100
+                                            - ($from36_64 / $appointmentSuccess) * 100)
                                         ?>%</span>
                                 </div>
                             </div>

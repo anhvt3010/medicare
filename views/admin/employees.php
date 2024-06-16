@@ -80,7 +80,7 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên nhân viên..." autocomplete="off"
+                                            <input id="searchInput" placeholder="Nhập tên/mã/sđt nhân viên..." autocomplete="off"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -145,10 +145,14 @@ if (!isset($_SESSION['admin_name'])) {
 
         function searchEmployees() {
             const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredDoctors = listEmployees.filter(doctor => doctor.name.toLowerCase().includes(input));
+            const filteredEmployees = listEmployees.filter(employee =>
+                employee.name.toLowerCase().includes(input) ||
+                (employee.employee_code && employee.employee_code.toLowerCase().includes(input)) ||
+                (employee.phone && employee.phone.includes(input))
+            );
             currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
-            setupPagination(filteredDoctors, paginationElement, employeesPerPage);
-            renderEmployees(currentPage, filteredDoctors);
+            setupPagination(filteredEmployees, paginationElement, employeesPerPage);
+            renderEmployees(currentPage, filteredEmployees); // Cập nhật lại hàm renderEmployees để nhận thêm tham số filteredEmployees
         }
 
         function renderEmployees(page, items = listEmployees) {

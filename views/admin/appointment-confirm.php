@@ -3,6 +3,9 @@ session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
     header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
     exit();
+} else if ($_SESSION['role_id'] == 2){  // Trừ bác sĩ
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    exit();
 }
 ?>
 <!DOCTYPE html>
@@ -15,9 +18,8 @@ if (!isset($_SESSION['admin_name'])) {
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
     <title>Xác nhận lịch khám</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
-    <?php include 'import-link-tag.php' ?>
-    <link href="http://localhost/Medicare/assets/css/appointment.css" rel="stylesheet">
+    <?php include 'import-linzk-tag.php' ?>
+
     <style>
         #btn-action:focus {
             outline: none;
@@ -208,7 +210,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                     <?php echo $statusInfo[1]; ?>
                                                 </div>
                                             </td>
-                                            <td>
+                                            <td class="p-0">
                                                 <div class="btn-group">
                                                     <button id="btn-action"
                                                             style="border: none; background-color: transparent; "
@@ -320,16 +322,73 @@ if (!isset($_SESSION['admin_name'])) {
 <!--    pop-up sidebar-->
 <?php include 'pop-up-sidebar.php' ?>
 
-<?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/appointment-update.js"></script>
-<script src="http://localhost/Medicare/assets/js/validateAppointment.js"></script>
-
-<script>
-    document.addEventListener('DOMContentLoaded', function () {
+<?php include 'import-script.php' ?>
+<script type="text/javascript">
+    $(document).ready(function () {
         App.init();
     });
+</script>
+<script>
+    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=confirm&page=1'
+
+    document.getElementById('button').addEventListener('click', function () {
+        var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
+            ? null
+            : document.querySelector('.select2[name="specialty"]').value;
+        var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
+            ? null
+            : document.querySelector('.select2[name="doctor"]').value;
+        var searchInput = document.getElementById('searchInput').value.trim();
+
+
+        if (specialty) {
+            url_appointment += '&specialty=' + encodeURIComponent(specialty);
+        }
+        if (doctor) {
+            url_appointment += '&doctor=' + encodeURIComponent(doctor);
+        }
+        if (searchInput.length > 0) {
+            url_appointment += '&search=' + encodeURIComponent(searchInput);
+        }
+
+        console.log(url_appointment)
+
+        window.location.href = url_appointment
+    });
+
+    function getRowClass(status) {
+        switch (status) {
+            case 0:
+                return 'warning in-progress';
+            case 1:
+                return 'primary to-do';
+            case 2:
+                return 'success done';
+            case 3:
+                return 'danger in-review';
+            default:
+                return '';
+        }
+    }
+
+    function formatDate(timestamp) {
+        var date = new Date(timestamp * 1000);
+        return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
+    }
+
+    function convertDateToDayTimestamp(dateString) {
+        if (!dateString) return null;
+        var parts = dateString.split('/');
+        var day = parseInt(parts[0], 10);
+        var month = parseInt(parts[1], 10) - 1;
+        var year = parseInt(parts[2], 10);
+        var date = new Date(Date.UTC(year, month, day));
+
+        // Chuyển đổi ngày sang timestamp và chia cho số giây trong một ngày
+        return Math.floor(date.getTime() / 86400000); // 86400000 là số miligiây trong một ngày
+    }
 </script>
 </body>
 </html>

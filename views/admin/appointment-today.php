@@ -34,7 +34,7 @@ if (!isset($_SESSION['admin_name'])) {
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="page-head">
-            <h2 class="page-head-title">Lịch khám hôm nay <?php echo $totalAppointment ?></h2>
+            <h2 class="page-head-title">Lịch khám hôm nay</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
                     <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
