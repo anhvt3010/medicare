@@ -71,11 +71,11 @@ class EmployeeController extends BaseController {
 
     public function detail()
     {
-        $employee_id = $_GET['employee_id'] ?? '';
+        $employee_id = $_GET['employee_id'];
         $employee = $this->employeeModel->getById($employee_id);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
-            echo json_encode($employee);
+            echo json_encode($employee_id);
             exit;
         }
         return $this->view('admin.employee-detail', [

@@ -1,10 +1,7 @@
 <?php
-session_start();
+session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
-    exit();
-} else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
     exit();
 }
 ?>
@@ -205,7 +202,7 @@ if (!isset($_SESSION['admin_name'])) {
                             <label class="labels">Chức vụ</label>
                             <div id="docUpPosition" class="form-control"
                                  style="height: 50px; background-color: #eee; line-height: 30px; font-size: 13px">
-                                <?php echo $employee['positionName'] ?>
+                                <?php echo $employee['position_name'] ?>
                             </div>
                         </div>
                     </div>

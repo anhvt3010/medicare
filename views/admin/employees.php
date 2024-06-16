@@ -60,11 +60,13 @@ if (!isset($_SESSION['admin_name'])) {
                                     <div class="row">
                                         <div class="col-12">
                                             <form>
-                                                <select class="form-select form-control" id="selectSpecialty">
+                                                <select class="form-select form-control" id="selectPosition">
                                                     <option value="All" selected>Tất cả chức vụ</option>
                                                     <?php
                                                     foreach ($listPositions as $position) {
-                                                        echo "<option value='" . htmlspecialchars($position['position_id']) . "'>" . htmlspecialchars($position['name']) . "</option>";
+                                                        if ($position['position_id'] != 1) {  // Kiểm tra nếu id chức vụ không phải là 1
+                                                            echo "<option value='" . htmlspecialchars($position['position_id']) . "'>" . htmlspecialchars($position['name']) . "</option>";
+                                                        }
                                                     }
                                                     ?>
                                                 </select>
@@ -138,8 +140,8 @@ if (!isset($_SESSION['admin_name'])) {
         const searchInput = document.getElementById('searchInput');
         searchInput.addEventListener('input', searchEmployees);
 
-        const selectSpecialty = document.getElementById('selectSpecialty');
-        selectSpecialty.addEventListener('change', filterBySpecialty);
+        const selectPosition = document.getElementById('selectPosition');
+        selectPosition.addEventListener('change', filterByPosition);
 
         function searchEmployees() {
             const input = document.getElementById('searchInput').value.toLowerCase();
@@ -351,12 +353,12 @@ if (!isset($_SESSION['admin_name'])) {
             return li;
         }
 
-        function filterBySpecialty() {
-            const selectedSpecialty = document.getElementById('selectSpecialty').value;
-            const filteredDoctors = selectedSpecialty === 'All' ? listEmployees : listEmployees.filter(doctor => doctor.specialty === selectedSpecialty);
-            currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
-            setupPagination(filteredDoctors, paginationElement, employeesPerPage);
-            renderEmployees(currentPage, filteredDoctors);
+        function filterByPosition() {
+            const selectedPosition = selectPosition.value;
+            const filteredEmployees = selectedPosition === 'All' ? listEmployees : listEmployees.filter(employee => employee.position_id === selectedPosition);
+            currentPage = 1;
+            setupPagination(filteredEmployees, paginationElement, employeesPerPage);
+            renderEmployees(currentPage, filteredEmployees);
         }
 
         function changePage(page) {

@@ -16,7 +16,6 @@ class EmployeeModel  extends BaseModel {
     {
         $sql = "SELECT e.employee_id AS id,
                         e.name AS name,
-                       e.username AS username,
                        e.avt AS avt,
                        e.gender AS gender,
                        e.dob AS dob,
@@ -24,13 +23,10 @@ class EmployeeModel  extends BaseModel {
                        e.phone AS phone,
                        e.address AS address,
                        e.status AS status,
-                       e.specialty_id AS specialty_id,
-                       s.name AS specialty_name,
                        e.employee_code AS employee_code,
                        p.name AS position_name
                 FROM employees AS e
                 JOIN positions AS p ON e.position_id = p.position_id
-                JOIN specialties AS s ON s.specialty_id = e.specialty_id
                 WHERE e.employee_id = $id";
 
         $query = $this->_query($sql);
@@ -43,6 +39,7 @@ class EmployeeModel  extends BaseModel {
                     e.employee_id AS id,
                     e.avt AS avt,
                     e.name AS name,
+                    p.position_id AS position_id,
                     p.name AS position,
                     e.email AS email,
                     e.phone AS phone,
