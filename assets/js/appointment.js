@@ -77,18 +77,18 @@ $(document).ready(function () {
 
         // Lấy ngày hiện tại và thời gian hiện tại
         var now = new Date();
-        var todayDateString = now.toLocaleDateString();
+        var todayDateString = now.toLocaleDateString('vi-VN');
         var currentHour = now.getHours();
 
         // Kiểm tra nếu ngày được chọn là hôm nay và sau 11 giờ sáng
-        if (date.toLocaleDateString() === todayDateString && currentHour >= 11) {
 
+        if (date.toLocaleDateString('vi-VN') === todayDateString && currentHour >= 11) {
             displayTimeSlots(["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00",
                 "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]);
             console.log('Chọn giờ hẹn: Không thể đặt lịch hẹn sau 11 giờ sáng cho ngày hôm nay.');
-        } else if (date.toLocaleDateString() === todayDateString && currentHour < 11) {
-            displayTimeSlots(["13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]);
-        } else {
+        }
+
+        else {
             $.ajax({
                 url: 'http://localhost/Medicare/index.php',
                 type: 'GET',
@@ -100,12 +100,18 @@ $(document).ready(function () {
                 },
                 success: function(timeSlots) {
                     console.log(timeSlots)
-                    displayTimeSlots(timeSlots);
+                    if (date.toLocaleDateString('vi-VN') === todayDateString && currentHour <= 11) {
+                        displayTimeSlots(["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00"].concat(timeSlots));
+                    } else {
+                        displayTimeSlots(timeSlots);
+                    }
+
                 },
                 error: function(error) {
                     console.error('Error:', error);
                 }
             });
+
         }
     }
 
@@ -114,11 +120,6 @@ $(document).ready(function () {
 document.addEventListener('DOMContentLoaded', function() {
     timeSlots = [];
     displayTimeSlots(timeSlots);
-    // var btnSelectOrtherDay = document.getElementById('otherDay');
-    // btnSelectDay.addEventListener('click', function() {
-    //     var inputOtherDate = document.getElementById('input-otherDate');
-    //     inputOtherDate.focus();  // Set focus vào input
-    // });
 });
 
 
