@@ -201,7 +201,7 @@ class AppointmentModel extends Database {
     public function getAppointmentToday($limit = 10, $page = 1, $specialty = null, $doctor = null, $date = null, $search = null): array
     {
         $converter = new ConvertDate();
-
+        date_default_timezone_set('Asia/Ho_Chi_Minh');
         $offset = ($page - 1) * $limit;
         $today = date('d/m/Y');
         $date = $converter->convertDateToDayTimestamp($today);
