@@ -39,6 +39,12 @@ if (isset($_SESSION['user_phone'])) {
     </style>
 </head>
 <body style="background-color: #3fbbc0; overflow-y: hidden ">
+<div id="loading-spinner"
+     style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1051; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <!-- Login 9 - Bootstrap Brain Component -->
 <section class=" py-3 py-md-5 py-xl-8" style="margin-top: 50px">
     <div class="container">
@@ -139,6 +145,7 @@ if (isset($_SESSION['user_phone'])) {
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
+        document.getElementById('loading-spinner').style.display = 'none';
         var inputs = document.querySelectorAll('.form-control');
 
         inputs.forEach(function (input) {
@@ -195,6 +202,7 @@ if (isset($_SESSION['user_phone'])) {
         });
 
         if (isValid) {
+            document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
                 url: 'http://localhost/Medicare/index.php?controller=auth&action=processLoginClient',
                 type: 'POST',
@@ -214,10 +222,12 @@ if (isset($_SESSION['user_phone'])) {
                         errorMessage.classList.add('error-message');
                         errorMessage.textContent = response['message'];
                         document.getElementById('password').parentElement.appendChild(errorMessage);
+                        document.getElementById('loading-spinner').style.display = 'none';
                     }
                 },
                 error: function() {
                     failed_toast("Có lỗi xảy ra, vui lòng thử lại.")
+                    document.getElementById('loading-spinner').style.display = 'none';
                 }
             });
         }

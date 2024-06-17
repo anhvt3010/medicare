@@ -22,13 +22,23 @@
     </style>
 </head>
 <body style="background-color: #3fbbc0; color: white">
+<div id="loading-spinner"
+     style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1051; display: flex; align-items: center; justify-content: center;">
+    <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
+        <span class="sr-only">Loading...</span>
+    </div>
+</div>
 <section class=" py-3 py-md-5 py-xl-8" style=" margin-top: 40px">
     <div class="container">
         <div class="row gy-4 align-items-center">
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="d-flex justify-content-center">
                     <div class="col-12 col-xl-9">
-                        <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345" alt="BootstrapBrain Logo">
+                        <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero"
+                           class="logo me-auto">
+                            <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345"
+                                 alt="BootstrapBrain Logo">
+                        </a>
                         <hr class="border-primary-subtle mb-4">
                         <h2 class="h1 mb-4">Chào mừng đến với Medicare.</h2>
                         <p class="lead mb-5">Chúng tôi rất vui được chăm sóc sức khỏe của quý vị. Tại đây, chúng tôi cam kết cung cấp dịch vụ y tế chất lượng, chu đáo và chuyên nghiệp nhất để mang lại sự an tâm và hài lòng cho quý khách.</p>
@@ -106,7 +116,7 @@
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
-
+        document.getElementById('loading-spinner').style.display = 'none';
         document.getElementById('togglePasswordRe').addEventListener('click', function (e) {
             const passwordInput = document.getElementById('password');
             const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
@@ -166,6 +176,7 @@
         });
 
         if (isValid) {
+            document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
                 url: 'http://localhost/Medicare/index.php?controller=auth&action=processRegister',
                 type: 'POST',
@@ -186,8 +197,10 @@
                             errorMessage.classList.add('error-message');
                             errorMessage.textContent = response['message'];
                             phoneInput.parentElement.appendChild(errorMessage);
+                            document.getElementById('loading-spinner').style.display = 'none';
                         } else {
                             failed_toast('Đã có lỗi xảy ra, vui lòng thử lại sau')
+                            document.getElementById('loading-spinner').style.display = 'none';
                         }
                     }
                 },

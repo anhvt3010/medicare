@@ -1,5 +1,4 @@
 ﻿<?php
-session_start();
 if (!isset($_SESSION['admin_name'])) {
     header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
     exit();
