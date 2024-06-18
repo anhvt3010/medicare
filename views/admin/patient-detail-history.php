@@ -59,7 +59,7 @@
                                 </button>
                                 <div class="dropdown-menu dropdown-menu-left">
                                     <a type="button" class="dropdown-item"
-                                       href="http://localhost/Medicare/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>">Chi tiết</a>
+                                       href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>">Chi tiết</a>
                                 </div>
                             </div>
                         </td>

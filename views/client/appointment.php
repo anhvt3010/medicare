@@ -120,7 +120,7 @@
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                <a href="http://localhost/Medicare/index.php?controller=patient&action=profile" class="btn btn-primary">Thêm thông tin tài khoản</a>
+                <a href="<?php echo BASE_URL ?>/index.php?controller=patient&action=profile" class="btn btn-primary">Thêm thông tin tài khoản</a>
             </div>
         </div>
     </div>
@@ -130,10 +130,13 @@
 <!-- Thêm JavaScript của jQuery UI -->
 <script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+    var baseUri = '<?php echo BASE_URL; ?>';
+</script>
 <script src="assets/js/appointment.js"></script>
 <script src="assets/js/validate-appointment.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -164,12 +167,16 @@
         document.getElementById('autoInformation').addEventListener('click', function () {
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=patient&action=get_one',
+                url: '<?php echo BASE_URL ?>/index.php?controller=patient&action=get_one',
                 type: 'POST',
                 data: {
                     patient_id: patientId
                 },
                 success: function (response) {
+                    document.getElementById('error-name-gender').style.display = 'none';
+                    document.getElementById('error-dob').style.display = 'none';
+                    document.getElementById('error-phone').style.display = 'none';
+                    document.getElementById('error-email').style.display = 'none';
                     if (response.name && response.gender && response.dob && response.email && response.phone) {
                         document.getElementById('patient-name').value = response.name;
                         document.querySelector('input[name="gender"][value="' + response.gender + '"]').checked = true;
@@ -260,9 +267,8 @@
             if (validatePatientInfo(patientName, patientGender, patientDob, patientPhone, patientEmail, patientDescription)) {
                 document.getElementById('loading-spinner').style.display = 'block';
                 $.ajax({
-                    url: 'http://localhost/Medicare/index.php',
+                    url: '<?php echo BASE_URL ?>/index.php',
                     type: 'POST',
-                    // timeout: 30000,
                     data: {
                         controller: 'appointment',
                         action: 'create',
@@ -283,7 +289,7 @@
                     },
                     success: function (message) {
                         console.log(message);
-                        success_toast('http://localhost/Medicare/index.php?controller=home&action=home')
+                        success_toast('<?php echo HOME_CLIENT_URL ?>')
                     },
                     error: function(xhr, status, error) {
                         console.error('Error:', status, error);

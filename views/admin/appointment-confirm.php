@@ -1,10 +1,10 @@
 <?php
 session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: '. NOT_FOUND_URL);
     exit();
-} else if ($_SESSION['role_id'] == 2){  // Trừ bác sĩ
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+} else if ($_SESSION['role_id'] != 1){  // Chỉ admin
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -226,7 +226,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                                     </button>
                                                     <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                                        <a href="http://localhost/Medicare/index.php?controller=appointment&action=update_show&appointmentId=<?php echo $appointment['id'] ?>"
+                                                        <a href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=update_show&appointmentId=<?php echo $appointment['id'] ?>"
                                                            type='button' class='dropdown-item'>Cập nhật</a>
                                                     </div>
                                                 </div>
@@ -321,9 +321,6 @@ if (!isset($_SESSION['admin_name'])) {
     </div>
 </div>
 
-<!--    pop-up sidebar-->
-<?php include 'pop-up-sidebar.php' ?>
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <?php include 'import-script.php' ?>
@@ -333,7 +330,7 @@ if (!isset($_SESSION['admin_name'])) {
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=confirm&page=1'
+    var url_appointment = '<?php echo BASE_URL ?>/index.php?controller=appointment&action=confirm&page=1'
 
     document.getElementById('button').addEventListener('click', function () {
         var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'

@@ -1,6 +1,6 @@
 ﻿<?php
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 }
 ?>
@@ -37,7 +37,7 @@ if (!isset($_SESSION['admin_name'])) {
                 </div>
                 <div class="col-12 col-lg-6 col-xl-3" >
                     <a class="widget widget-tile" title="Đi đến trang xác nhận lịch hẹn"
-                       href="http://localhost/Medicare/index.php?controller=appointment&action=confirm">
+                       href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=confirm">
                         <div class="chart sparkline" style="color: black">
                             <i class="fa-solid fa-calendar-check fa-3x" style="color: #fae711"></i>
                         </div>
@@ -174,8 +174,6 @@ if (!isset($_SESSION['admin_name'])) {
 
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import_script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>

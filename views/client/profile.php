@@ -35,7 +35,7 @@
             <div class="card">
                 <div class="card-body">
                     <div class="d-flex flex-column align-items-center text-center">
-                        <img src="https://bootdey.com/img/Content/avatar/avatar7.png" alt="Admin" class="rounded-circle"
+                        <img src="https://png.pngtree.com/png-clipart/20210608/ourlarge/pngtree-dark-gray-simple-avatar-png-image_3418404.jpg" alt="Admin" class="rounded-circle"
                              width="150">
                         <div class="mt-3">
                             <h4><?php echo $patient['name'] ?></h4>
@@ -173,7 +173,7 @@
 <?php include "components/footer.html" ?>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -240,7 +240,7 @@
         confirmUpdateButton.addEventListener('click', function () {
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=patient&action=update_information',
+                url: '<?php echo BASE_URL ?>/index.php?controller=patient&action=update_information',
                 type: 'POST',
                 data: {
                     name: nameInput.value,
@@ -252,7 +252,7 @@
                 success: function (response) {
                     console.log(response);
                     if (response === true) {
-                        success_toast('Cập nhật thành công', 'http://localhost/Medicare/index.php?controller=patient&action=profile')
+                        success_toast('Cập nhật thành công', '<?php echo BASE_URL ?>/index.php?controller=patient&action=profile')
                     } else {
                         failed_toast('Cập nhật thất bại')
                         document.getElementById('loading-spinner').style.display = 'none';
@@ -300,7 +300,7 @@
 
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=auth&action=processChangePasswordClient',
+                url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=processChangePasswordClient',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -308,7 +308,7 @@
                 success: function (response) {
                     if(response['success'] === true) {
                         console.log(response);
-                        success_toast('Đăng nhập thành công', 'http://localhost/Medicare/index.php?controller=patient&action=profile');
+                        success_toast('Đổi mật khẩu thành công', '<?php echo BASE_URL ?>/index.php?controller=patient&action=profile');
                     } else {
                         failed_toast(response['message']);
                         if (response['message'] === 'Mật khẩu hiện tại không đúng') {

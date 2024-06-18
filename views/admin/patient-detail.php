@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 } else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -181,14 +181,12 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 
 <?php include 'import-script.php'?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -203,14 +201,14 @@ if (!isset($_SESSION['admin_name'])) {
 
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=patient&action=update_status',
+                url: '<?php echo BASE_URL ?>/index.php?controller=patient&action=update_status',
                 type: 'POST',
                 data: formData,
                 contentType: false, // Không set contentType
                 processData: false, // Không xử lý dữ liệu
                 success: function(response) {
                     console.log(response);
-                    success_toast('http://localhost/Medicare/index.php?controller=patient&action=index')
+                    success_toast('<?php echo BASE_URL ?>/index.php?controller=patient&action=index')
                 },
                 error: function() {
                     failed_toast()

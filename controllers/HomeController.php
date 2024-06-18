@@ -90,7 +90,7 @@ class HomeController extends BaseController
 
     public function getDoctor()
     {
-        $specialtyId = isset($_GET['specialtyId']) ? $_GET['specialtyId'] : null;
+        $specialtyId = $_GET['specialtyId'] ?? null;
         $listDoctorsBySpecialty = $this->doctorModel->getDoctorsBySpecialty($specialtyId);
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');

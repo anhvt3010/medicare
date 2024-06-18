@@ -1,7 +1,7 @@
 <?php
 session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: '. LOGIN_ADMIN_URL);
     exit();
 }
 ?>
@@ -179,7 +179,7 @@ if (!isset($_SESSION['admin_name'])) {
                     <hr>
                     <div class="mt-3 d-flex justify-content-between">
                         <a id="backButton" class="btn btn-danger"
-                           href="http://localhost/Medicare/index.php?controller=appointment&action=index">Danh sách lịch khám</a>
+                           href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=index">Danh sách lịch khám</a>
                         <form id="uploadForm" enctype="multipart/form-data">
                             <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" hidden="hidden">
                             <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>" hidden="hidden">
@@ -208,14 +208,12 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 
 <?php include 'import-script.php'?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
@@ -260,7 +258,7 @@ if (!isset($_SESSION['admin_name'])) {
                 document.getElementById('loading-spinner').style.display = 'block';
                 // Gửi AJAX request
                 $.ajax({
-                    url: 'http://localhost/Medicare/index.php?controller=appointment&action=update_result',
+                    url: '<?php echo BASE_URL ?>/index.php?controller=appointment&action=update_result',
                     type: 'POST',
                     data: formData,
                     contentType: false,

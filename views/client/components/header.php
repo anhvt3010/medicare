@@ -1,22 +1,22 @@
 <header id="header" class="fixed-top">
     <div class="container d-flex align-items-center gap-2">
-      <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero" class="logo me-auto">
+      <a href="<?php echo HOME_CLIENT_URL ?>" class="logo me-auto">
         <img   src="assets/img/Medicare.png" alt="">
       </a>
 
       <nav id="navbar" class="navbar order-last order-lg-0">
         <ul>
-          <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#hero">Trang chủ</a></li>
-          <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#about">Giới thiệu</a></li>
-          <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#services">Chuyên khoa</a></li>
-          <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#doctors">Bác sĩ</a></li>
-            <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=home#contact">Liên hệ</a></li>
-            <li><a class="nav-link scrollto" href="http://localhost/Medicare/index.php?controller=home&action=search_client">Tra cứu</a></li>
+          <li><a class="nav-link scrollto" href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#hero">Trang chủ</a></li>
+          <li><a class="nav-link scrollto" href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#about">Giới thiệu</a></li>
+          <li><a class="nav-link scrollto" href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#services">Chuyên khoa</a></li>
+          <li><a class="nav-link scrollto" href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#doctors">Bác sĩ</a></li>
+            <li><a class="nav-link scrollto" href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#contact">Liên hệ</a></li>
+            <li><a class="nav-link scrollto" href="<?php echo BASE_URL ?>/index.php?controller=home&action=search_client">Tra cứu</a></li>
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
       </nav>
 
-      <a href="http://localhost/Medicare/index.php?controller=home&action=appointment"
+      <a href="<?php echo BASE_URL ?>/index.php?controller=home&action=appointment"
          class="appointment-btn scrollto" style="text-decoration: none"><span class="d-none d-md-inline">ĐẶT LỊCH KHÁM</span></a>
 
         <?php
@@ -33,10 +33,10 @@
                         Xin chào: ' . htmlspecialchars($username) . '
                       </a>
                       <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=patient&action=profile">
+                        <li><a class="dropdown-item" href="'. BASE_URL .'/index.php?controller=patient&action=profile">
                             <i class="fa-solid fa-user"></i>&nbsp;&nbsp;Thông tin cá nhân
                         </a></li>
-                        <li><a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=patient&action=history">
+                        <li><a class="dropdown-item" href="'. BASE_URL .'/index.php?controller=patient&action=history">
                             <i class="fa-solid fa-clock-rotate-left"></i>&nbsp;&nbsp;Lịch sử khám
                         </a></li>
                         <li>
@@ -72,6 +72,6 @@
 </div>
 <script>
     function logout() {
-        window.location.href = "http://localhost/Medicare/index.php?controller=home&action=logout";
+        window.location.href = "<?php echo BASE_URL ?>/index.php?controller=home&action=logout";
     }
 </script>

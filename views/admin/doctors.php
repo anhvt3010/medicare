@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 } else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -20,16 +20,16 @@ if (!isset($_SESSION['admin_name'])) {
     <title>Danh sách bác sĩ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\material-design-icons\css\material-design-iconic-font.min.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib\material-design-icons\css\material-design-iconic-font.min.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\select2\css\select2.min.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib\select2\css\select2.min.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\bootstrap-slider\css\bootstrap-slider.min.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib\bootstrap-slider\css\bootstrap-slider.min.css">
     <link rel="stylesheet" type="text/css"
-          href="http://localhost/Medicare/views/admin/assets/lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css\app.css" type="text/css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css\app.css" type="text/css">
     <!--    icon-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
@@ -138,13 +138,11 @@ if (!isset($_SESSION['admin_name'])) {
         </div>
     </div>
     <?php include "doctor-add.php"; ?>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -220,7 +218,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                    <a href='http://localhost/Medicare/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
+                                    <a href='<?php echo BASE_URL ?>/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
                                        type='button' class='dropdown-item'>Xem chi tiết</a>
                                 </div>
                             </div>
@@ -547,7 +545,7 @@ if (!isset($_SESSION['admin_name'])) {
 
 
                 $.ajax({
-                    url: 'http://localhost/Medicare/index.php?controller=doctor&action=add',
+                    url: '<?php echo BASE_URL ?>/index.php?controller=doctor&action=add',
                     type: 'POST',
                     data: formData,
                     contentType: false, // Không set contentType

@@ -135,7 +135,7 @@ class AppointmentController extends BaseController
                 ]);
             }
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. NOT_FOUND_URL);
             exit();
         }
     }

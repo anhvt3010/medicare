@@ -65,7 +65,7 @@ $(document).ready(function () {
         console.log('Bác sĩ:  + ', parseInt(document.getElementById('selected-doctor').value,10))
 
         $.ajax({
-            url: 'http://localhost/Medicare/index.php',
+            url:  baseUri + '/index.php',
             type: 'GET',
             data: {
                 controller: 'appointment',

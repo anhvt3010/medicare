@@ -51,7 +51,7 @@ class EmployeeController extends BaseController {
             if (isset($_FILES['avt']) && $_FILES['avt']['error'] == 0) {
                 $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avt']['tmp_name']));
             } else {
-                $avt = 'http://localhost/Medicare/assets/img/doctors/doctor_default.png';
+                $avt = BASE_URL .'/assets/img/doctors/doctor_default.png';
             }
 
             $result = $this->employeeModel->addEmployee($name,$dob, $email, $phone, $gender, $address, $position_id, $status, $avt, $update_by);
@@ -64,7 +64,7 @@ class EmployeeController extends BaseController {
                 'result' => $result,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. BASE_URL .'/index.php?controller=home&action=not_found');
             exit();
         }
     }
@@ -115,7 +115,7 @@ class EmployeeController extends BaseController {
                 'result' => $result,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. BASE_URL .'/index.php?controller=home&action=not_found');
             exit();
         }
     }
@@ -135,7 +135,7 @@ class EmployeeController extends BaseController {
                 'employee' => $employee,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. NOT_FOUND_URL);
             exit();
         }
     }

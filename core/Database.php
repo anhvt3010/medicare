@@ -5,7 +5,7 @@ class Database{
     const PASSWORD = '';
     const DATABASE = 'medicare';
 
-    public function connect()
+    public function connect(): false|mysqli
     {
         $connect = mysqli_connect(self::HOST, self::USERNAME, self::PASSWORD, self::DATABASE);
         mysqli_set_charset($connect, 'utf8');

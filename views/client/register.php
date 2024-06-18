@@ -34,7 +34,7 @@
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="d-flex justify-content-center">
                     <div class="col-12 col-xl-9">
-                        <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero"
+                        <a href="<?php echo HOME_CLIENT_URL ?>"
                            class="logo me-auto">
                             <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345"
                                  alt="BootstrapBrain Logo">
@@ -57,7 +57,7 @@
                             <div class="col-12">
                                 <div>
                                     <h3>Đăng Kí</h3>
-                                    <p>Bạn đã có tài khoản? <a href="http://localhost/Medicare/index.php?controller=auth&action=login">Đăng nhập</a></p>
+                                    <p>Bạn đã có tài khoản? <a href="<?php echo LOGIN_CLIENT_URL ?>">Đăng nhập</a></p>
                                 </div>
                             </div>
                         </div>
@@ -111,7 +111,7 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 
 <script>
@@ -178,7 +178,7 @@
         if (isValid) {
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=auth&action=processRegister',
+                url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=processRegister',
                 type: 'POST',
                 data: formData,
                 contentType: false,
@@ -186,7 +186,7 @@
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        success_toast('http://localhost/Medicare/index.php?controller=auth&action=login')
+                        success_toast('<?php echo LOGIN_CLIENT_URL ?>')
                         console.log('Thông tin session:', response['sessionData']);
                     } else {
                         if (response['message'] === 'Số điện thoại đã được đăng ký') {

@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 } else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -102,8 +102,6 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import-script.php' ?>
 <script>
@@ -166,7 +164,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                 </button>
                             <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                <a href="http://localhost/Medicare/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
+                                <a href="<?php echo BASE_URL ?>/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
                                    type='button' class='dropdown-item'>Xem chi tiết</a>
                             </div>
                         </div>

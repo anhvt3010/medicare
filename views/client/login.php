@@ -1,7 +1,6 @@
 <?php
-// Kiểm tra xem người dùng đã đăng nhập hay chưa
 if (isset($_SESSION['user_phone'])) {
-    header("Location: http://localhost/Medicare/index.php?controller=home&action=home");
+    header("Location: ". HOME_CLIENT_URL);
     exit();
 }
 ?>
@@ -52,7 +51,7 @@ if (isset($_SESSION['user_phone'])) {
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="d-flex justify-content-center" style="background-color: #3fbbc0; color: white">
                     <div class="col-12 col-xl-9">
-                        <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero"
+                        <a href="<?php echo HOME_CLIENT_URL ?>"
                            class="logo me-auto">
                             <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345"
                                  alt="BootstrapBrain Logo">
@@ -78,9 +77,10 @@ if (isset($_SESSION['user_phone'])) {
                             <div class="col-12">
                                 <div>
                                     <h3>Đăng Nhập</h3>
-                                    <p>Bạn không có tài khoản? <a
-                                                href="http://localhost/Medicare/index.php?controller=register&action=register">Đăng
-                                            kí</a></p>
+                                    <p>
+                                        Bạn không có tài khoản?
+                                        <a href="<?php echo REGISTER_URL ?>"> Đăng kí</a>
+                                    </p>
                                 </div>
                             </div>
                         </div>
@@ -115,13 +115,13 @@ if (isset($_SESSION['user_phone'])) {
                         <div class="row">
                             <div class="col-12">
                                 <div class="d-flex gap-2 gap-md-4 flex-column flex-md-row justify-content-md-end mt-3">
-                                    <a href="http://localhost/Medicare/index.php?controller=auth&action=confirm_phone">Quên mật khẩu</a>
+                                    <a href="<?php echo FORGOT_URL ?>">Quên mật khẩu</a>
                                 </div>
                             </div>
                         </div>
                         <div class="row mt-3">
                             <div class="col-12">
-                                <a href="http://localhost/Medicare/index.php?controller=auth&action=loginAdmin"
+                                <a href="<?php echo LOGIN_ADMIN_URL ?>"
                                    style="color: #3fbbc0; margin-right: 10px">Đăng nhập quản trị
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(63, 187, 192, 1);transform: ;msFilter:;">
                                         <path d="M10.296 7.71 14.621 12l-4.325 4.29 1.408 1.42L17.461 12l-5.757-5.71z"></path>
@@ -141,7 +141,7 @@ if (isset($_SESSION['user_phone'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -204,7 +204,7 @@ if (isset($_SESSION['user_phone'])) {
         if (isValid) {
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=auth&action=processLoginClient',
+                url: '<?php echo PROCESS_LOGIN_CLIENT_URL ?>',
                 type: 'POST',
                 data: formData,
                 contentType: false, // Không set contentType
@@ -212,7 +212,7 @@ if (isset($_SESSION['user_phone'])) {
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        success_toast('http://localhost/Medicare/index.php?controller=home&action=home')
+                        success_toast('<?php echo HOME_CLIENT_URL ?>')
                         console.log('Thông tin session:', response['sessionData']);
                     } else {
                         failed_toast(response['message'])
@@ -225,7 +225,10 @@ if (isset($_SESSION['user_phone'])) {
                         document.getElementById('loading-spinner').style.display = 'none';
                     }
                 },
-                error: function() {
+                error: function(xhr, status, error) {
+                    console.error('AJAX Error:', error);
+                    console.error('Status:', status);
+                    console.error('Response:', xhr.responseText);
                     failed_toast("Có lỗi xảy ra, vui lòng thử lại.")
                     document.getElementById('loading-spinner').style.display = 'none';
                 }

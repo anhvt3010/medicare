@@ -9,7 +9,7 @@
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css/app.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css/app.css" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet">
 
 </head>
@@ -102,10 +102,10 @@
 </div>
 <?php include "components/footer.html" ?>
 
-<script src="http://localhost/Medicare/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
+<script src="<?php echo BASE_URL ?>/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -147,7 +147,7 @@
         function handleSearch() {
             loadingSpinner.style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=patient&action=search',
+                url: '<?php echo BASE_URL ?>/index.php?controller=patient&action=search',
                 type: 'POST',
                 data: {
                     phone: searchInput.value
@@ -232,7 +232,7 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-left">
                             <a type="button" class="dropdown-item"
-                               href="http://localhost/Medicare/index.php?controller=appointment&action=detail_client&id=${appointment.id}">Chi tiết</a>
+                               href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail_client&id=${appointment.id}">Chi tiết</a>
                         </div>
                     </div>
                 </td>

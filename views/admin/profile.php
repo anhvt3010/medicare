@@ -1,3 +1,10 @@
+<?php
+session_start();
+if (!isset($_SESSION['admin_name'])) {
+    header('Location: '. LOGIN_ADMIN_URL);
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -172,14 +179,12 @@
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 
 <?php include 'import-script.php'?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
@@ -217,7 +222,7 @@
 
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=auth&action=processChangePasswordAdmin',
+                url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=processChangePasswordAdmin',
                 type: 'POST',
                 data: formData,
                 processData: false,
@@ -225,7 +230,7 @@
                 success: function (response) {
                     if(response['success'] === true) {
                         console.log(response);
-                        success_toast('http://localhost/Medicare/index.php?controller=employee&action=profile');
+                        success_toast('<?php echo BASE_URL ?>/index.php?controller=employee&action=profile');
                     } else {
                         failed_toast(response['message']);
                         if (response['message'] === 'Mật khẩu hiện tại không đúng') {

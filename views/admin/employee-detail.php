@@ -1,7 +1,7 @@
 <?php
-session_start(); // Khởi động session
+session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: '. LOGIN_ADMIN_URL);
     exit();
 }
 ?>
@@ -209,7 +209,7 @@ if (!isset($_SESSION['admin_name'])) {
                 </div>
                 <div class="d-flex justify-content-between p-3">
                     <a id="backButton" class="btn btn-danger"
-                       href="http://localhost/Medicare/index.php?controller=employee&action=index">Quay lại danh
+                       href="<?php echo BASE_URL ?>/index.php?controller=employee&action=index">Quay lại danh
                         sách</a>
                     <button type="button" class="btn btn-primary" id="editButtonDoctor">
                         Chỉnh sửa
@@ -236,14 +236,12 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 
 <?php include 'import-script.php'?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
@@ -319,14 +317,14 @@ if (!isset($_SESSION['admin_name'])) {
             document.getElementById('loading-spinner').style.display = 'block';
 
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=employee&action=update',
+                url: '<?php echo BASE_URL ?>/index.php?controller=employee&action=update',
                 type: 'POST',
                 data: formData,
                 contentType: false, // Không set contentType
                 processData: false, // Không xử lý dữ liệu
                 success: function (response) {
                     console.log(response);
-                    success_toast('http://localhost/Medicare/index.php?controller=employee&action=index');
+                    success_toast('<?php echo BASE_URL ?>/index.php?controller=employee&action=index');
                     $("#loading-spinner").hide()
                 },
                 error: function () {

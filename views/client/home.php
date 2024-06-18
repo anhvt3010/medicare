@@ -41,7 +41,7 @@
     <!-- ======= Featured Services Section ======= -->
     <?php include "components/featured-services.html" ?>
     <!-- ======= Cta Section ======= -->
-    <?php include "components/cta.html" ?>
+    <?php include "components/cta.php" ?>
     <!-- ======= About Us Section ======= -->
     <?php include "components/about.html"; ?>
     <!-- ======= Counts Section ======= -->

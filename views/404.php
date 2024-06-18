@@ -48,7 +48,7 @@
                     <h3 class="h2 mb-2">Ối! Không xong rồi.</h3>
                     <p class="mb-5">Trang bạn đang tìm kiếm không được tìm thấy.</p>
                     <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" style="background-color: #3fbbc0; border-color: #3fbbc0"
-                       href="http://localhost/Medicare/index.php?controller=home&action=home" role="button">Trở lại trang chủ</a>
+                       href="<?php echo HOME_CLIENT_URL ?>" role="button">Trở lại trang chủ</a>
                 </div>
             </div>
         </div>
