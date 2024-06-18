@@ -3,6 +3,7 @@
         "phpmailer/phpmailer": "^6.9",
       "ext-mysqli": "*",
       "ext-pdo": "*",
-        "cloudinary/cloudinary_php": "^2.14"
+        "cloudinary/cloudinary_php": "^2.14",
+        "spatie/async": "^1.6"
     }
 }

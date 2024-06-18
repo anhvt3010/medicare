@@ -262,6 +262,7 @@
                 $.ajax({
                     url: 'http://localhost/Medicare/index.php',
                     type: 'POST',
+                    // timeout: 30000,
                     data: {
                         controller: 'appointment',
                         action: 'create',
@@ -275,13 +276,17 @@
                         patientPhone: patientPhone,
                         patientEmail: patientEmail,
                         patientDescription: patientDescription,
+
+                        specialtyName: document.getElementById('selected-specialty-name').value,
+                        doctorName: document.getElementById('selected-doctor-name').value,
+                        timeSlot : document.getElementById('selected-time-slot').value
                     },
                     success: function (message) {
                         console.log(message);
                         success_toast('http://localhost/Medicare/index.php?controller=home&action=home')
                     },
-                    error: function (error) {
-                        console.error('Error:', error);
+                    error: function(xhr, status, error) {
+                        console.error('Error:', status, error);
                         failed_toast('Có lỗi xảy ra khi tạo lịch hẹn.')
                     },
                 });

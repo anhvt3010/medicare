@@ -156,6 +156,11 @@ if (!isset($_SESSION['admin_name'])) {
             appointmentUpdate['patient_email'] = response['patient_email']
             appointmentUpdate['patient_description'] = response['patient_description']
             appointmentUpdate['status'] = parseInt(response['status'], 10)
+
+            appointmentUpdate['specialty_name'] = response['specialty_name']
+            appointmentUpdate['employee_name'] = response['employee_name']
+            appointmentUpdate['patient_phone'] = response['patient_phone']
+            appointmentUpdate['time_slot'] = response['time_slot']
             return appointmentUpdate;
         }
 
@@ -234,6 +239,11 @@ if (!isset($_SESSION['admin_name'])) {
                     patient_email: appointmentUpdate['patient_email'],
                     patient_description: appointmentUpdate['patient_description'],
                     status: appointmentUpdate['status'],
+
+                    specialty_name:  appointmentUpdate['specialty_name'],
+                    employee_name: appointmentUpdate['employee_name'],
+                    phone: appointmentUpdate['patient_phone'],
+                    time_slot: appointmentUpdate['time_slot'].slice(0, 5)
                 },
                 success: function (response) {
                     success_toast('http://localhost/Medicare/index.php?controller=appointment&action=confirm')

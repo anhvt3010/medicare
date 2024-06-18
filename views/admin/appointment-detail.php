@@ -253,6 +253,8 @@ if (!isset($_SESSION['admin_name'])) {
                 var formData = new FormData();
                 formData.append('pdfFile', file);
                 formData.append('appointment_id', appointmentId);
+                formData.append('name', '<?php echo $appointment['patient_name']; ?>');
+                formData.append('email', '<?php echo $appointment['patient_email']; ?>');
 
 
                 document.getElementById('loading-spinner').style.display = 'block';
@@ -268,7 +270,7 @@ if (!isset($_SESSION['admin_name'])) {
                         $("#loading-spinner").hide();
                     },
                     error: function () {
-                        alert('Có lỗi xảy ra, vui lòng thử lại.');
+                        failed_toast('Có lỗi xảy ra, vui lòng thử lại.');
                         $("#loading-spinner").hide();
                     }
                 });

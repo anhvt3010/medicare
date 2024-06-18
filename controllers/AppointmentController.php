@@ -1,5 +1,8 @@
 <?php
 require_once 'BaseController.php';
+require_once 'services/sendMail.php';
+use Spatie\Async\Pool;
+
 class AppointmentController extends BaseController
 {
     private $timeSlotModel;
@@ -22,22 +25,6 @@ class AppointmentController extends BaseController
         $this->specialtyModel = new SpecialtyModel();
     }
 
-    public function getByDateAndDoctor()
-    {
-        $date_slot = isset($_GET['dateSlot']) ? $_GET['dateSlot'] : null;
-        $doctorId = isset($_GET['doctorId']) ? $_GET['doctorId'] : null;
-        $listTimeSlot = $this->timeSlotModel->getByDateAndDoctor($date_slot, $doctorId);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($listTimeSlot);
-            exit;
-        } else {
-            return $this->view('test', [
-                'listTimeSlot' => $listTimeSlot
-            ]);
-        }
-    }
-
     /**
      * @throws Exception
      */
@@ -54,16 +41,44 @@ class AppointmentController extends BaseController
         $patientPhone = $_POST['patientPhone'];
         $patientEmail = $_POST['patientEmail'];
         $patientDescription = $_POST['patientDescription'];
+
+        $specialtyName = $_POST['specialtyName'];
+        $doctorName = $_POST['doctorName'];
+        $timeSlot = $_POST['timeSlot'];
         $appointment = $this->appointmentModel->createAppointment(
             $specialId, $doctorId, $dateSlot, $timeSlotId,
-            $patientName, $patientGender, $patientDob, $patientPhone, $patientEmail, $patientDescription,$patient_id);
+            $patientName, $patientGender, $patientDob, $patientPhone, $patientEmail, $patientDescription, $patient_id);
+
+        $pool = Pool::create();
+
+        $pool->add(function () use ($specialtyName, $doctorName, $dateSlot, $timeSlot, $patientName, $patientPhone, $patientEmail, $patientDescription) {
+            return send_mail($specialtyName, $doctorName, $dateSlot, $timeSlot, $patientName, $patientPhone, $patientEmail, $patientDescription);
+        });
+
         if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
             header('Content-Type: application/json');
             echo json_encode($appointment);
             exit;
         } else {
             return $this->view('test', [
-                'message' => $appointment
+                'message' => $appointment,
+                'result' => 'Email is being sent asynchronously'
+            ]);
+        }
+    }
+
+    public function getByDateAndDoctor()
+    {
+        $date_slot = isset($_GET['dateSlot']) ? $_GET['dateSlot'] : null;
+        $doctorId = isset($_GET['doctorId']) ? $_GET['doctorId'] : null;
+        $listTimeSlot = $this->timeSlotModel->getByDateAndDoctor($date_slot, $doctorId);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($listTimeSlot);
+            exit;
+        } else {
+            return $this->view('test', [
+                'listTimeSlot' => $listTimeSlot
             ]);
         }
     }
@@ -95,8 +110,21 @@ class AppointmentController extends BaseController
             $patient_description = $_POST['patient_description'];
             $status = $_POST['status'];
 
+            $phone = $_POST['phone'];
+
+            $specialtyName = $_POST['specialty_name'];
+            $doctorName = $_POST['employee_name'];
+            $timeSlot = $_POST['time_slot'];
+
             $update = $this->appointmentModel->updateAppointment($id, $employee_id, $specialty_id, $date_slot, $time_id,
                 $patient_name, $patient_gender, $patient_email, $patient_description, $status, $update_by);
+
+            $pool = Pool::create();
+
+            $pool->add(function () use ($specialtyName, $doctorName, $date_slot, $timeSlot, $patient_name, $phone, $patient_email, $patient_description) {
+                return confirm_mail($specialtyName, $doctorName, $date_slot, $timeSlot, $patient_name, $phone, $patient_email, $patient_description);
+            });
+
             if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
                 header('Content-Type: application/json');
                 echo json_encode($update);
@@ -149,8 +177,6 @@ class AppointmentController extends BaseController
 
         $listSpecialties = $this->specialtyModel->getSpecialtiesForAdmin();
         $listDoctors = $this->doctorModel->getDoctorForAdmin();
-
-
 
         $specialty= $_GET['specialty'] ?? null;
         $doctor = $_GET['doctor'] ?? null;
@@ -214,23 +240,46 @@ class AppointmentController extends BaseController
 
     public function update_result()
     {
-        $id = $_POST['appointment_id'];
+        try {
+            $id = $_POST['appointment_id'];
+            $name = $_POST['name'];
+            $email = $_POST['email'];
+            $result = null;
 
-        if (isset($_FILES['pdfFile']) && $_FILES['pdfFile']['error'] == 0) {
-            $result = $this->uploadToCloudinary($this->escapeBackslashes($_FILES['pdfFile']['tmp_name']));
+            if (isset($_FILES['pdfFile']) && $_FILES['pdfFile']['error'] == 0) {
+                $result = $this->uploadToCloudinary($this->escapeBackslashes($_FILES['pdfFile']['tmp_name']));
+                if (!$result) {
+                    throw new Exception("Lỗi tải file lên Cloudinary");
+                }
+            } else {
+                throw new Exception("Không có file được tải lên hoặc file có lỗi");
+            }
+
+            $update = $this->appointmentModel->updateResultAppointment($id, $result);
+            if (!$update) {
+                throw new Exception("Lỗi cập nhật kết quả cuộc hẹn");
+            }
+
+            $mailResult = result_mail($name, $email, $result);
+            if (!$mailResult) {
+                throw new Exception("Lỗi gửi email kết quả");
+            }
+
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                echo json_encode(['success' => true, 'message' => 'Cập nhật và gửi email thành công']);
+            } else {
+                return $this->view('test', ['message' => 'Cập nhật và gửi email thành công']);
+            }
+        } catch (Exception $e) {
+            if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+                header('Content-Type: application/json');
+                http_response_code(500);
+                echo json_encode(['success' => false, 'message' => $e->getMessage()]);
+            } else {
+                return $this->view('test', ['message' => $e->getMessage()]);
+            }
         }
-
-        $update = $this->appointmentModel->updateResultAppointment($id, $result);
-        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
-            header('Content-Type: application/json');
-            echo json_encode($update);
-            exit;
-        } else {
-            return $this->view('test', [
-                'message' => $update
-            ]);
-        }
-
     }
 
     public function detail(): void
@@ -274,4 +323,15 @@ class AppointmentController extends BaseController
     {
         return str_replace("\\", "\\\\", $string);
     }
+
+    public function validate_email() {
+        $email = $_GET['email'] ?? null;
+        // Kiểm tra MX record của tên miền trong email
+        $domain = substr(strrchr($email, "@"), 1);
+        if (!checkdnsrr($domain, "MX")) {
+            echo false;
+        }
+        echo true;
+    }
+
 }
