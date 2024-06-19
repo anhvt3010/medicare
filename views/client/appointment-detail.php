@@ -14,9 +14,11 @@
 
 </head>
 <body>
-<?php include "components/topbar.php" ?>
-<?php include "components/header.php" ?>
-<body>
+<?php
+session_start();
+include "components/topbar.php";
+include "components/header.php" ;
+?>
 <main class="container p-0" style="margin-top: 150px!important; margin-bottom: 30px">
     <div class="card card-table">
         <div class="main-content container-fluid row">

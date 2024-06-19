@@ -178,13 +178,35 @@ if (!isset($_SESSION['admin_name'])) {
                     </div>
                     <hr>
                     <div class="mt-3 d-flex justify-content-between">
-                        <a id="backButton" class="btn btn-danger"
-                           href="http://localhost/Medicare/index.php?controller=appointment&action=index">Danh sách lịch khám</a>
-                        <form id="uploadForm" enctype="multipart/form-data">
-                            <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" hidden="hidden">
-                            <input type="hidden" name="appointment_id" value="<?php echo $appointment['id']; ?>" hidden="hidden">
-                            <button class="btn btn-primary" type="button" id="uploadButton">Tải lên kết quả</button>
-                        </form>
+                        <div>
+                            <a id="backButton" class="btn btn-danger mr-3"
+                               href="http://localhost/Medicare/index.php?controller=appointment&action=index">Danh sách lịch khám</a>
+                            <?php
+                            // Lấy ngày và giờ hiện tại
+                            $currentDate = date('Y-m-d');
+                            $currentTime = date('H:i'); // Lấy giờ và phút hiện tại
+
+                            $currentDate = convertDate::convertFormYMDToTimestamp($currentDate);
+
+                            if ($appointment['status'] == 1) {
+                                if ($appointment['date_slot'] > $currentDate ||
+                                    ($appointment['date_slot'] == $currentDate && $appointment['time_slot'] > $currentTime)) {
+                                    // Hiển thị nút nếu các điều kiện được thỏa mãn
+                                    echo '<button id="btnExpired" class="btn btn-warning">Chuyển về danh sách quá giờ</button>';
+                                }
+                            }
+                            ?>
+                        </div>
+                        <?php
+                            if($appointment['status'] == 1 || $appointment['status'] == 2){
+                                echo '<form id="uploadForm" enctype="multipart/form-data">
+                                        <input type="file" id="pdfFile" name="pdfFile" accept=".pdf" hidden="hidden">
+                                        <input type="hidden" name="appointment_id" value=" '.$appointment['id'].'" hidden="hidden">
+                                        <button class="btn btn-primary" type="button" id="uploadButton">Tải lên kết quả</button>
+                                    </form>';
+                            }
+                        ?>
+
                     </div>
                 </div>
             </div>
