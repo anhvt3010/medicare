@@ -9,7 +9,7 @@
     <link href="assets/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css/app.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css/app.css" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet">
     <style>
         .error {
@@ -43,22 +43,22 @@
         </div>
     </form>
     <div class="d-flex justify-content-between">
-        <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero"
+        <a href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#hero"
            type="button" class="btn btn-secondary" data-dismiss="modal">Quay lại trang chủ</a>
         <button id="btnSaveChange" type="button" class="btn btn-primary">Thay đổi mật khẩu</button>
     </div>
 </main>
 <?php include "components/footer.html" ?>
 
-<script src="http://localhost/Medicare/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
+<script src="<?php echo BASE_URL ?>/views/admin/assets/lib\jquery\jquery.min.js" type="text/javascript"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $('#loading-spinner').hide();
         if(<?php echo isset($_GET['phone']) ? json_encode($_GET['phone']) : 'null'; ?> === null) {
-            window.location.href = `http://localhost/Medicare/index.php?controller=home&action=not_found`;
+            window.location.href = `<?php echo BASE_URL ?>/index.php?controller=home&action=not_found`;
         }
 
         var newPassword = document.getElementById('newPassword');
@@ -89,7 +89,7 @@
 
             $('#loading-spinner').show();
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=auth&action=process_forgot_password',
+                url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=process_forgot_password',
                 type: 'POST',
                 data: {
                     phone : <?php echo json_encode($_GET['phone']); ?>,
@@ -97,7 +97,7 @@
                 },
                 success: function (response) {
                     if(response['success'] === true) {
-                        success_toast(response['message'], 'http://localhost/Medicare/index.php?controller=home&action=login')
+                        success_toast(response['message'], '<?php echo BASE_URL ?>/index.php?controller=home&action=login')
                     } else {
                         failed_toast(response['message'])
                         $('#loading-spinner').hide();

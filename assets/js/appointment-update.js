@@ -59,9 +59,7 @@ $(document).ready(function () {
         var specialtyId = document.getElementById('selected-specialty').value;
 
         console.log('Ngày đã chọn:', dateTimestamp);
-        console.log('ngày chưa chuyển', date.toLocaleDateString())
         document.getElementById('date-slot').value = dateTimestamp
-        // document.getElementById('selected-date-slot').value = date.toLocaleDateString()
         console.log('Chuyen khoa: + ', specialtyId)
         console.log('Bác sĩ:  + ', parseInt(document.getElementById('selected-doctor').value,10))
 
@@ -80,7 +78,7 @@ $(document).ready(function () {
 
         else {
             $.ajax({
-                url: 'http://localhost/Medicare/index.php',
+                url:  baseUri + '/index.php',
                 type: 'GET',
                 data: {
                     controller: 'appointment',

@@ -77,7 +77,7 @@ class DoctorController extends BaseController {
                 'result' => $result,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: ' .NOT_FOUND_URL);
             exit();
         }
     }
@@ -101,7 +101,7 @@ class DoctorController extends BaseController {
             if (isset($_FILES['avt']) && $_FILES['avt']['error'] == 0) {
                 $avt = $this->uploadImageToCloudinary($this->escapeBackslashes($_FILES['avt']['tmp_name']));
             } else {
-                $avt = 'http://localhost/Medicare/assets/img/doctors/doctor_default.png';
+                $avt = BASE_URL .'/assets/img/doctors/doctor_default.png';
             }
 
             $result = $this->doctorModel->addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by);
@@ -114,7 +114,7 @@ class DoctorController extends BaseController {
                 'result' => $result,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. NOT_FOUND_URL);
             exit();
         }
     }

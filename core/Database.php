@@ -5,7 +5,13 @@ class Database{
     const PASSWORD = '';
     const DATABASE = 'medicare';
 
-    public function connect()
+//    product
+//    const HOST = 'localhost';
+//    const USERNAME = 'id22328282_medicare';
+//    const PASSWORD = 'Medicare3010@';
+//    const DATABASE = 'id22328282_medicare';
+
+    public function connect(): false|mysqli
     {
         $connect = mysqli_connect(self::HOST, self::USERNAME, self::PASSWORD, self::DATABASE);
         mysqli_set_charset($connect, 'utf8');

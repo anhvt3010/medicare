@@ -10,7 +10,7 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link href="assets/css/style.css" rel="stylesheet">
-    <link rel="stylesheet" href="http://localhost/Medicare/views/admin/assets/css/app.css" type="text/css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css/app.css" type="text/css">
 
 
 </head>
@@ -112,9 +112,8 @@
                                             // Lấy màu và tên trạng thái dựa trên $appointment['status']
                                             $statusInfo = $statusColors[$appointment['status']] ?? $statusColors['default'];
                                             ?>
-                                            <div class="btn btn-secondary"
-                                                 style="width: 150px; color: whitesmoke; font-weight: normal;
-                                                     background-color: <?php echo $statusInfo[0]; ?>;">
+                                            <div style="width: 150px; color: whitesmoke; font-weight: normal;
+                                                         height: 30px; line-height: 30px; background-color: <?php echo $statusInfo[0]; ?>;">
                                                 <?php echo $statusInfo[1]; ?>
                                             </div>
                                         </td>
@@ -129,9 +128,8 @@
                                             // Chọn trạng thái dựa trên có kết quả hay không
                                             $statusInfo = $appointment['result'] ? $statusColors[1] : $statusColors[0];
                                             ?>
-                                            <div class="btn btn-secondary"
-                                                 style="width: 150px; color: whitesmoke; font-weight: normal;
-                                                         background-color: <?php echo $statusInfo[0]; ?>;">
+                                            <div style="width: 150px; height: 30px; line-height: 30px;
+                                                    color: whitesmoke; font-weight: normal; background-color: <?php echo $statusInfo[0]; ?>;">
                                                 <?php echo $statusInfo[1]; ?>
                                             </div>
                                         </td>
@@ -147,7 +145,7 @@
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-left">
                                                     <a type="button" class="dropdown-item"
-                                                       href="http://localhost/Medicare/index.php?controller=appointment&action=detail_client&id=<?php echo $appointment['id'] ?>">Chi tiết</a>
+                                                       href="<?php echo BASE_URL ?>/index.php?controller=patient&action=detail_appointment&id=<?php echo $appointment['id'] ?>">Chi tiết</a>
                                                 </div>
                                             </div>
                                         </td>

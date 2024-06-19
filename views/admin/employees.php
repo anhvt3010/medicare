@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 } else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -31,7 +31,7 @@ if (!isset($_SESSION['admin_name'])) {
             <h2 class="page-head-title" style="font-size: 25px">Danh sách nhân viên</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
-                    <li class="breadcrumb-item"><a href="http://localhost/Medicare/index.php?controller=home&action=home_admin">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>/index.php?controller=home&action=home_admin">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý nhân viên</li>
                     <li class="breadcrumb-item active">Danh sách nhân viên</li>
                 </ol>
@@ -121,13 +121,11 @@ if (!isset($_SESSION['admin_name'])) {
     </div>
     <!-- Modal -->
     <?php include 'employee-add.php'?>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
@@ -201,7 +199,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                    <a href='http://localhost/Medicare/index.php?controller=employee&action=detail&employee_id=${employee.id}'
+                                    <a href='<?php echo BASE_URL ?>/index.php?controller=employee&action=detail&employee_id=${employee.id}'
                                        type='button' class='dropdown-item'>Xem chi tiết</a>
                                 </div>
                             </div>
@@ -525,7 +523,7 @@ if (!isset($_SESSION['admin_name'])) {
                 formData.append('avt', emAvt.files[0]);
                 document.getElementById('loading-spinner').style.display = 'block';
                 $.ajax({
-                    url: 'http://localhost/Medicare/index.php?controller=employee&action=add',
+                    url: '<?php echo BASE_URL ?>/index.php?controller=employee&action=add',
                     type: 'POST',
                     data: formData,
                     contentType: false,

@@ -1,7 +1,7 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 }
 ?>
@@ -213,7 +213,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a type="button" class="dropdown-item"
-                                                           href="http://localhost/Medicare/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>"
+                                                           href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>"
                                                            data-id="<?php echo $appointment['id'] ?>">Chi tiết</a>
                                                     </div>
                                                 </div>
@@ -304,9 +304,6 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
@@ -331,7 +328,7 @@ if (!isset($_SESSION['admin_name'])) {
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=today&page=1'
+    var url_appointment = '<?php echo BASE_URL ?>/index.php?controller=appointment&action=today&page=1'
 
     document.getElementById('button').addEventListener('click', function() {
         var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'

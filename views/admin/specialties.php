@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 } else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '.UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -32,7 +32,7 @@ if (!isset($_SESSION['admin_name'])) {
             <h2 class="page-head-title" style="font-size: 25px">Danh sách chuyên khoa</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
-                    <li class="breadcrumb-item"><a href="http://localhost/Medicare/index.php?controller=home&action=home_admin">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>/index.php?controller=home&action=home_admin">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý chuyên khoa</li>
                     <li class="breadcrumb-item active">Danh sách chuyên khoa</li>
                 </ol>
@@ -137,13 +137,11 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import-script.php'?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
@@ -195,7 +193,7 @@ if (!isset($_SESSION['admin_name'])) {
                                 </button>
                                 <div class='dropdown-menu dropdown-menu-right' role='menu'>
                                     <a class='dropdown-item '
-                                       href='http://localhost/Medicare/index.php?controller=specialty&action=get_one&specialtyId=${specialty.specialty_id}'>Xem chi tiết</a>
+                                       href='<?php echo BASE_URL ?>/index.php?controller=specialty&action=get_one&specialtyId=${specialty.specialty_id}'>Xem chi tiết</a>
 <!--                                    <a class='dropdown-item' href='#'>Xóa</a>-->
                                 </div>
                             </div>
@@ -400,7 +398,7 @@ if (!isset($_SESSION['admin_name'])) {
 
                 document.getElementById('loading-spinner').style.display = 'block';
                 $.ajax({
-                    url: 'http://localhost/Medicare/index.php?controller=specialty&action=add',
+                    url: '<?php echo BASE_URL ?>/index.php?controller=specialty&action=add',
                     type: 'GET',
                     data: {
                         specialtyName: specialtyName.value,

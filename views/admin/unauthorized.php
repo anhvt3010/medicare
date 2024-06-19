@@ -1,6 +1,6 @@
 <?php
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: '. LOGIN_ADMIN_URL);
     exit();
 }
 ?>
@@ -29,13 +29,11 @@ if (!isset($_SESSION['admin_name'])) {
         <a class="btn bsb-btn-5xl btn-dark rounded-pill px-5 fs-6 m-0" style="background-color: #3fbbc0; border-color: #3fbbc0"
            onclick="window.history.back();" role="button">Trở lại</a>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 <?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();

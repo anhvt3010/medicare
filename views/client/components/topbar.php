@@ -1,4 +1,3 @@
-
 <div id="topbar" class="d-flex align-items-center fixed-top">
     <div class="container d-flex align-items-center justify-content-center justify-content-md-between">
         <div class="align-items-center d-none d-md-flex">
@@ -11,7 +10,7 @@
             <?php
             if (!isset($_SESSION['user_phone'])) {
                 echo
-                '<a href="http://localhost/Medicare/index.php?controller=home&action=login" class="navbar order-last order-lg-0" style="color:white;">
+                '<a href="'. LOGIN_CLIENT_URL .'" class="navbar order-last order-lg-0" style="color:white;">
                   <i style="color: white;" class="fa fa-sign-in" aria-hidden="true"></i>
                   Đăng nhập
                 </a>';

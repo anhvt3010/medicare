@@ -37,7 +37,7 @@ class SpecialtyController extends BaseController
                 'specialty' => $specialty,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. NOT_FOUND_URL);
             exit();
         }
     }
@@ -77,7 +77,7 @@ class SpecialtyController extends BaseController
                 'specialty' => $specialty,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. BASE_URL .'/index.php?controller=home&action=not_found');
             exit();
         }
     }

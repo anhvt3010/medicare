@@ -83,7 +83,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST' && !empty($data)) {
 
     function fetchDoctorsBySpecialty(specialtyId) {
         $.ajax({
-            url: 'http://localhost/Medicare/index.php',
+            url: '<?php echo BASE_URL ?>/index.php',
             type: 'GET',
             data: {
                 controller: 'home',

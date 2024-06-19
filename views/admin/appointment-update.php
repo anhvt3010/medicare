@@ -1,7 +1,7 @@
 <?php
 session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: '. LOGIN_ADMIN_URL);
     exit();
 }
 ?>
@@ -17,7 +17,7 @@ if (!isset($_SESSION['admin_name'])) {
     <title>Xác nhận lịch khám</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'import-link-tag.php' ?>
-    <link href="http://localhost/Medicare/assets/css/appointment.css" rel="stylesheet">
+    <link href="<?php echo BASE_URL ?>/assets/css/appointment.css" rel="stylesheet">
     <style>
         #btn-action:focus {
             outline: none;
@@ -43,7 +43,7 @@ if (!isset($_SESSION['admin_name'])) {
             <h2 class="page-head-title">Cập nhật lịch khám</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
-                    <li class="breadcrumb-item"><a href="http://localhost/Medicare/index.php?controller=home&action=home_admin">Trang chủ</a></li>
+                    <li class="breadcrumb-item"><a href="<?php echo BASE_URL ?>/index.php?controller=home&action=home_admin">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý đặt lịch</li>
                     <li class="breadcrumb-item active">Cập nhật lịch khám</li>
                 </ol>
@@ -96,16 +96,13 @@ if (!isset($_SESSION['admin_name'])) {
         </div>
     </div>
 </div>
-<!--    pop-up sidebar-->
-<?php include 'pop-up-sidebar.php' ?>
 
-
-<script src="http://localhost/Medicare/assets/js/appointment-update.js"></script>
-<script src="http://localhost/Medicare/assets/js/validate-appointment.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/appointment-update.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/validate-appointment.js"></script>
 <?php include 'import-script.php'?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script type="text/javascript">
     $(document).ready(function () {
         App.init()
@@ -116,7 +113,7 @@ if (!isset($_SESSION['admin_name'])) {
         var appointmentUpdate = [];
 
         $.ajax({
-            url: 'http://localhost/Medicare/index.php',
+            url: '<?php echo BASE_URL ?>/index.php',
             type: 'GET',
             data: {
                 controller: 'appointment',
@@ -225,7 +222,7 @@ if (!isset($_SESSION['admin_name'])) {
             console.log('appointmentUpdated', appointmentUpdated)
 
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=appointment&action=update',
+                url: '<?php echo BASE_URL ?>/index.php?controller=appointment&action=update',
                 type: 'POST',
                 data: {
                     id: appointmentUpdated['id'],
@@ -245,7 +242,7 @@ if (!isset($_SESSION['admin_name'])) {
                     time_slot: appointmentUpdate['time_slot'].slice(0, 5)
                 },
                 success: function (response) {
-                    success_toast('http://localhost/Medicare/index.php?controller=appointment&action=confirm')
+                    success_toast('<?php echo BASE_URL ?>/index.php?controller=appointment&action=confirm')
                 },
                 error: function () {
                     failed_toast()

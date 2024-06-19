@@ -1,7 +1,7 @@
 <nav class="navbar navbar-expand fixed-top be-top-header">
     <div class="container-fluid">
         <div class="be-navbar-header">
-            <a href="http://localhost/Medicare/index.php?controller=home&action=home_admin" class="ml-5">
+            <a href="<?php echo BASE_URL ?>/index.php?controller=home&action=home_admin" class="ml-5">
                 <img src="assets/img/Medicare.png" alt="logo" width="150">
             </a>
         </div>
@@ -12,7 +12,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" data-toggle="dropdown"
                                                  role="button" aria-expanded="false">
-                        <img src="<?php echo $_SESSION['admin_avt'] ?? 'http://localhost/Medicare/assets/img/doctors/doctor_default.png' ?>" alt="Avatar">
+                        <img src="<?php echo $_SESSION['admin_avt'] ?? '<?php echo BASE_URL ?>/assets/img/doctors/doctor_default.png' ?>" alt="Avatar">
                         <span class="user-name"><?php echo $_SESSION['admin_name'] ?></span>
                     </a>
                     <div class="dropdown-menu" role="menu">
@@ -20,11 +20,11 @@
                             <div class="user-name"><?php echo $_SESSION['admin_name'] ?></div>
                             <div class="user-position online">Hoạt động</div>
                         </div>
-                        <a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=employee&action=profile">
+                        <a class="dropdown-item" href="<?php echo BASE_URL ?>/index.php?controller=employee&action=profile">
                             <span class="icon mdi mdi-face"></span>Tài khoản
                         </a>
                         <a  data-bs-toggle="modal" data-bs-target="#exampleModal"
-                            class="dropdown-item" href="http://localhost/Medicare/index.php?controller=auth&action=logout">
+                            class="dropdown-item" href="<?php echo BASE_URL ?>/index.php?controller=auth&action=logout">
                             <span class="icon mdi mdi-power"></span>Đăng xuất
                         </a>
                     </div>
@@ -53,6 +53,6 @@
 </div>
 <script>
     function logout() {
-        window.location.href = "http://localhost/Medicare/index.php?controller=home&action=logout";
+        window.location.href = "<?php echo BASE_URL ?>/index.php?controller=home&action=logout";
     }
 </script>

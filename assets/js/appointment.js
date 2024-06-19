@@ -90,7 +90,7 @@ $(document).ready(function () {
 
         else {
             $.ajax({
-                url: 'http://localhost/Medicare/index.php',
+                url:  baseUri + '/index.php',
                 type: 'GET',
                 data: {
                     controller: 'appointment',

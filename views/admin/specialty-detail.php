@@ -1,10 +1,10 @@
 <?php
 session_start();
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: '. NOT_FOUND_URL);
     exit();
 } else if ($_SESSION['role_id'] != 1){  // Chỉ admin
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -85,7 +85,7 @@ if (!isset($_SESSION['admin_name'])) {
                             <hr>
                             <div class="mt-3 d-flex justify-content-between">
                                 <a id="backButton" class="btn btn-danger"
-                                   href="http://localhost/Medicare/index.php?controller=specialty&action=index">Quay lại
+                                   href="<?php echo BASE_URL ?>/index.php?controller=specialty&action=index">Quay lại
                                     danh sách</a>
                                 <button id="editButton" class="btn btn-primary">Chỉnh sửa</button>
                             </div>
@@ -114,14 +114,12 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
 
 <?php include 'import-script.php' ?>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
@@ -182,13 +180,13 @@ if (!isset($_SESSION['admin_name'])) {
 
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=specialty&action=update',
+                url: '<?php echo BASE_URL ?>/index.php?controller=specialty&action=update',
                 type: 'POST',
                 data: formData,
                 processData: false,
                 contentType: false,
                 success: function (response) {
-                    success_toast('http://localhost/Medicare/index.php?controller=specialty&action=index')
+                    success_toast('<?php echo BASE_URL ?>/index.php?controller=specialty&action=index')
                     // document.getElementById('loading-spinner').style.display = 'none';
                 },
                 error: function () {

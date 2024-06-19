@@ -1,6 +1,6 @@
 <?php
 if (isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=home_admin');
+    header('Location: '. HOME_ADMIN_URL);
     exit();
 }
 ?>
@@ -53,7 +53,7 @@ if (isset($_SESSION['admin_name'])) {
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="d-flex justify-content-center" style="background-color: #1F5D60FF; color: white">
                     <div class="col-12 col-xl-9">
-                        <a href="http://localhost/Medicare/index.php?controller=home&action=home#hero"
+                        <a href="<?php echo HOME_ADMIN_URL ?>"
                            class="logo me-auto">
                             <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345"
                                  alt="BootstrapBrain Logo">
@@ -123,7 +123,7 @@ if (isset($_SESSION['admin_name'])) {
                             </div>
                             <div class="row mt-3">
                                 <div class="col-12">
-                                    <a href="http://localhost/Medicare/index.php?controller=auth&action=login"
+                                    <a href="<?php echo LOGIN_CLIENT_URL ?>"
                                        style="color: #1F5D60FF">Đăng nhập người dùng
                                         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" style="fill: rgba(31, 93, 96, 1);transform: ;msFilter:;">
                                             <path d="m13.061 4.939-2.122 2.122L15.879 12l-4.94 4.939 2.122 2.122L20.121 12z"></path>
@@ -161,9 +161,9 @@ if (isset($_SESSION['admin_name'])) {
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
-<script src="http://localhost/Medicare/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+<script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="http://localhost/Medicare/views/admin/assets/js/functions.js"></script>
+<script src="<?php echo BASE_URL ?>/views/admin/assets/js/functions.js"></script>
 
 <script>
     document.addEventListener('DOMContentLoaded', function () {
@@ -228,7 +228,7 @@ if (isset($_SESSION['admin_name'])) {
         if (isValid) {
             document.getElementById('loading-spinner').style.display = 'block';
             $.ajax({
-                url: 'http://localhost/Medicare/index.php?controller=auth&action=processLoginAdmin',
+                url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=processLoginAdmin',
                 type: 'POST',
                 data: formData,
                 contentType: false, // Không set contentType

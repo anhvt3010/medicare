@@ -38,7 +38,7 @@ class PatientController extends BaseController
                 'patient' => $patient,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '. BASE_URL .'/index.php?controller=home&action=not_found');
             exit();
         }
     }
@@ -75,7 +75,7 @@ class PatientController extends BaseController
                 ]);
             }
         } else {
-            header('http://localhost/Medicare/index.php?controller=home&action=login');
+            header(''. BASE_URL .'/index.php?controller=home&action=login');
             exit();
         }
     }
@@ -91,7 +91,7 @@ class PatientController extends BaseController
                 'listAppointments' => $listAppointments,
             ]);
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: '.NOT_FOUND_URL);
             exit();
         }
     }
@@ -130,7 +130,7 @@ class PatientController extends BaseController
                 ]);
             }
         } else {
-            header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+            header('Location: ' .NOT_FOUND_URL);
             exit();
         }
     }
@@ -148,5 +148,14 @@ class PatientController extends BaseController
                 'patient' => $patient,
             ]);
         }
+    }
+
+    public function detail_appointment(): void
+    {
+        $appointment_id = $_GET['id'];
+        $appointment = $this->appointmentModel->getAppointmentById($appointment_id);
+        $this->view('client.appointment-detail', [
+            'appointment' => $appointment,
+        ]);
     }
 }

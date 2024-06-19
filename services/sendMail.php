@@ -4,7 +4,6 @@ use PHPMailer\PHPMailer\Exception;
 
 require 'vendor/autoload.php';
 
-
 function send_mail($specialtyName, $doctorName, $dateSlot, $timeSlot, $patientName, $patientPhone, $patientEmail,$patientDescription ) {
     $mail = new PHPMailer(true); // Tạo một instance của PHPMailer
 
