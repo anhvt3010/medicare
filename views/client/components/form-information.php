@@ -3,7 +3,7 @@
         <h5>Nhập thông tin cá nhân</h5>
         <button id="autoInformation" class="btn btn-warning">Tự động nhập thông tin</button>
     </div>
-    <div class="col-6">
+    <div class="col-md-6">
         <div class="row mb-4">
             <div class="col-8">
                 <div class="input-group">
@@ -58,7 +58,7 @@
         </div>
     </div>
 <!--    <div style="width: 50%; margin: 0">-->
-    <div class="col-6 mb-4">
+    <div class="col-md-6 mb-4">
     <textarea class="form-control" id="patient-description" rows="9" style="resize: none"
               placeholder="Vui lòng mô tả rõ triệu chứng của bạn và nhu cầu thăm khám (*)"></textarea>
         <span id="error-description" class="ml-2" style="color: red;"></span>

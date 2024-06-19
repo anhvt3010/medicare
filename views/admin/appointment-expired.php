@@ -1,7 +1,10 @@
 <?php
-session_start();
+session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=not_found');
+    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    exit();
+} else if ($_SESSION['role_id'] == 2){  // Trừ bác sĩ
+    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
     exit();
 }
 ?>
@@ -14,17 +17,14 @@ if (!isset($_SESSION['admin_name'])) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
-    <title>Danh sách lịch khám</title>
+    <title>Lịch khám quá hạn</title>
     <?php include 'import-link-tag.php' ?>
+
     <style>
         #btn-action:focus {
             outline: none;
             border: none;
             box-shadow: none;
-        }
-        .col-2-5 {
-            flex: 0 0 20.83333%;
-            max-width: 20.83333%;
         }
     </style>
 </head>
@@ -36,26 +36,29 @@ if (!isset($_SESSION['admin_name'])) {
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="page-head">
-            <h2 class="page-head-title">Danh sách lịch khám</h2>
+            <h2 class="page-head-title">Lịch khám quá hạn</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
                     <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
                     <li class="breadcrumb-item">Quán lý đặt lịch</li>
-                    <li class="breadcrumb-item active">Danh sách lịch khám</li>
+                    <li class="breadcrumb-item active">Lịch khám quá hạn</li>
                 </ol>
             </nav>
         </div>
-        <div class="main-content container-fluid" style="margin-top: -30px">
+        <div class="main-content container-fluid pt-0">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-table">
                         <div class="row table-filters-container">
-                            <div class="col-2-5 table-filters pb-0">
+                            <div class="col-3 table-filters pb-0">
                                 <div class="filter-container">
                                     <label class="control-label table-filter-title">Lọc chuyên khoa:</label>
                                     <form>
-                                        <select class="select2" name="specialty">
-                                            <option value="All" <?php echo ($specialtySelected == 'All' ? 'selected' : ''); ?>>Tất cả chuyên khoa</option>
+                                        <select class="select2" name="specialty"
+                                                style="height: 50px; border-color: #cac9c9; padding: 10px; width:250px">
+                                            <option value="All" <?php echo($specialtySelected == 'All' ? 'selected' : ''); ?>>
+                                                Tất cả chuyên khoa
+                                            </option>
                                             <?php
                                             foreach ($listSpecialties as $specialty) {
                                                 // Kiểm tra nếu id của chuyên khoa hiện tại trùng với $specialtySelected
@@ -68,12 +71,15 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
 
-                            <div class="col-2-5 table-filters pb-0">
+                            <div class="col-3 table-filters pb-0">
                                 <div class="filter-container">
                                     <label class="control-label table-filter-title">Lọc bác sĩ:</label>
                                     <form>
-                                        <select class="select2" name="doctor">
-                                            <option value="All" <?php echo ($doctorSelected == 'All' ? 'selected' : ''); ?>>Tất cả bác sĩ</option>
+                                        <select class="select2" name="doctor"
+                                                style="height: 50px; border-color: #cac9c9; padding: 10px; width:250px ">
+                                            <option value="All" <?php echo($doctorSelected == 'All' ? 'selected' : ''); ?>>
+                                                Tất cả bác sĩ
+                                            </option>
                                             <?php
                                             foreach ($listDoctors as $doctor) {
                                                 // Kiểm tra nếu id của bác sĩ hiện tại trùng với $doctor_selected
@@ -86,7 +92,8 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
 
-                            <div class="col-2-5 table-filters pb-0">
+
+                            <div class="col-3 table-filters pb-0">
                                 <span class="table-filter-title">Tra cứu bệnh nhân </span>
                                 <div class="filter-container">
                                     <div class="row">
@@ -98,50 +105,14 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
 
-                            <div class="col-2-5 table-filters pb-0">
-                                <span class="table-filter-title">Trạng thái</span>
-                                <?php
-                                $statusAppointment = $statusAppointment ?? '';
-                                $statusArray = explode(',', $statusAppointment);
-                                ?>
+                            <div class="col-3 table-filters pb-0">
+                                <span class="table-filter-title" style="opacity: 0">Tìm kiếm</span>
                                 <div class="filter-container">
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-6">
-                                                <div class="custom-controls-stacked">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(0, $statusArray) ? 'checked' : ''; ?>
-                                                                value="0" class="custom-control-input" id="toDo" type="checkbox">
-                                                        <label class="custom-control-label" for="toDo">Chờ xác nhận</label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(1, $statusArray) ? 'checked' : ''; ?>
-                                                                value="1" class="custom-control-input" id="inReview" type="checkbox">
-                                                        <label class="custom-control-label" for="inReview">Đã xác nhận</label>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="col-6">
-                                                <div class="custom-controls-stacked">
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(2, $statusArray) ? 'checked' : ''; ?>
-                                                                value="2" class="custom-control-input" id="inProgress" type="checkbox">
-                                                        <label class="custom-control-label" for="inProgress">Hoàn thành</label>
-                                                    </div>
-                                                    <div class="custom-control custom-checkbox">
-                                                        <input <?php echo in_array(3, $statusArray) ? 'checked' : ''; ?>
-                                                                value="3" class="custom-control-input" id="done" type="checkbox">
-                                                        <label class="custom-control-label" for="done">Đã hủy</label>
-                                                    </div>
-                                                </div>
-                                            </div>
+                                    <div class="row">
+                                        <div class="col-12">
+                                            <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
                                         </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-2 table-filters pb-xl-4">
-                                <div class="m-0 pt-8">
-                                    <button id="button" class="btn btn-success form-control">Tìm kiếm</button>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -187,13 +158,16 @@ if (!isset($_SESSION['admin_name'])) {
                                                 <?php echo $counter; ?>
                                             </td>
                                             <td class="user-avatar cell-detail user-info">
-                                                <img class="mt-0 mt-md-2 mt-lg-0" src="<?php echo htmlspecialchars($appointment['doctor_avt']); ?>" alt="Avatar">
+                                                <img class="mt-0 mt-md-2 mt-lg-0"
+                                                     src="<?php echo htmlspecialchars($appointment['doctor_avt']); ?>"
+                                                     alt="Avatar">
                                                 <span><?php echo htmlspecialchars($appointment['doctor_name']); ?></span>
                                                 <!--                                            <span class="cell-detail-description">Bác sĩ chuyên khoa 1</span>-->
                                             </td>
                                             <td class="cell-detail milestone" data-project="Bootstrap">
                                                 <span class="completed"><?php echo htmlspecialchars($appointment['patient_dob']); ?></span>
-                                                <span class="cell-detail-description"style="font-size: 13px; color: black"><?php echo htmlspecialchars($appointment['patient_name']); ?></span>
+                                                <span class="cell-detail-description"
+                                                      style="font-size: 13px; color: black"><?php echo htmlspecialchars($appointment['patient_name']); ?></span>
                                                 <span><?php echo htmlspecialchars($appointment['patient_gender'] == 1 ? 'Nam' : 'Nũ'); ?></span>
                                             </td>
                                             <td class="milestone">
@@ -233,25 +207,29 @@ if (!isset($_SESSION['admin_name'])) {
                                                 // Lấy màu và tên trạng thái dựa trên $appointment['status']
                                                 $statusInfo = $statusColors[$appointment['status']] ?? $statusColors['default'];
                                                 ?>
-                                                <div class="btn btn-secondary"
-                                                     style="width: 150px; color: whitesmoke; font-weight: normal;
-                                                             background-color: <?php echo $statusInfo[0]; ?>;">
+                                                <div style="width: 150px; height: 35px; color: black; line-height: 35px;
+                                                    font-weight: normal; background-color: <?php echo $statusInfo[0]; ?>;">
                                                     <?php echo $statusInfo[1]; ?>
                                                 </div>
                                             </td>
                                             <td class="p-0">
-                                                <div class="btn-group p-0">
+                                                <div class="btn-group">
                                                     <button id="btn-action"
                                                             style="border: none; background-color: transparent; "
-                                                            class=" dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                                            class=" dropdown-toggle" type="button"
+                                                            data-toggle="dropdown" aria-haspopup="true"
+                                                            aria-expanded="false">
+                                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
+                                                             fill="currentColor" class="bi bi-three-dots-vertical"
+                                                             viewBox="0 0 16 16">
                                                             <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
                                                         </svg>
                                                     </button>
-                                                    <div class="dropdown-menu dropdown-menu-right">
-                                                        <a type="button" class="dropdown-item"
-                                                           href="http://localhost/Medicare/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>"
-                                                           data-id="<?php echo $appointment['id'] ?>">Chi tiết</a>
+                                                    <div class='dropdown-menu dropdown-menu-right' role='menu'>
+                                                        <a href="http://localhost/Medicare/index.php?controller=appointment&action=update_show&appointmentId=<?php echo $appointment['id'] ?>"
+                                                           type='button' class='dropdown-item'>Cập nhật</a>
+<!--                                                        <a href="http://localhost/Medicare/index.php?controller=appointment&action=detail&id=--><?php //echo $appointment['id'] ?><!--"-->
+<!--                                                           type='button' class='dropdown-item'>Chi tiết</a>-->
                                                     </div>
                                                 </div>
                                             </td>
@@ -261,8 +239,10 @@ if (!isset($_SESSION['admin_name'])) {
                                     endforeach; ?>
                                     </tbody>
                                 </table>
+
                                 <div class="row be-datatable-footer">
-                                    <div class="col-sm-10 dataTables_paginate" id="pagination" style="margin-bottom: 0px!important;">
+                                    <div class="col-sm-10 dataTables_paginate" id="pagination"
+                                         style="margin-bottom: 0px!important;">
                                         <nav aria-label="Page navigation example">
                                             <?php
                                             $currentPage = $_GET['page'] ?? 1;
@@ -341,64 +321,42 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
-    <!--    pop-up sidebar-->
-    <?php include 'pop-up-sidebar.php' ?>
 </div>
+
+<!--    pop-up sidebar-->
+<?php include 'pop-up-sidebar.php' ?>
+
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <?php include 'import-script.php' ?>
 <script type="text/javascript">
-    $(document).ready(function(){
-        document.querySelectorAll('.dropdown-item').forEach(function(button) {
-            button.addEventListener('click', function() {
-                var appointmentId = this.getAttribute('data-id');
-                showAppointmentDetails(appointmentId);
-            });
-        });
-
-        function showAppointmentDetails(appointmentId) {
-            // Lấy dữ liệu từ server hoặc hiển thị dialog
-            console.log('Hiển thị thông tin cho appointment ID:', appointmentId);
-            // Code để hiển thị dialog ở đây
-        }
-        //-initialize the javascript
+    $(document).ready(function () {
         App.init();
-        App.tableFilters();
     });
 </script>
 <script>
-    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=index&page=1'
+    var url_appointment = 'http://localhost/Medicare/index.php?controller=appointment&action=expired&page=1'
 
-    document.getElementById('button').addEventListener('click', function() {
-    var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
-        ? null
-        : document.querySelector('.select2[name="specialty"]').value;
-    var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
-        ? null
-        : document.querySelector('.select2[name="doctor"]').value;
+    document.getElementById('button').addEventListener('click', function () {
+        var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
+            ? null
+            : document.querySelector('.select2[name="specialty"]').value;
+        var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
+            ? null
+            : document.querySelector('.select2[name="doctor"]').value;
         var searchInput = document.getElementById('searchInput').value.trim();
-    var toDo = document.getElementById('toDo').checked;
-    var inReview = document.getElementById('inReview').checked;
-    var inProgress = document.getElementById('inProgress').checked;
-    var done = document.getElementById('done').checked;
 
-    var statusAppointment = [];
-    if (!toDo && !inReview && !inProgress && !done) statusAppointment = null;
-    if (toDo) statusAppointment.push(0);
-    if (inReview) statusAppointment.push(1);
-    if (inProgress) statusAppointment.push(2);
-    if (done) statusAppointment.push(3);
 
-    if (specialty) {
-        url_appointment += '&specialty=' + encodeURIComponent(specialty);
-    }
-    if (doctor) {
-        url_appointment += '&doctor=' + encodeURIComponent(doctor);
-    }
-    if (searchInput.length > 0) {
-        url_appointment += '&search=' + encodeURIComponent(searchInput);
-    }
-    if (statusAppointment) {
-        url_appointment += '&statusAppointment=' + statusAppointment.join(',');
-    }
+        if (specialty) {
+            url_appointment += '&specialty=' + encodeURIComponent(specialty);
+        }
+        if (doctor) {
+            url_appointment += '&doctor=' + encodeURIComponent(doctor);
+        }
+        if (searchInput.length > 0) {
+            url_appointment += '&search=' + encodeURIComponent(searchInput);
+        }
+
         console.log(url_appointment)
 
         window.location.href = url_appointment
@@ -422,18 +380,6 @@ if (!isset($_SESSION['admin_name'])) {
     function formatDate(timestamp) {
         var date = new Date(timestamp * 1000);
         return date.getDate() + '-' + (date.getMonth() + 1) + '-' + date.getFullYear();
-    }
-
-    function formatStatus(status) {
-        var statusColors = {
-            0: ['#fbbc05', 'Chờ xác nhận'],
-            1: ['#4285f4', 'Đã xác nhận'],
-            2: ['#34a853', 'Đã hoàn thành'],
-            3: ['#ea4335', 'Đã hủy'],
-            'default': ['#d3d3d3', 'Không xác định']
-        };
-        var statusInfo = statusColors[status] || statusColors['default'];
-        return '<div class="btn btn-secondary" style="width: 150px; color: whitesmoke; font-weight: normal; background-color: ' + statusInfo[0] + ';">' + statusInfo[1] + '</div>';
     }
 
     function convertDateToDayTimestamp(dateString) {

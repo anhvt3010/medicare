@@ -30,7 +30,7 @@
     <section class="container" style="padding-top: 150px">
         <h2>Đặt Lịch Khám</h2>
         <hr>
-        <form method="GET" action="#">
+        <form method="GET" action="#" class="row">
             <div id="form-time-container">
                 <?php include "components/form-time.php" ?>
             </div>

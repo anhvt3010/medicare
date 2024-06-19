@@ -56,31 +56,53 @@ $(document).ready(function () {
     // Hàm selectDate để xử lý việc chọn ngày để đổ ra time slot còn trống
     function selectDate(date) {
         var dateTimestamp = convertDateToDayTimestamp(date.toLocaleDateString());
-
         var specialtyId = document.getElementById('selected-specialty').value;
 
         console.log('Ngày đã chọn:', dateTimestamp);
+        console.log('ngày chưa chuyển', date.toLocaleDateString())
         document.getElementById('date-slot').value = dateTimestamp
+        // document.getElementById('selected-date-slot').value = date.toLocaleDateString()
         console.log('Chuyen khoa: + ', specialtyId)
         console.log('Bác sĩ:  + ', parseInt(document.getElementById('selected-doctor').value,10))
 
-        $.ajax({
-            url: 'http://localhost/Medicare/index.php',
-            type: 'GET',
-            data: {
-                controller: 'appointment',
-                action: 'getByDateAndDoctor',
-                dateSlot: dateTimestamp,
-                doctorId: parseInt(document.getElementById('selected-doctor').value,10)
-            },
-            success: function(timeSlots) {
-                // console.log(timeSlots)
-                displayTimeSlots(timeSlots);
-            },
-            error: function(error) {
-                console.error('Error:', error);
-            }
-        });
+        // Lấy ngày hiện tại và thời gian hiện tại
+        var now = new Date();
+        var todayDateString = now.toLocaleDateString('vi-VN');
+        var currentHour = now.getHours();
+
+        // Kiểm tra nếu ngày được chọn là hôm nay và sau 11 giờ sáng
+
+        if (date.toLocaleDateString('vi-VN') === todayDateString && currentHour >= 11) {
+            displayTimeSlots(["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00",
+                "13:00", "13:30", "14:00", "14:30", "15:00", "15:30", "16:00", "16:30"]);
+            console.log('Chọn giờ hẹn: Không thể đặt lịch hẹn sau 11 giờ sáng cho ngày hôm nay.');
+        }
+
+        else {
+            $.ajax({
+                url: 'http://localhost/Medicare/index.php',
+                type: 'GET',
+                data: {
+                    controller: 'appointment',
+                    action: 'getByDateAndDoctor',
+                    dateSlot: dateTimestamp,
+                    doctorId: parseInt(document.getElementById('selected-doctor').value,10)
+                },
+                success: function(timeSlots) {
+                    console.log(timeSlots)
+                    if (date.toLocaleDateString('vi-VN') === todayDateString && currentHour <= 11) {
+                        displayTimeSlots(["08:00", "08:30", "09:00", "09:30", "10:00", "10:30", "11:00"].concat(timeSlots));
+                    } else {
+                        displayTimeSlots(timeSlots);
+                    }
+
+                },
+                error: function(error) {
+                    console.error('Error:', error);
+                }
+            });
+
+        }
     }
 
 });

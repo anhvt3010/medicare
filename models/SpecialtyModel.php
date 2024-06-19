@@ -57,7 +57,7 @@ class SpecialtyModel extends Database{
     public function getSpecialtiesForAdmin(): array
     {
         $sql = "SELECT *
-            FROM specialties WHERE status = 1";
+            FROM specialties WHERE status = 1 ORDER BY create_at DESC ";
 
         $query = $this->_query($sql);
         $data = [];

@@ -25,6 +25,31 @@ class AppointmentController extends BaseController
         $this->specialtyModel = new SpecialtyModel();
     }
 
+    public function expired(){
+        $page = $_GET['page'] ?? 1;
+
+        $listSpecialties = $this->specialtyModel->getSpecialtiesForAdmin();
+        $listDoctors = $this->doctorModel->getDoctorForAdmin();
+
+        $specialty= $_GET['specialty'] ?? null;
+        $doctor = $_GET['doctor'] ?? null;
+        $search = $_GET['search'] ?? null;
+
+        $listAppointments = $this->appointmentModel->getAppointmentExpired(10, $page, $specialty, $doctor, $search);
+        $totalAppointment = $this->appointmentModel->getTotalAppointmentsExpired($specialty, $doctor, $search);
+
+        return $this->view('admin.appointment-expired', [
+            'listAppointments' => $listAppointments,
+            'listSpecialties' => $listSpecialties,
+            'listDoctors' => $listDoctors,
+            'totalAppointment' => $totalAppointment,
+            'specialtySelected' => $specialty,
+            'doctorSelected' => $doctor,
+            'search' => $search,
+//            co the bo cac bien, vi lay $_GET
+        ]);
+    }
+
     /**
      * @throws Exception
      */
@@ -236,6 +261,18 @@ class AppointmentController extends BaseController
         return $this->view('admin.appointment-confirm', [
             'appointment' => $appointment,
         ]);
+    }
+
+    public function update_status()
+    {
+        $id = $_POST['appointment_id'];
+        $update = $this->appointmentModel->updateStatusAppointment($id);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($update);
+        } else {
+            return $this->view('test', ['update' => $update]);
+        }
     }
 
     public function update_result()

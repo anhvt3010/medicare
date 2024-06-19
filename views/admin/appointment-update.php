@@ -64,8 +64,7 @@ if (!isset($_SESSION['admin_name'])) {
                         <hr>
                         <div class="modal-footer p-0 d-flex justify-content-between">
                             <div>
-                                <a type="button" class="btn btn-danger"
-                                    href="http://localhost/Medicare/index.php?controller=appointment&action=confirm">Quay lại danh sách</a>
+                                <button type="button" class="btn btn-danger" onclick="window.history.back();">Quay lại</button>
                                 <button type="button" class="btn btn-warning ml-3" id="changeInfor">Thay đổi thông tin</button>
                             </div>
 

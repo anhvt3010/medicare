@@ -1,5 +1,5 @@
 <div class="row">
-    <div class="col-6">
+    <div class="col-md-6">
         <h5 class="mb-4">Chọn thông tin khám bệnh</h5>
         <div class="row">
             <div class="mb-3 col-sm-11">
@@ -14,7 +14,7 @@
             </div>
         </div>
     </div>
-    <div class="col-6">
+    <div class="col-md-6">
         <div class="row">
             <h5 class="mb-1">Thời gian khám</h5>
             <p>Ngày khám (*)</p>

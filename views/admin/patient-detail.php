@@ -118,7 +118,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     </div>
                                 </div>
                                 <button type="button" class="btn btn-danger" id="btnLock"
-                                        data-bs-toggle="modal" data-bs-target="#exampleModal">
+                                        data-bs-toggle="modal" data-bs-target="#confirmChangeStatus">
                                     <i class="fa-solid fa-triangle-exclamation"></i>
                                     Thay đổi trạng thái tài khoản
                                 </button>
@@ -137,7 +137,7 @@ if (!isset($_SESSION['admin_name'])) {
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="confirmChangeStatus" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
@@ -194,6 +194,7 @@ if (!isset($_SESSION['admin_name'])) {
     document.addEventListener('DOMContentLoaded', function () {
         document.getElementById('loading-spinner').style.display = 'none';
         var confirmModal = new bootstrap.Modal(document.getElementById('confirmModal'));
+        var confirmChangeStatus = new bootstrap.Modal(document.getElementById('confirmChangeStatus'));
 
         document.getElementById('btnUpdateStatus').addEventListener('click', function() {
             confirmModal.hide()

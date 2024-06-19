@@ -17,7 +17,7 @@
       </nav>
 
       <a href="http://localhost/Medicare/index.php?controller=home&action=appointment"
-         class="appointment-btn scrollto" style="text-decoration: none"><span class="d-none d-md-inline">ĐẶT LỊCH KHÁM</span></a>
+         class="appointment-btn scrollto"><span class="d-none d-md-inline"></span>ĐẶT LỊCH KHÁM</a>
 
         <?php
         if (isset($_SESSION['user_phone'])) {
@@ -25,12 +25,12 @@
             $username =  $_SESSION['user_name'];
 
             // Hiển thị số điện thoại người dùng
-            echo '<div class="user-dropdown">
+            echo '<div class="user-dropdown scrollto">
                     <div class="dropdown">
                       <a class="dropdown-toggle appointment-btn m-0"
                             style="background-color: #3FBBC0FF !important; border-color: #3FBBC0FF; color: whitesmoke"
                             type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        Xin chào: ' . htmlspecialchars($username) . '
+                       <span class="d-none d-md-inline">Xin chào: </span> ' . htmlspecialchars($username) . '
                       </a>
                       <ul class="dropdown-menu">
                         <li><a class="dropdown-item" href="http://localhost/Medicare/index.php?controller=patient&action=profile">

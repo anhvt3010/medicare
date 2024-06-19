@@ -107,7 +107,7 @@ if (!isset($_SESSION['admin_name'])) {
                             <div class="col-4">
                                 <label for="" class="form-label">Giờ khám</label>
                                 <div class="form-control-sm" style="background-color: #eee; line-height: 30px">
-                                    <?php echo $appointment['time_slot'] ?>
+                                    <?php echo substr($appointment['time_slot'], 0, 5) ?>
                                 </div>
                             </div>
                         </div>
@@ -182,7 +182,7 @@ if (!isset($_SESSION['admin_name'])) {
                             <a id="backButton" class="btn btn-danger mr-3"
                                href="http://localhost/Medicare/index.php?controller=appointment&action=index">Danh sách lịch khám</a>
                             <?php
-                            // Lấy ngày và giờ hiện tại
+                            date_default_timezone_set('Asia/Ho_Chi_Minh');
                             $currentDate = date('Y-m-d');
                             $currentTime = date('H:i'); // Lấy giờ và phút hiện tại
 
@@ -190,7 +190,7 @@ if (!isset($_SESSION['admin_name'])) {
 
                             if ($appointment['status'] == 1) {
                                 if ($appointment['date_slot'] > $currentDate ||
-                                    ($appointment['date_slot'] == $currentDate && $appointment['time_slot'] > $currentTime)) {
+                                    ($appointment['date_slot'] == $currentDate && substr($appointment['time_slot'], 0, 5) < $currentTime)) {
                                     // Hiển thị nút nếu các điều kiện được thỏa mãn
                                     echo '<button id="btnExpired" class="btn btn-warning">Chuyển về danh sách quá giờ</button>';
                                 }
@@ -230,6 +230,24 @@ if (!isset($_SESSION['admin_name'])) {
             </div>
         </div>
     </div>
+    <!-- Modal -->
+    <div class="modal fade" id="expiredModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Thông báo</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Việc bệnh nhân đã vắng mặt, bạn có muốn chuyển lịch khám này đến danh sách lịch khám quá giờ ?
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary" id="btnRemoveExpired">Chuyển</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <!--    pop-up sidebar-->
     <?php include 'pop-up-sidebar.php' ?>
 </div>
@@ -241,6 +259,8 @@ if (!isset($_SESSION['admin_name'])) {
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
+        var expiredModal = new bootstrap.Modal(document.getElementById('expiredModal'));
+
         document.getElementById('loading-spinner').style.display = 'none';
 
         document.getElementById('uploadButton').addEventListener('click', function() {
@@ -288,7 +308,7 @@ if (!isset($_SESSION['admin_name'])) {
                     contentType: false,
                     processData: false,
                     success: function (response) {
-                        success_toast()
+                        success_toast('Tải lên kết quả thành công !')
                         $("#loading-spinner").hide();
                     },
                     error: function () {
@@ -314,6 +334,31 @@ if (!isset($_SESSION['admin_name'])) {
             modal.modal('hide');
         });
 
+        document.getElementById('btnExpired').addEventListener('click', function(){
+            expiredModal.show()
+            document.getElementById('btnRemoveExpired').addEventListener('click', function(){
+                var appointmentId = document.querySelector('input[name="appointment_id"]').value;
+                var formData = new FormData();
+                formData.append('appointment_id', appointmentId);
+                document.getElementById('loading-spinner').style.display = 'block';
+                expiredModal.hide()
+                $.ajax({
+                    url: 'http://localhost/Medicare/index.php?controller=appointment&action=update_status',
+                    type: 'POST',
+                    data: formData,
+                    contentType: false,
+                    processData: false,
+                    success: function (response) {
+                        success_toast('Chuyển đến danh sách quá hẹn thành công')
+                    },
+                    error: function () {
+                        failed_toast('Có lỗi xảy ra, vui lòng thử lại.');
+                        $("#loading-spinner").hide();
+                    }
+                });
+            });
+        })
+
         <?php
         function convertDayTimestampToDate($dayTimestamp) {
             if (!isset($dayTimestamp)) return null;
@@ -321,16 +366,17 @@ if (!isset($_SESSION['admin_name'])) {
             return date('d/m/Y', $timestamp); // Định dạng lại timestamp thành ngày tháng
         }
         ?>
+
     });
 </script>
 <script>
-    function success_toast(redirectUrl) {
+    function success_toast(message) {
         toast({
             classes: `text-bg-success border-0`,
             body: `
           <div class="d-flex w-100" data-bs-theme="dark">
             <div class="flex-grow-1">
-              Tải lên kết quả thành công !
+              ${message}
             </div>
             <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
           </div>`,
