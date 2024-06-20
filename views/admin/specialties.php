@@ -78,7 +78,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                         <div class="card-body">
                             <div class="noSwipe">
-                                <table class="table table-striped table-hover be-table-responsive" id="table1">
+                                <table class="table table-striped table-hover be-table-responsive" id="table1" style="margin-bottom: 60px">
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
@@ -90,7 +90,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     <tbody id="tableBody" style="font-size: 15px">
                                     </tbody>
                                 </table>
-                                <div class="row be-datatable-footer">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-9 dataTables_paginate" id="pagination"
                                          style="margin-bottom: 0px!important;"></div>
                                     <div class="col-sm-3 dataTables_info" id="sub-pagination"
@@ -148,7 +148,7 @@ if (!isset($_SESSION['admin_name'])) {
         document.getElementById('loading-spinner').style.display = 'none';
 
         const listSpecialties = JSON.parse('<?php echo json_encode($listSpecialties); ?>');
-        const itemsPerPage = 6;
+        const itemsPerPage = 10;
         let currentPage = 1;
 
         const searchInput = document.getElementById('searchInput');

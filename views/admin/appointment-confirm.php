@@ -1,5 +1,5 @@
 <?php
-session_start(); // Khởi động session
+session_start();
 if (!isset($_SESSION['admin_name'])) {
     header('Location: '. NOT_FOUND_URL);
     exit();
@@ -118,7 +118,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                         <div class="card-body">
                             <div class="noSwipe">
-                                <table class="table table-striped table-hover be-table-responsive" id="table1">
+                                <table class="table table-striped table-hover be-table-responsive" id="table1" style="margin-bottom: 60px!important;">
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
@@ -238,7 +238,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     </tbody>
                                 </table>
 
-                                <div class="row be-datatable-footer">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-10 dataTables_paginate" id="pagination"
                                          style="margin-bottom: 0px!important;">
                                         <nav aria-label="Page navigation example">

@@ -34,6 +34,7 @@
                                 </a>
                                 <ul class="sub-menu">
                                     <li><a href="<?php echo BASE_URL ?>/index.php?controller=patient&action=index">Danh sách bệnh nhân</a></li>
+                                    <li><a href="<?php echo BASE_URL ?>/index.php?controller=patient&action=guest">Danh sách khách hàng </a></li>
                                 </ul>
                             </li>
                             <li class="parent">

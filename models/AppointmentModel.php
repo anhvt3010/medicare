@@ -14,6 +14,50 @@ class AppointmentModel extends Database {
         return mysqli_query($this->connection, $sql);
     }
 
+    public function getAppointmentGuests($limit = 10, $page = 1, $search = null): array
+    {
+        $offset = ($page - 1) * $limit;
+        $sql = "SELECT a.patient_id AS patient_id,
+                       a.patient_name AS patient_name,
+                       a.patient_dob AS patient_dob,
+                       a.patient_gender AS patient_gender,
+                       a.patient_phone AS patient_phone,
+                       a.patient_email AS patient_email,
+                       COUNT(a.appointment_id) AS total_appointments
+                FROM appointments AS a
+                         JOIN employees AS e ON e.employee_id = a.employee_id
+                         JOIN time_slots AS ts ON ts.time_id = a.time_id
+                         JOIN specialties AS s ON s.specialty_id = a.specialty_id
+                WHERE a.patient_id IS NULL AND a.status = 2 ";
+        if ($search) {
+            $sql .= " AND (a.patient_name LIKE '%$search%' OR a.patient_phone LIKE '%$search%')";
+        }
+
+        $sql .= "GROUP BY a.patient_phone LIMIT $limit OFFSET $offset";
+
+        $query = $this->_query($sql);
+        $data = [];
+        while ($result = mysqli_fetch_assoc($query)) {
+            $data[] = $result;
+        }
+        return $data;
+    }
+
+    public function getTotalAppointmentGuests($search = null) {
+        $sql = "SELECT COUNT(*) AS total 
+               FROM appointments AS a
+                         JOIN employees AS e ON e.employee_id = a.employee_id
+                         JOIN time_slots AS ts ON ts.time_id = a.time_id
+                         JOIN specialties AS s ON s.specialty_id = a.specialty_id
+                WHERE a.patient_id IS NULL AND a.status = 2";
+        if ($search) {
+            $sql .= " AND (a.patient_name LIKE '%$search%' OR a.patient_phone LIKE '%$search%')";
+        }
+        $query = $this->_query($sql);
+        $result = mysqli_fetch_assoc($query);
+        return $result['total'];
+    }
+
     public function getTotalAppointmentsExpired($specialty = null, $doctor = null, $search = null) {
         $sql = "SELECT COUNT(*) AS total 
             FROM appointments AS a
@@ -587,11 +631,11 @@ class AppointmentModel extends Database {
                      JOIN employees AS e ON e.employee_id = a.employee_id
                      JOIN time_slots AS ts ON ts.time_id = a.time_id
                      JOIN specialties AS s ON s.specialty_id = a.specialty_id
-            WHERE a.patient_phone = ?
+            WHERE  a.status = 2 AND a.patient_phone = ? 
             ORDER BY a.date_slot ASC";
 
         if ($stmt = $this->connection->prepare($sql)) {
-            $stmt->bind_param("s", $phone, $patient_id);
+            $stmt->bind_param("s", $phone);
             $stmt->execute();
             $result = $stmt->get_result();
             $data = [];

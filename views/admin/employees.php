@@ -89,7 +89,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                         <div class="card-body">
                             <div class="noSwipe">
-                                <table class="table table-striped table-hover be-table-responsive" id="table1">
+                                <table class="table table-striped table-hover be-table-responsive" id="table1" style="margin-bottom: 60px">
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
@@ -106,7 +106,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     <tbody id="tableBody" style="font-size: 15px">
                                     </tbody>
                                 </table>
-                                <div class="row be-datatable-footer">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-10 dataTables_paginate" id="pagination"
                                          style="margin-bottom: 0px!important;"></div>
                                     <div class="col-sm-2 dataTables_info" id="sub-pagination"
@@ -132,7 +132,8 @@ if (!isset($_SESSION['admin_name'])) {
         App.init();
 
         const listEmployees = JSON.parse('<?php echo json_encode($listEmployees); ?>');
-        const employeesPerPage = 5;
+        let filteredEmployees = listEmployees; // Biến mới để lưu trữ danh sách đã lọc
+        const employeesPerPage = 10;
         let currentPage = 1;
 
         const searchInput = document.getElementById('searchInput');
@@ -142,69 +143,68 @@ if (!isset($_SESSION['admin_name'])) {
         selectPosition.addEventListener('change', filterByPosition);
 
         function searchEmployees() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredEmployees = listEmployees.filter(employee =>
+            const input = searchInput.value.toLowerCase();
+            filteredEmployees = listEmployees.filter(employee =>
                 employee.name.toLowerCase().includes(input) ||
                 (employee.employee_code && employee.employee_code.toLowerCase().includes(input)) ||
                 (employee.phone && employee.phone.includes(input))
             );
-            currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
+            currentPage = 1;
             setupPagination(filteredEmployees, paginationElement, employeesPerPage);
-            renderEmployees(currentPage, filteredEmployees); // Cập nhật lại hàm renderEmployees để nhận thêm tham số filteredEmployees
+            renderEmployees(currentPage, filteredEmployees);
         }
 
-        function renderEmployees(page, items = listEmployees) {
+        function renderEmployees(page, items) {
             const start = (page - 1) * employeesPerPage;
             const end = start + employeesPerPage;
             const paginatedItems = items.slice(start, end);
             const tableBody = document.getElementById('tableBody');
-
             tableBody.innerHTML = '';
             paginatedItems.forEach((employee, index) => {
-                const rowNumber = start + index + 1; // Tính số thứ tự cho mỗi hàng
+                const rowNumber = start + index + 1;
                 const row = `<tr>
-                        <td>${rowNumber}</td>
-                        <td class='user-avatar cell-detail user-info'>
-                            <img class='mt-0 mt-md-2 mt-lg-0'
-                                 src='${employee.avt}'
-                                 alt='Avatar'>
-                            <span class='m-0'>${employee.name}</span>
-                        </td>
-                        <td>
-                            <span>${employee.employee_code ?? '...'}</span>
-                        </td>
-                        <td class='cell-detail milestone' data-project='Bootstrap'>
-                            <span style='font-size: 13px; color: black'>${employee.position}</span>
-                        </td>
-                        <td class='cell-detail milestone'>
-                            <span class='cell-detail-description' style='font-size: 13px; color: black'>${employee.dob ?? '...'}</span>
-                            <span>${employee.gender == 1 ? 'Nam' : 'Nũ'}</span>
-                        </td>
-                        <td class='milestone'>
-                            <span class='version'>${employee.email ?? '...'}</span>
-                            <div>${employee.phone ?? '...'}</div>
-                        </td>
-                        <td class='cell-detail'>
-                            ${employee.address ?? '...'}
-                        </td>
-                        <td class='cell-detail'>
-                            <span>${employee.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</span>
-                        </td>
-                        <td class='text-right p-0'>
-                            <div class='btn-group btn-hspace'>
-                                <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
-                                        data-toggle='dropdown'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                                            <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
-                                                        </svg>
-                                </button>
-                                <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                    <a href='<?php echo BASE_URL ?>/index.php?controller=employee&action=detail&employee_id=${employee.id}'
-                                       type='button' class='dropdown-item'>Xem chi tiết</a>
-                                </div>
+                    <td>${rowNumber}</td>
+                    <td class='user-avatar cell-detail user-info'>
+                        <img class='mt-0 mt-md-2 mt-lg-0'
+                             src='${employee.avt}'
+                             alt='Avatar'>
+                        <span class='m-0'>${employee.name}</span>
+                    </td>
+                    <td>
+                        <span>${employee.employee_code ?? '...'}</span>
+                    </td>
+                    <td class='cell-detail milestone' data-project='Bootstrap'>
+                        <span style='font-size: 13px; color: black'>${employee.position}</span>
+                    </td>
+                    <td class='cell-detail milestone'>
+                        <span class='cell-detail-description' style='font-size: 13px; color: black'>${employee.dob ?? '...'}</span>
+                        <span>${employee.gender == 1 ? 'Nam' : 'Nữ'}</span>
+                    </td>
+                    <td class='milestone'>
+                        <span class='version'>${employee.email ?? '...'}</span>
+                        <div>${employee.phone ?? '...'}</div>
+                    </td>
+                    <td class='cell-detail'>
+                        ${employee.address ?? '...'}
+                    </td>
+                    <td class='cell-detail'>
+                        <span>${employee.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</span>
+                    </td>
+                    <td class='text-right p-0'>
+                        <div class='btn-group btn-hspace'>
+                            <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
+                                    data-toggle='dropdown'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
+                                </svg>
+                            </button>
+                            <div class='dropdown-menu dropdown-menu-right' role='menu'>
+                                <a href='<?php echo BASE_URL ?>/index.php?controller=employee&action=detail&employee_id=${employee.id}'
+                                   type='button' class='dropdown-item'>Xem chi tiết</a>
                             </div>
-                        </td>
-                    </tr>`;
+                        </div>
+                    </td>
+                </tr>`;
                 tableBody.innerHTML += row;
             });
 
@@ -343,7 +343,7 @@ if (!isset($_SESSION['admin_name'])) {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 currentPage = page;
-                renderEmployees(currentPage);
+                renderEmployees(currentPage, filteredEmployees);
 
                 document.querySelectorAll('.pagination .page-item').forEach(item => {
                     item.classList.remove('active');
@@ -357,7 +357,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         function filterByPosition() {
             const selectedPosition = selectPosition.value;
-            const filteredEmployees = selectedPosition === 'All' ? listEmployees : listEmployees.filter(employee => employee.position_id === selectedPosition);
+            filteredEmployees = selectedPosition === 'All' ? listEmployees : listEmployees.filter(employee => employee.position_id === selectedPosition);
             currentPage = 1;
             setupPagination(filteredEmployees, paginationElement, employeesPerPage);
             renderEmployees(currentPage, filteredEmployees);
@@ -365,13 +365,13 @@ if (!isset($_SESSION['admin_name'])) {
 
         function changePage(page) {
             currentPage = page;
-            renderEmployees(currentPage);
-            setupPagination(listEmployees, document.getElementById('pagination'), employeesPerPage);
+            renderEmployees(currentPage, filteredEmployees);
+            setupPagination(filteredEmployees, paginationElement, employeesPerPage);
         }
 
         const paginationElement = document.getElementById('pagination');
-        setupPagination(listEmployees, paginationElement, employeesPerPage);
-        renderEmployees(currentPage);
+        setupPagination(filteredEmployees, paginationElement, employeesPerPage);
+        renderEmployees(currentPage, filteredEmployees);
 
         const errorMessages = {
             emName: 'Tên không được để trống và không vượt quá 50 ký tự',

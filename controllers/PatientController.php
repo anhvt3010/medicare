@@ -28,6 +28,29 @@ class PatientController extends BaseController
         ]);
     }
 
+    public function guest()
+    {
+        $page= $_GET['page'] ?? 1;
+        $search = $_GET['search'] ?? null;
+
+        $totalAppointmentsGuest = $this->appointmentModel->getTotalAppointmentGuests($search);
+        $appointmentsGuests = $this->appointmentModel->getAppointmentGuests(10, $page, $search);
+        return $this->view('admin.guests', [
+            'totalAppointmentsGuest' => $totalAppointmentsGuest,
+            'appointmentsGuests' => $appointmentsGuests,
+        ]);
+    }
+
+    public function guest_detail()
+    {
+        $phone= $_GET['phone'];
+
+        $listAppointments = $this->appointmentModel->getAppointmentsByPhone($phone);
+        return $this->view('admin.guest-detail', [
+            'listAppointments' => $listAppointments,
+        ]);
+    }
+
     public function profile()
     {
         session_start();

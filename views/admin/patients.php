@@ -74,22 +74,23 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                         <div class="card-body">
                             <div class="noSwipe">
-                                <table class="table table-striped table-hover be-table-responsive" id="table1">
+                                <table class="table table-striped table-hover be-table-responsive" id="table1" style="margin-bottom: 60px">
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
                                         <th style="width:10%;">Tên bệnh nhân</th>
-                                        <th style="width:7%;">Tên tài khoản</th>
-                                        <th style="width:7%;">Thông tin</th>
+                                        <th style="width:8%;">Giới tính</th>
+                                        <th style="width:10%;">Ngày sinh</th>
                                         <th style="width:10%;">Liên hệ</th>
                                         <th style="width:15%;">Địa chỉ</th>
-                                        <th style="width:10%;"></th>
+                                        <th style="width:5%;">Số lần khám</th>
+                                        <th style="width:2%;"></th>
                                     </tr>
                                     </thead>
                                     <tbody id="tableBody" style="font-size: 15px">
                                     </tbody>
                                 </table>
-                                <div class="row be-datatable-footer">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-9 dataTables_paginate" id="pagination"
                                          style="margin-bottom: 0px!important;"></div>
                                     <div class="col-sm-3 dataTables_info" id="sub-pagination"
@@ -109,7 +110,7 @@ if (!isset($_SESSION['admin_name'])) {
         App.init();
 
         const listSpecialties = JSON.parse('<?php echo json_encode($listPatients); ?>');
-        const itemsPerPage = 5;
+        const itemsPerPage = 10;
         let currentPage = 1;
 
         const searchInput = document.getElementById('searchInput');
@@ -142,11 +143,10 @@ if (!isset($_SESSION['admin_name'])) {
                         <span>${patient.name}</span>
                     </td>
                     <td>
-                        <span style='font-size: 13px; color: black'>${patient.username ?? '...'}</span>
-                    </td>
-                    <td class='milestone'>
-                        <span class='version'>${patient.dob}</span>
                         <div>${patient.gender == 1 ? 'Nam' : 'Nữ'}</div>
+                    </td>
+                    <td>
+                        <span>${patient.dob ?? '...'}</span>
                     </td>
                     <td class='milestone'>
                         <span class='version'>${patient.email ?? '...'}</span>
@@ -154,6 +154,9 @@ if (!isset($_SESSION['admin_name'])) {
                     </td>
                     <td class='cell-detail'>
                     <span style='font-size: 13px; color: black'>${patient.address ?? '...'}</span>
+                    </td>
+                    <td class="text-center">
+                        <span>${patient.total_appointments}</span>
                     </td>
                     <td class='text-right p-0'>
                         <div class='btn-group btn-hspace'>

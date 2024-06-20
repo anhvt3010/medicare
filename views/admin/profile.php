@@ -1,5 +1,4 @@
 <?php
-session_start();
 if (!isset($_SESSION['admin_name'])) {
     header('Location: '. LOGIN_ADMIN_URL);
     exit();
@@ -139,7 +138,7 @@ if (!isset($_SESSION['admin_name'])) {
                     </div>
                 </div>
                 <div class="d-flex justify-content-between p-3">
-                    <button id="btnChangePassword" type="button" class="btn btn-danger" data-toggle="modal" data-target="#exampleModal">
+                    <button id="btnChangePassword" type="button" class="btn btn-danger" data-toggle="modal" data-target="#changePasswordModal">
                         <span class="mdi mdi-lock mr-1"></span>Đổi mật khẩu
                     </button>
                 </div>
@@ -147,7 +146,7 @@ if (!isset($_SESSION['admin_name'])) {
         </div>
     </div>
     <!-- Modal -->
-    <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal fade" id="changePasswordModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -189,7 +188,7 @@ if (!isset($_SESSION['admin_name'])) {
     document.addEventListener('DOMContentLoaded', function () {
         App.init();
         document.getElementById('loading-spinner').style.display = 'none';
-        var changePasswordModal = new bootstrap.Modal(document.getElementById('exampleModal'));
+        var changePasswordModal = new bootstrap.Modal(document.getElementById('changePasswordModal'));
 
         document.getElementById('btnSaveChange').addEventListener('click', function (){
             var currentPassword = document.getElementById('currentPassword');

@@ -12,8 +12,18 @@ class PatientModel extends Database {
 
     public function getPatientForAdmin(): array
     {
-        $sql = "SELECT patient_id, name, username, dob, gender, address, phone, email
-                FROM patients";
+        $sql = "SELECT p.patient_id AS patient_id,
+                       p.name AS name,
+                       p.dob AS dob,
+                       p.gender AS gender,
+                       p.address AS address,
+                       p.phone AS phone,
+                       p.email AS email,
+                       COUNT(a.patient_id) AS total_appointments
+                FROM patients AS p
+                         LEFT JOIN appointments AS a ON p.patient_id = a.patient_id
+                GROUP BY p.patient_id, p.name, p.dob, p.gender, p.address, p.phone, p.email
+";
         $query = $this->_query($sql);
         $data = [];
         while ($result = mysqli_fetch_assoc($query)) {

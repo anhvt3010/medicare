@@ -20,16 +20,16 @@ if (!isset($_SESSION['admin_name'])) {
     <title>Danh sách bác sĩ</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css"
-          href="<?php echo BASE_URL ?>/views/admin/assets/lib\perfect-scrollbar\css\perfect-scrollbar.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib/perfect-scrollbar/css/perfect-scrollbar.css">
     <link rel="stylesheet" type="text/css"
-          href="<?php echo BASE_URL ?>/views/admin/assets/lib\material-design-icons\css\material-design-iconic-font.min.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib/material-design-icons/css/material-design-iconic-font.min.css">
     <link rel="stylesheet" type="text/css"
-          href="<?php echo BASE_URL ?>/views/admin/assets/lib\select2\css\select2.min.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib/select2/css/select2.min.css">
     <link rel="stylesheet" type="text/css"
-          href="<?php echo BASE_URL ?>/views/admin/assets/lib\bootstrap-slider\css\bootstrap-slider.min.css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib/bootstrap-slider/css/bootstrap-slider.min.css">
     <link rel="stylesheet" type="text/css"
-          href="<?php echo BASE_URL ?>/views/admin/assets/lib\datetimepicker\css\bootstrap-datetimepicker.min.css">
-    <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css\app.css" type="text/css">
+          href="<?php echo BASE_URL ?>/views/admin/assets/lib/datetimepicker/css/bootstrap-datetimepicker.min.css">
+    <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css/app.css" type="text/css">
     <!--    icon-->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
           integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw=="
@@ -107,7 +107,7 @@ if (!isset($_SESSION['admin_name'])) {
                         </div>
                         <div class="card-body">
                             <div class="noSwipe">
-                                <table class="table table-striped table-hover be-table-responsive" id="table1">
+                                <table class="table table-striped table-hover be-table-responsive" id="table1" style="margin-bottom: 60px">
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
@@ -124,7 +124,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     <tbody id="tableBody" style="font-size: 15px">
                                     </tbody>
                                 </table>
-                                <div class="row be-datatable-footer">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-10 dataTables_paginate" id="pagination"
                                          style="margin-bottom: 0px!important;"></div>
                                     <div class="col-sm-2 dataTables_info" id="sub-pagination"
@@ -150,7 +150,8 @@ if (!isset($_SESSION['admin_name'])) {
         // App.tableFilters();
 
         let listDoctors = <?php echo json_encode($listDoctors); ?>;
-        const doctorsPerPage = 5;
+        let filteredDoctors = listDoctors; // Biến mới để lưu trữ danh sách đã lọc
+        const doctorsPerPage = 10;
         let currentPage = 1;
 
         const searchInput = document.getElementById('searchInput');
@@ -160,70 +161,69 @@ if (!isset($_SESSION['admin_name'])) {
         selectSpecialty.addEventListener('change', filterBySpecialty);
 
         function searchDoctor() {
-            const input = document.getElementById('searchInput').value.toLowerCase();
-            const filteredDoctors = listDoctors.filter(doctor =>
+            const input = searchInput.value.toLowerCase();
+            filteredDoctors = listDoctors.filter(doctor =>
                 doctor.name.toLowerCase().includes(input) ||
                 (doctor.employee_code && doctor.employee_code.toLowerCase().includes(input)) ||
                 (doctor.phone && doctor.phone.includes(input))
             );
-            currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
+            currentPage = 1;
             setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
-            renderDoctors(currentPage, filteredDoctors); // Cập nhật lại hàm renderDoctors để nhận thêm tham số filteredDoctors
+            renderDoctors(currentPage, filteredDoctors);
         }
 
-        function renderDoctors(page, items = listDoctors) {
+        function renderDoctors(page, items) {
             const start = (page - 1) * doctorsPerPage;
             const end = start + doctorsPerPage;
             const paginatedItems = items.slice(start, end);
             const tableBody = document.getElementById('tableBody');
-
             tableBody.innerHTML = '';
             paginatedItems.forEach((doctor, index) => {
                 const rowNumber = start + index + 1; // Tính số thứ tự cho mỗi hàng
                 const row = `<tr>
-                        <td>${rowNumber}</td>
-                        <td class='user-avatar cell-detail user-info'>
-                            <img class='mt-0 mt-md-2 mt-lg-0'
-                                 src='${doctor.avt}'
-                                 alt='Avatar'>
-                            <span>${doctor.name}</span>
-                            <span class='cell-detail-description'>${doctor.specialty}</span>
-                        </td>
-                        <td>
-                            <span>${doctor.employee_code ?? '...'}</span>
-                        </td>
-                        <td class='cell-detail milestone' data-project='Bootstrap'>
-                            <span style='font-size: 13px; color: black'>${doctor.position}</span>
-                        </td>
-                        <td class='cell-detail'>
-                            <span>${doctor.specialty}</span>
-                        </td>
-                        <td class='cell-detail milestone'>
-                            <span class='cell-detail-description' style='font-size: 13px; color: black'>${doctor.dob ?? '...'}</span>
-                            <span>${doctor.gender == 1 ? 'Nam' : 'Nũ'}</span>
-                        </td>
-                        <td class='milestone'>
-                            <span class='version'>${doctor.email}</span>
-                            <div>${doctor.phone}</div>
-                        </td>
-                        <td class='cell-detail'>
-                            <span>${doctor.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</span>
-                        </td>
-                        <td class='text-right p-0'>
-                            <div class='btn-group btn-hspace'>
-                                <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
-                                        data-toggle='dropdown'>
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
-                                                            <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
-                                                        </svg>
-                                </button>
-                                <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                    <a href='<?php echo BASE_URL ?>/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
-                                       type='button' class='dropdown-item'>Xem chi tiết</a>
-                                </div>
+                    <td>${rowNumber}</td>
+                    <td class='user-avatar cell-detail user-info'>
+                        <img class='mt-0 mt-md-2 mt-lg-0'
+                             src='${doctor.avt}'
+                             alt='Avatar'>
+                        <span>${doctor.name}</span>
+                        <span class='cell-detail-description'>${doctor.specialty}</span>
+                    </td>
+                    <td>
+                        <span>${doctor.employee_code ?? '...'}</span>
+                    </td>
+                    <td class='cell-detail milestone' data-project='Bootstrap'>
+                        <span style='font-size: 13px; color: black'>${doctor.position}</span>
+                    </td>
+                    <td class='cell-detail'>
+                        <span>${doctor.specialty}</span>
+                    </td>
+                    <td class='cell-detail milestone'>
+                        <span class='cell-detail-description' style='font-size: 13px; color: black'>${doctor.dob ?? '...'}</span>
+                        <span>${doctor.gender == 1 ? 'Nam' : 'Nữ'}</span>
+                    </td>
+                    <td class='milestone'>
+                        <span class='version'>${doctor.email}</span>
+                        <div>${doctor.phone}</div>
+                    </td>
+                    <td class='cell-detail'>
+                        <span>${doctor.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</span>
+                    </td>
+                    <td class='text-right p-0'>
+                        <div class='btn-group btn-hspace'>
+                            <button class='btn btn-secondary dropdown-toggle p-0' type='button' style='border: none; background-color: transparent;'
+                                    data-toggle='dropdown'>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-three-dots-vertical" viewBox="0 0 16 16">
+                                    <path d="M3 9.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0-5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zm0 10a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0z"/>
+                                </svg>
+                            </button>
+                            <div class='dropdown-menu dropdown-menu-right' role='menu'>
+                                <a href='<?php echo BASE_URL ?>/index.php?controller=doctor&action=detail&doctor_id=${doctor.id}'
+                                   type='button' class='dropdown-item'>Xem chi tiết</a>
                             </div>
-                        </td>
-                    </tr>`;
+                        </div>
+                    </td>
+                </tr>`;
                 tableBody.innerHTML += row;
             });
 
@@ -362,7 +362,7 @@ if (!isset($_SESSION['admin_name'])) {
             link.addEventListener('click', function (e) {
                 e.preventDefault();
                 currentPage = page;
-                renderDoctors(currentPage);
+                renderDoctors(currentPage, filteredDoctors);
 
                 document.querySelectorAll('.pagination .page-item').forEach(item => {
                     item.classList.remove('active');
@@ -376,7 +376,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         function filterBySpecialty() {
             const selectedSpecialty = document.getElementById('selectSpecialty').value;
-            const filteredDoctors = selectedSpecialty === 'All' ? listDoctors : listDoctors.filter(doctor => doctor.specialty === selectedSpecialty);
+            filteredDoctors = selectedSpecialty === 'All' ? listDoctors : listDoctors.filter(doctor => doctor.specialty === selectedSpecialty);
             currentPage = 1; // Reset lại trang hiện tại về trang đầu tiên
             setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
             renderDoctors(currentPage, filteredDoctors);
@@ -384,13 +384,13 @@ if (!isset($_SESSION['admin_name'])) {
 
         function changePage(page) {
             currentPage = page;
-            renderDoctors(currentPage);
-            setupPagination(listDoctors, document.getElementById('pagination'), doctorsPerPage);
+            renderDoctors(currentPage, filteredDoctors);
+            setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
         }
 
         const paginationElement = document.getElementById('pagination');
-        setupPagination(listDoctors, paginationElement, doctorsPerPage);
-        renderDoctors(currentPage);
+        setupPagination(filteredDoctors, paginationElement, doctorsPerPage);
+        renderDoctors(currentPage, filteredDoctors);
 
         // Xu ly them moi
         const errorMessages = {

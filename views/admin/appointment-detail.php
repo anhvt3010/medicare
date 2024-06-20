@@ -107,7 +107,7 @@ if (!isset($_SESSION['admin_name'])) {
                             <div class="col-4">
                                 <label for="" class="form-label">Giờ khám</label>
                                 <div class="form-control-sm" style="background-color: #eee; line-height: 30px">
-                                    <?php echo $appointment['time_slot'] ?>
+                                    <?php echo substr($appointment['time_slot'], 0, 5) ?>
                                 </div>
                             </div>
                         </div>
@@ -179,8 +179,7 @@ if (!isset($_SESSION['admin_name'])) {
                     <hr>
                     <div class="mt-3 d-flex justify-content-between">
                         <div>
-                            <a id="backButton" class="btn btn-danger mr-3"
-                               href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=index">Danh sách lịch khám</a>
+                            <button id="backButton" class="btn btn-danger mr-3" onclick=" window.history.back();">Quay lại</button>
                             <?php
                             date_default_timezone_set('Asia/Ho_Chi_Minh');
                             $currentDate = date('Y-m-d');

@@ -17,7 +17,6 @@ class DoctorModel  extends BaseModel {
     {
         $sql = "SELECT e.employee_id AS id,
                         e.name AS name,
-                       e.username AS username,
                        e.avt AS avt,
                        e.gender AS gender,
                        e.dob AS dob,

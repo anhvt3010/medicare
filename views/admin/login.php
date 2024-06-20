@@ -53,7 +53,7 @@ if (isset($_SESSION['admin_name'])) {
             <div class="col-12 col-md-6 col-xl-7">
                 <div class="d-flex justify-content-center" style="background-color: #1F5D60FF; color: white">
                     <div class="col-12 col-xl-9">
-                        <a href="<?php echo HOME_ADMIN_URL ?>"
+                        <a href="<?php echo HOME_CLIENT_URL ?>"
                            class="logo me-auto">
                             <img class="img-fluid rounded mb-4" loading="lazy" src="assets/img/Medicare.png" width="345"
                                  alt="BootstrapBrain Logo">

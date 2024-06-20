@@ -261,7 +261,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     endforeach; ?>
                                     </tbody>
                                 </table>
-                                <div class="row be-datatable-footer">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-10 dataTables_paginate" id="pagination" style="margin-bottom: 0px!important;">
                                         <nav aria-label="Page navigation example">
                                             <?php

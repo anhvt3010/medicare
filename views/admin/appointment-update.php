@@ -53,11 +53,11 @@ if (!isset($_SESSION['admin_name'])) {
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-table p-3 m-0">
-                        <form method="GET" action="#">
-                            <div class="row" id="form-time-container">
+                        <form method="GET" action="#" class="row">
+                            <div class="col-md-6" id="form-time-container">
                                 <?php include "./views/admin/components/form-time.php" ?>
                             </div>
-                            <div id="form-info-container">
+                            <div id="form-info-container" class="col-md-6">
                                 <?php include "./views/admin/components/form-information.php" ?>
                             </div>
                         </form>
@@ -68,7 +68,7 @@ if (!isset($_SESSION['admin_name'])) {
                                 <button type="button" class="btn btn-warning ml-3" id="changeInfor">Thay đổi thông tin</button>
                             </div>
 
-                            <button id="btnUpdate" type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdropApUp">
+                            <button id="btnUpdate" type="button" class="btn btn-primary">
                                 Cập nhật
                             </button>
                         </div>
@@ -96,7 +96,9 @@ if (!isset($_SESSION['admin_name'])) {
         </div>
     </div>
 </div>
-
+<script>
+    var baseUri = '<?php echo BASE_URL; ?>';
+</script>
 <script src="<?php echo BASE_URL ?>/assets/js/appointment-update.js"></script>
 <script src="<?php echo BASE_URL ?>/assets/js/validate-appointment.js"></script>
 <?php include 'import-script.php'?>
@@ -195,6 +197,73 @@ if (!isset($_SESSION['admin_name'])) {
             });
         });
 
+        document.getElementById('btnUpdate').addEventListener('click', function () {
+            var isValid = true;
+
+            // Kiểm tra tên bệnh nhân
+            var errorName = document.getElementById('error-name-gender');
+            var patientName = appointmentUpdate['patient_name'];
+            if (!patientName) {
+                errorName.style.display = 'block';
+                errorName.textContent = 'Vui lòng nhập tên bệnh nhân'
+                isValid = false;
+            } else if(patientName.length < 5 || patientName.length > 100) {
+                errorName.style.display = 'block';
+                errorName.textContent = 'Tên có độ dài từ 5 đến 100 kí tự'
+                isValid = false;
+            }
+            else {
+                errorName.style.display = 'none';
+            }
+
+            // Kiểm tra ngày sinh
+            var errorDob = document.getElementById('error-dob');
+            var patientDob = appointmentUpdate['patient_dob'];
+
+            const dob = new Date(patientDob);
+            const now = new Date();
+            const oneYearAgo = new Date(now.getFullYear() - 1, now.getMonth(), now.getDate());
+
+            if (!patientDob) {
+                errorDob.style.display = 'block';
+                errorDob.textContent = 'Vui lòng chọn ngày sinh';
+                isValid = false;
+            } else if ( dob >= oneYearAgo) {
+                errorDob.style.display = 'block';
+                errorDob.textContent = 'Ngày sinh không hợp lệ';
+                isValid = false;
+            } else {
+                errorDob.style.display = 'none';
+            }
+
+            // Kiểm tra số điện thoại
+            var errorPhone = document.getElementById('error-phone');
+            var patientPhone = appointmentUpdate['patient_phone'];
+            const phoneRegex = /^(0|\+84)(3[2-9]|5[689]|7[06-9]|8[1-689]|9[0-46-9])[0-9]{7}$/;
+            if (!patientPhone || !phoneRegex.test(patientPhone)) {
+                errorPhone.style.display = 'block';
+                errorPhone.textContent = 'Số điện thoại không hợp lệ'
+                isValid = false;
+            } else {
+                errorPhone.style.display = 'none';
+            }
+
+            // Kiểm tra email
+            var errorEmail = document.getElementById('error-email');
+            var patientEmail = appointmentUpdate['patient_email'];
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!patientEmail || !emailRegex.test(patientEmail)) {
+                errorEmail.style.display = 'block';
+                errorEmail.textContent = 'Email không hợp lệ'
+                isValid = false;
+            } else {
+                errorEmail.style.display = 'none';
+            }
+
+            if(isValid === true) staticBackdropApUp.show()
+
+        })
+
         // Sự kiện click nút cập nhật
         document.getElementById('update-appointment').addEventListener('click', function () {
             document.getElementById('loading-spinner').style.display = 'block';
@@ -220,6 +289,7 @@ if (!isset($_SESSION['admin_name'])) {
                 : parseInt(document.getElementById('time-slot')?.value, 10);
 
             console.log('appointmentUpdated', appointmentUpdated)
+
 
             $.ajax({
                 url: '<?php echo BASE_URL ?>/index.php?controller=appointment&action=update',

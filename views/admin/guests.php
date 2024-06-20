@@ -14,7 +14,7 @@ if (!isset($_SESSION['admin_name'])) {
     <meta name="description" content="">
     <meta name="author" content="">
     <link href="assets/img/logo.png" rel="icon">
-    <title>Lịch khám hôm nay</title>
+    <title>Danh sách khách vãng lai</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <?php include 'import-link-tag.php' ?>
     <style>
@@ -34,59 +34,33 @@ if (!isset($_SESSION['admin_name'])) {
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="page-head">
-            <h2 class="page-head-title">Lịch khám hôm nay</h2>
+            <h2 class="page-head-title" style="font-size: 25px">Danh sách khách vãng lai</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
-                    <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>
-                    <li class="breadcrumb-item">Quán lý đặt lịch</li>
-                    <li class="breadcrumb-item active">Lịch khám hôm nay</li>
+                    <li class="breadcrumb-item"><a href="<?php echo HOME_ADMIN_URL ?>">Trang chủ</a></li>
+                    <li class="breadcrumb-item">Quán lý bệnh nhân</li>
+                    <li class="breadcrumb-item active">Danh sách khách hàng</li>
                 </ol>
             </nav>
         </div>
-        <div class="main-content container-fluid">
+        <div class="main-content container-fluid" style="margin-top: -30px ">
             <div class="row">
                 <div class="col-md-12">
                     <div class="card card-table">
                         <div class="row table-filters-container">
                             <div class="col-3 table-filters pb-0">
                                 <div class="filter-container">
-                                    <label class="control-label table-filter-title">Lọc chuyên khoa:</label>
-                                    <form>
-                                        <select class="select2" name="specialty">
-                                            <option value="All" <?php echo ($specialtySelected == 'All' ? 'selected' : ''); ?>>Tất cả chuyên khoa</option>
-                                            <?php
-                                            foreach ($listSpecialties as $specialty) {
-                                                // Kiểm tra nếu id của chuyên khoa hiện tại trùng với $specialtySelected
-                                                $selected = ($specialty['specialty_id'] == $specialtySelected) ? 'selected' : '';
-                                                echo "<option value='" . htmlspecialchars($specialty['specialty_id']) . "' $selected>" . htmlspecialchars($specialty['name']) . "</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </form>
+
                                 </div>
                             </div>
 
                             <div class="col-3 table-filters pb-0">
                                 <div class="filter-container">
-                                    <label class="control-label table-filter-title">Lọc bác sĩ:</label>
-                                    <form>
-                                        <select class="select2" name="doctor">
-                                            <option value="All" <?php echo ($doctorSelected == 'All' ? 'selected' : ''); ?>>Tất cả bác sĩ</option>
-                                            <?php
-                                            foreach ($listDoctors as $doctor) {
-                                                // Kiểm tra nếu id của bác sĩ hiện tại trùng với $doctor_selected
-                                                $selected = ($doctor['id'] == $doctorSelected) ? 'selected' : '';
-                                                echo "<option value='" . htmlspecialchars($doctor['id']) . "' $selected>" . htmlspecialchars($doctor['name']) . "</option>";
-                                            }
-                                            ?>
-                                        </select>
-                                    </form>
+
                                 </div>
                             </div>
 
-
-                            <div class="col-3 table-filters pb-0">
-                                <span class="table-filter-title">Tra cứu bệnh nhân </span>
+                            <div class="col-4 table-filters pb-0">
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
@@ -97,8 +71,7 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
 
-                            <div class="col-3 table-filters pb-0">
-                                <span class="table-filter-title" style="opacity: 0">Tìm kiếm</span>
+                            <div class="col-2 table-filters pb-0">
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
@@ -114,12 +87,12 @@ if (!isset($_SESSION['admin_name'])) {
                                     <thead>
                                     <tr>
                                         <th style="width:2%;">STT</th>
-                                        <th style="width:13%;">Bác sĩ</th>
-                                        <th style="width:15%;">Bệnh nhân</th>
-                                        <th style="width:12%;">Thông tin liên hệ</th>
-                                        <th style="width:10%;">Chuyên khoa khám</th>
-                                        <th style="width:10%;">Thời gian hẹn</th>
-                                        <th style="width:10%;" class="text-center">Trạng thái</th>
+                                        <th style="width:10%;">Tên bệnh nhân</th>
+                                        <th style="width:10%;">Giới tính</th>
+                                        <th style="width:10%;">Ngày sinh</th>
+                                        <th style="width:10%;">Số điện thoại</th>
+                                        <th style="width:10%;">Email</th>
+                                        <th style="width:10%;">Số lần thăm khám</th>
                                         <th style="width:1%;"></th>
                                     </tr>
                                     </thead>
@@ -127,82 +100,30 @@ if (!isset($_SESSION['admin_name'])) {
                                     <?php
                                     $currentPage = $_GET['page'] ?? 1;
                                     $counter = ($currentPage - 1) * 10 + 1;
-                                    foreach ($listAppointments as $appointment): ?>
-                                        <tr class="<?php
-                                        switch ($appointment['status']) {
-                                            case 0:
-                                                echo 'warning in-progress';
-                                                break;
-                                            case 1:
-                                                echo 'primary to-do';
-                                                break;
-                                            case 2:
-                                                echo 'success done';
-                                                break;
-                                            case 3:
-                                                echo 'danger in-review';
-                                                break;
-                                            default:
-                                                echo '';
-                                        }
-                                        ?>">
+                                    foreach ($appointmentsGuests as $guest): ?>
+                                        <tr>
                                             <td style="text-align: center">
                                                 <?php echo $counter; ?>
                                             </td>
-                                            <td class="user-avatar cell-detail user-info">
-                                                <img class="mt-0 mt-md-2 mt-lg-0" src="<?php echo htmlspecialchars($appointment['doctor_avt']); ?>" alt="Avatar">
-                                                <span><?php echo htmlspecialchars($appointment['doctor_name']); ?></span>
-                                                <!--                                            <span class="cell-detail-description">Bác sĩ chuyên khoa 1</span>-->
-                                            </td>
-                                            <td class="cell-detail milestone" data-project="Bootstrap">
-                                                <span class="completed"><?php echo htmlspecialchars($appointment['patient_dob']); ?></span>
-                                                <span class="cell-detail-description"style="font-size: 13px; color: black"><?php echo htmlspecialchars($appointment['patient_name']); ?></span>
-                                                <span><?php echo htmlspecialchars($appointment['patient_gender'] == 1 ? 'Nam' : 'Nũ'); ?></span>
-                                            </td>
-                                            <td class="milestone">
-                                                <div><?php echo htmlspecialchars($appointment['patient_phone']); ?></div>
-                                                <span class="version"><?php echo htmlspecialchars($appointment['patient_email']); ?></span>
-
-                                            </td>
-                                            <td class="cell-detail">
-                                                <span><?php echo htmlspecialchars($appointment['specialty_name']); ?></span>
-                                                <!--                                            <span class="cell-detail-description">63e8ec3</span>-->
-                                            </td>
-                                            <td class="cell-detail">
-                                                <span class="date"><?php echo date('H:i', strtotime($appointment['time_slot'])); ?></span>
-                                                <span class="cell-detail-description">
-                                                <?php
-                                                //$appointment['date_slot'] là số ngày kể từ ngày 1/1/1970
-                                                $timestamp = $appointment['date_slot'] * 86400; // Chuyển đổi số ngày thành giây
-
-                                                // Đặt múi giờ sang "Asia/Ho_Chi_Minh" để đảm bảo chuyển đổi ngày chính xác theo giờ Việt Nam
-                                                date_default_timezone_set('Asia/Ho_Chi_Minh');
-
-                                                $date = date('d-m-Y', $timestamp); // Định dạng lại timestamp thành ngày tháng
-                                                echo htmlspecialchars($date);
-                                                ?>
-                                                </span>
-                                            </td>
-                                            <td class="text-center">
-                                                <?php
-                                                $statusColors = [
-                                                    0 => ['#fbbc05', 'Chờ xác nhận'],
-                                                    1 => ['#4285f4', 'Đã xác nhận'],
-                                                    2 => ['#34a853', 'Đã hoàn thành'],
-                                                    3 => ['#ea4335', 'Đã hủy'],
-                                                    'default' => ['#d3d3d3', 'Không xác định']
-                                                ];
-
-                                                // Lấy màu và tên trạng thái dựa trên $appointment['status']
-                                                $statusInfo = $statusColors[$appointment['status']] ?? $statusColors['default'];
-                                                ?>
-                                                <div class="btn btn-secondary"
-                                                     style="width: 150px; color: whitesmoke; font-weight: normal;
-                                                             background-color: <?php echo $statusInfo[0]; ?>;">
-                                                    <?php echo $statusInfo[1]; ?>
-                                                </div>
+                                            <td>
+                                                <?php echo htmlspecialchars($guest['patient_name']); ?>
                                             </td>
                                             <td>
+                                                <?php echo htmlspecialchars($guest['patient_gender'] == 1 ? 'Nam' : 'Nũ'); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo htmlspecialchars($guest['patient_dob']); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo htmlspecialchars($guest['patient_phone']); ?>
+                                            </td>
+                                            <td>
+                                                <?php echo htmlspecialchars($guest['patient_email']); ?>
+                                            </td>
+                                            <td style="text-align: center">
+                                                <?php echo htmlspecialchars($guest['total_appointments']); ?>
+                                            </td>
+                                            <td class="p-0">
                                                 <div class="btn-group">
                                                     <button id="btn-action"
                                                             style="border: none; background-color: transparent; "
@@ -213,8 +134,7 @@ if (!isset($_SESSION['admin_name'])) {
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
                                                         <a type="button" class="dropdown-item"
-                                                           href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>"
-                                                           data-id="<?php echo $appointment['id'] ?>">Chi tiết</a>
+                                                           href="<?php echo BASE_URL ?>/index.php?controller=patient&action=guest_detail&phone=<?php echo $guest['patient_phone'] ?>">Chi tiết</a>
                                                     </div>
                                                 </div>
                                             </td>
@@ -224,7 +144,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     endforeach; ?>
                                     </tbody>
                                 </table>
-                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.6%">
+                                <div class="row be-datatable-footer" style="position: fixed; bottom: 0; right: 1.6%; left: 16.8%">
                                     <div class="col-sm-10 dataTables_paginate" id="pagination" style="margin-bottom: 0px!important;">
                                         <nav aria-label="Page navigation example">
                                             <?php
@@ -234,7 +154,7 @@ if (!isset($_SESSION['admin_name'])) {
                                             unset($queryParams['page']);
                                             $newQueryString = http_build_query($queryParams);
 
-                                            $totalPages = ceil($totalAppointment / 10);
+                                            $totalPages = ceil($totalAppointmentsGuest / 10);
                                             $range = 2; // Số trang hiển thị xung quanh trang hiện tại
                                             $initialNum = $currentPage - $range;
                                             $conditionLimitNum = ($currentPage + $range)  + 1;
@@ -286,15 +206,15 @@ if (!isset($_SESSION['admin_name'])) {
                                     <?php
                                     $recordsPerPage = 10;
                                     $currentPage = $_GET['page'] ?? 1;
-                                    $totalPages = ceil($totalAppointment / $recordsPerPage);
+                                    $totalPages = ceil($totalAppointmentsGuest / $recordsPerPage);
                                     $startRecord = ($currentPage - 1) * $recordsPerPage + 1;
                                     $endRecord = $currentPage * $recordsPerPage;
-                                    if ($endRecord > $totalAppointment) {
-                                        $endRecord = $totalAppointment;
+                                    if ($endRecord > $totalAppointmentsGuest) {
+                                        $endRecord = $totalAppointmentsGuest;
                                     }
                                     ?>
                                     <div class="col-sm-2 dataTables_info" id="sub-pagination" style="line-height: 48px">
-                                        <?php echo $startRecord . " đến " . $endRecord . " trong số " . $totalAppointment; ?>
+                                        <?php echo $startRecord . " đến " . $endRecord . " trong số " . $totalAppointmentsGuest; ?>
                                     </div>
                                 </div>
                             </div>
@@ -328,24 +248,11 @@ if (!isset($_SESSION['admin_name'])) {
     });
 </script>
 <script>
-    var url_appointment = '<?php echo BASE_URL ?>/index.php?controller=appointment&action=today&page=1'
+    var url_appointment = '<?php echo BASE_URL ?>/index.php?controller=patient&action=guest&page=1'
 
     document.getElementById('button').addEventListener('click', function() {
-        var specialty = document.querySelector('.select2[name="specialty"]').value === 'All'
-            ? null
-            : document.querySelector('.select2[name="specialty"]').value;
-        var doctor = document.querySelector('.select2[name="doctor"]').value === 'All'
-            ? null
-            : document.querySelector('.select2[name="doctor"]').value;
         var searchInput = document.getElementById('searchInput').value.trim();
 
-
-        if (specialty) {
-            url_appointment += '&specialty=' + encodeURIComponent(specialty);
-        }
-        if (doctor) {
-            url_appointment += '&doctor=' + encodeURIComponent(doctor);
-        }
         if (searchInput.length > 0) {
             url_appointment += '&search=' + encodeURIComponent(searchInput);
         }
