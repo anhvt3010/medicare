@@ -94,23 +94,42 @@
             var OTP = 123456;
             var otpInput = document.getElementById('otp');
             var otpreq = parseInt(otpInput?.value, 10);
+            phoneNumber.style.borderColor = '';
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/index.php?controller=patient&action=check_phone',
+                type: 'POST',
+                data: {
+                    phone: phoneNumber.value
+                },
+                success: function(response) {
+                    if (response) {
+                        if (otpreq === OTP) {
+                            success_toast(
+                                "Xác minh OTP thành công",
+                                `<?php echo BASE_URL ?>/index.php?controller=auth&action=forgot_password&phone=${encodeURIComponent(phoneNumber.value)}`
+                            )
+                            otpInput.style.borderColor = '#24fa24';
 
-            if (otpreq === OTP) {
-                // document.getElementById('loadingConfirm').style.display = 'none';
-                success_toast(
-                    "Xác minh OTP thành công",
-                    `<?php echo BASE_URL ?>/index.php?controller=auth&action=forgot_password&phone=${encodeURIComponent(phoneNumber.value)}`
-                )
-                otpInput.style.borderColor = '#24fa24';
+                        } else {
+                            otpInput.value = ''; // Xóa nội dung của ô nhập
+                            otpInput.style.borderColor = 'red'; // Thêm border màu đỏ
+                            otpInput.focus(); // Đặt focus lại vào ô nhập để người dùng có thể nhập lại
+                            failed_toast('Mã OTP không đúng')
+                            $('#loading-spinner').hide();
+                        }
+                    } else {
+                        phoneNumber.style.borderColor = 'red';
+                        failed_toast('Số điện thoại không tồn tại.');
+                        $('#loading-spinner').hide();
+                    }
+                    // success_toast('Thêm mới thành công.')
+                },
+                error: function() {
+                    failed_toast('Có lỗi xảy ra, vui lòng thử lại.');
+                    document.getElementById('loading-spinner').style.display = 'none';
+                }
+            });
 
-            } else {
-                // document.getElementById('loadingConfirm').style.display = 'none';
-                otpInput.value = ''; // Xóa nội dung của ô nhập
-                otpInput.style.borderColor = 'red'; // Thêm border màu đỏ
-                otpInput.focus(); // Đặt focus lại vào ô nhập để người dùng có thể nhập lại
-                failed_toast('Mã OTP không đúng')
-                $('#loading-spinner').hide();
-            }
         });
     });
 
@@ -143,13 +162,13 @@
         }, 100); // Đợi 100ms để đảm bảo toast đã được thêm vào DOM
     }
 
-    function failed_toast() {
+    function failed_toast(message) {
         toast({
             classes: `text-bg-danger border-0`,
             body: `
               <div class="d-flex w-100" data-bs-theme="dark">
                 <div class="flex-grow-1">
-                  Đã có lỗi xảy ra !
+                  ${message}
                 </div>
                 <button type="button" class="btn-close flex-shrink-0" data-bs-dismiss="toast" aria-label="Close"></button>
               </div>`,

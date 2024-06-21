@@ -1,6 +1,8 @@
 <?php
 const BASE_URL = 'http://localhost/Medicare';
 //const BASE_URL = 'https://medicareee.000webhostapp.com';
+
+
 const NOT_FOUND_URL = BASE_URL . '/index.php?controller=home&action=not_found';
 const UNAUTHORIZED_URL =  BASE_URL .'/index.php?controller=home&action=unauthorized';
 

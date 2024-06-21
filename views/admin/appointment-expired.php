@@ -1,10 +1,10 @@
 <?php
 session_start(); // Khởi động session
 if (!isset($_SESSION['admin_name'])) {
-    header('Location: http://localhost/Medicare/index.php?controller=auth&action=loginAdmin');
+    header('Location: '. LOGIN_ADMIN_URL);
     exit();
 } else if ($_SESSION['role_id'] == 2){  // Trừ bác sĩ
-    header('Location: http://localhost/Medicare/index.php?controller=home&action=unauthorized');
+    header('Location: '. UNAUTHORIZED_URL);
     exit();
 }
 ?>
@@ -36,7 +36,7 @@ if (!isset($_SESSION['admin_name'])) {
     <?php include 'sidebar.php' ?>
     <div class="be-content">
         <div class="page-head">
-            <h2 class="page-head-title">Lịch khám quá hạn</h2>
+            <h2 class="page-head-title">Lịch khám quá hạn/đã hủy</h2>
             <nav aria-label="breadcrumb" role="navigation">
                 <ol class="breadcrumb page-head-nav">
                     <li class="breadcrumb-item"><a href="index.php">Trang chủ</a></li>

@@ -84,7 +84,7 @@ include "components/header.php" ;
                     <div class="col-4">
                         <label for="" class="form-label">Giờ khám</label>
                         <div class="form-control-sm" style="background-color: #eee; line-height: 30px">
-                            <?php echo $appointment['time_slot'] ?>
+                            <?php echo substr($appointment['time_slot'], 0, 5) ?>
                         </div>
                     </div>
                 </div>

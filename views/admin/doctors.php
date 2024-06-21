@@ -98,7 +98,7 @@ if (!isset($_SESSION['admin_name'])) {
                                 <div class="filter-container">
                                     <div class="row">
                                         <div class="col-12">
-                                            <input id="searchInput" placeholder="Nhập tên bác sĩ..." autocomplete="off"
+                                            <input id="searchInput" placeholder="Nhập tên/sđt/mã bác sĩ..." autocomplete="off"
                                                    class="form-control">
                                         </div>
                                     </div>
@@ -174,7 +174,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         function renderDoctors(page, items) {
             const start = (page - 1) * doctorsPerPage;
-            const end = start + doctorsPerPage;
+            var end = start + doctorsPerPage;
             const paginatedItems = items.slice(start, end);
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
@@ -226,8 +226,10 @@ if (!isset($_SESSION['admin_name'])) {
                 </tr>`;
                 tableBody.innerHTML += row;
             });
-
             const paginationInfo = document.getElementById('sub-pagination');
+            if(currentPage === Math.ceil(listDoctors.length / doctorsPerPage)) {
+                end = listDoctors.length
+            }
             paginationInfo.innerHTML = `${start + 1} - ${end} trong số ${items.length} bác sĩ`;
         }
 

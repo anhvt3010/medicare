@@ -15,7 +15,9 @@
                                 <i class="icon fa-regular fa-calendar"></i><span>Quản lý đặt lịch</span>
                             </a>
                             <ul class="sub-menu">
-                                <li><a href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=index">Danh sách lịch khám</a></li>
+                                <?php if ($_SESSION['role_id'] != 2) { ?>
+                                    <li><a href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=index">Danh sách lịch khám</a></li>
+                                <?php } ?>
                                 <li><a href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=today">Lịch khám hôm nay</a></li>
                                 <?php if ($_SESSION['role_id'] != 2) { ?>
                                     <li>

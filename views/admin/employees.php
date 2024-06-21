@@ -95,11 +95,11 @@ if (!isset($_SESSION['admin_name'])) {
                                         <th style="width:2%;">STT</th>
                                         <th style="width:13%;">Tên nhân viên</th>
                                         <th style="width:7%;">Mã nhân viên</th>
-                                        <th style="width:10%;">Chức vụ</th>
-                                        <th style="width:10%;">Ngày sinh</th>
+                                        <th style="width:8%;">Chức vụ</th>
+                                        <th style="width:8%;">Ngày sinh</th>
                                         <th style="width:10%;">Thông tin liên hệ</th>
-                                        <th style="width:15%;">Địa chỉ</th>
-                                        <th style="width:10%;">Trạng thái</th>
+                                        <th style="width:18%;">Địa chỉ</th>
+                                        <th style="width:6%;">Trạng thái</th>
                                         <th style="width:2%;"></th>
                                     </tr>
                                     </thead>
@@ -156,7 +156,7 @@ if (!isset($_SESSION['admin_name'])) {
 
         function renderEmployees(page, items) {
             const start = (page - 1) * employeesPerPage;
-            const end = start + employeesPerPage;
+            var end = start + employeesPerPage;
             const paginatedItems = items.slice(start, end);
             const tableBody = document.getElementById('tableBody');
             tableBody.innerHTML = '';
@@ -173,8 +173,8 @@ if (!isset($_SESSION['admin_name'])) {
                     <td>
                         <span>${employee.employee_code ?? '...'}</span>
                     </td>
-                    <td class='cell-detail milestone' data-project='Bootstrap'>
-                        <span style='font-size: 13px; color: black'>${employee.position}</span>
+                    <td>
+                        <span>${employee.position}</span>
                     </td>
                     <td class='cell-detail milestone'>
                         <span class='cell-detail-description' style='font-size: 13px; color: black'>${employee.dob ?? '...'}</span>
@@ -188,7 +188,7 @@ if (!isset($_SESSION['admin_name'])) {
                         ${employee.address ?? '...'}
                     </td>
                     <td class='cell-detail'>
-                        <span>${employee.status == 1 ? 'Đang hoạt động' : 'Đã đóng'}</span>
+                        <span>${employee.status == 1 ? 'Hoạt động' : 'Đã đóng'}</span>
                     </td>
                     <td class='text-right p-0'>
                         <div class='btn-group btn-hspace'>
@@ -209,6 +209,9 @@ if (!isset($_SESSION['admin_name'])) {
             });
 
             const paginationInfo = document.getElementById('sub-pagination');
+            if(currentPage === Math.ceil(listEmployees.length / employeesPerPage)) {
+                end = listEmployees.length
+            }
             paginationInfo.innerHTML = `${start + 1} - ${end} trong số ${items.length} nhân viên`;
         }
 

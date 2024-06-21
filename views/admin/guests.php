@@ -214,7 +214,7 @@ if (!isset($_SESSION['admin_name'])) {
                                     }
                                     ?>
                                     <div class="col-sm-2 dataTables_info" id="sub-pagination" style="line-height: 48px">
-                                        <?php echo $startRecord . " đến " . $endRecord . " trong số " . $totalAppointmentsGuest; ?>
+                                        <?php echo $startRecord . " đến " . $endRecord . " trong số " . $totalAppointmentsGuest . " khách"?>
                                     </div>
                                 </div>
                             </div>

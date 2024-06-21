@@ -180,7 +180,7 @@ if (!isset($_SESSION['admin_name'])) {
             if(currentPage === Math.ceil(listSpecialties.length / itemsPerPage)) {
                 end = listSpecialties.length
             }
-            paginationInfo.innerHTML = `${start + 1} - ${end} trong số ${items.length} chuyên khoa`;
+            paginationInfo.innerHTML = `${start + 1} - ${end} trong số ${items.length} bệnh nhân`;
         }
 
         function setupPagination(items, wrapper, rowsPerPage) {

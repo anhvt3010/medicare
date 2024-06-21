@@ -42,6 +42,7 @@
             <input type="password" class="form-control" id="confirmNewPassword" required>
         </div>
     </form>
+
     <div class="d-flex justify-content-between">
         <a href="<?php echo BASE_URL ?>/index.php?controller=home&action=home#hero"
            type="button" class="btn btn-secondary" data-dismiss="modal">Quay lại trang chủ</a>
@@ -109,7 +110,12 @@
                     $("#loading-spinner").hide();
                 }
             });
-        })
+        });
+        function togglePasswordVisibility(fieldId) {
+            var inputField = document.getElementById(fieldId);
+            var currentType = inputField.type;
+            inputField.type = currentType === 'password' ? 'text' : 'password';
+        }
     });
 
 </script>

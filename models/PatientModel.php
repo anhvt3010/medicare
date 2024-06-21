@@ -22,8 +22,7 @@ class PatientModel extends Database {
                        COUNT(a.patient_id) AS total_appointments
                 FROM patients AS p
                          LEFT JOIN appointments AS a ON p.patient_id = a.patient_id
-                GROUP BY p.patient_id, p.name, p.dob, p.gender, p.address, p.phone, p.email
-";
+                GROUP BY p.patient_id, p.name, p.dob, p.gender, p.address, p.phone, p.email";
         $query = $this->_query($sql);
         $data = [];
         while ($result = mysqli_fetch_assoc($query)) {
@@ -96,5 +95,24 @@ class PatientModel extends Database {
         } else {
             return false;
         }
+    }
+
+    public function checkPhoneExists($phone): bool {
+        $sql = "SELECT COUNT(*) as count FROM patients WHERE phone = ?";
+        $stmt = mysqli_prepare($this->connection, $sql);
+        if ($stmt === false) {
+            throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
+        }
+
+        mysqli_stmt_bind_param($stmt, 's', $phone);
+        if (mysqli_stmt_execute($stmt) === false) {
+            throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));
+        }
+
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        return $row['count'] > 0;
     }
 }

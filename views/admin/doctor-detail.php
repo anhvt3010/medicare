@@ -167,13 +167,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-8 pr-0">
+                                <div class="col-md-9 pr-0">
                                     <label class="labels">Địa chỉ</label>
                                     <input id="docUpAddress" type="text" class="form-control" placeholder="Nhập địa chỉ"
                                            value="<?php echo $doctor['address'] ?>" disabled>
                                     <span id="errorDocAddress" style="color: red"></span>
                                 </div>
-                                <div class="col-md-4">
+                                <div class="col-md-3">
                                     <label class="labels">Trạng thái</label>
                                     <select id="docUpStatus" class="form-select mb-3" aria-label="Large select example" style="height: 50px" disabled>
                                         <option value="0" <?php echo ($doctor['status'] == 0) ? 'selected' : ''; ?>>Đóng</option>

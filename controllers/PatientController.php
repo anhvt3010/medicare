@@ -181,4 +181,22 @@ class PatientController extends BaseController
             'appointment' => $appointment,
         ]);
     }
+
+    /**
+     * @throws Exception
+     */
+    public function check_phone()
+    {
+        $phone = $_POST['phone'];  // Đảm bảo rằng bạn đang sử dụng POST ở đây
+        $result = $this->patientModel->checkPhoneExists($phone);
+        if (!empty($_SERVER['HTTP_X_REQUESTED_WITH']) && strtolower($_SERVER['HTTP_X_REQUESTED_WITH']) == 'xmlhttprequest') {
+            header('Content-Type: application/json');
+            echo json_encode($result);
+            exit;
+        } else {
+            return $this->view('client.profile', [
+                'result' => $result,
+            ]);
+        }
+    }
 }

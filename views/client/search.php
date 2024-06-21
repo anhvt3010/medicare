@@ -11,7 +11,6 @@
           integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <link rel="stylesheet" href="<?php echo BASE_URL ?>/views/admin/assets/css/app.css" type="text/css">
     <link href="assets/css/style.css" rel="stylesheet">
-
 </head>
 <body>
 <?php include "components/topbar.php" ?>
@@ -231,8 +230,10 @@
                             </svg>
                         </button>
                         <div class="dropdown-menu dropdown-menu-left">
-                            <a type="button" class="dropdown-item"
-                               href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail_client&id=${appointment.id}">Chi tiết</a>
+                           <form class="dropdown-item" action="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail_client" method="POST">
+                                <input type="hidden" name="id" value="${appointment.id}">
+                                <button style="border: none ;background-color: transparent" type="submit">Chi tiết</button>
+                            </form>
                         </div>
                     </div>
                 </td>
