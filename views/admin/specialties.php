@@ -114,7 +114,7 @@ if (!isset($_SESSION['admin_name'])) {
                 <div class="modal-body">
                     <div class="mb-3">
                         <label for="specialtyName" class="form-label">Tên chuyên khoa</label>
-                        <input type="text" class="form-control" id="specialtyName" placeholder="Nhập tên chuyên khoa mới">
+                        <input type="text" class="form-control" id="specialtyName" maxlength="255" placeholder="Nhập tên chuyên khoa mới">
                         <span style="margin-left: 10px; color: red" id="errorSpecialtyName"></span>
                     </div>
                     <div class="mb-3">
@@ -380,13 +380,13 @@ if (!isset($_SESSION['admin_name'])) {
 
             // Kiểm tra tên chuyên khoa
             if (!specialtyName.value || specialtyName.value.length > 150) {
-                errorSpecialtyName.textContent = 'Tên chuyên khoa không được để trống và không quá 150 kí tự.';
+                errorSpecialtyName.textContent = 'Vui lòng nhập tên chuyên khoa';
                 valid = false;
             }
 
             // Kiểm tra mô tả chuyên khoa
             if (!specialtyDescription.value) {
-                errorSpecialtyDescription.textContent = 'Mô tả không được để trống.';
+                errorSpecialtyDescription.textContent = 'Vui lòng nhập mô tả.';
                 valid = false;
             }
 

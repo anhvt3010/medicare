@@ -1,6 +1,6 @@
 <?php
 require_once 'BaseController.php';
-require_once 'services/sendMail.php';
+require_once 'configs/sendMailConfig.php';
 use Spatie\Async\Pool;
 
 class AppointmentController extends BaseController

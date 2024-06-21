@@ -64,7 +64,7 @@
                                       data-value='" . htmlspecialchars($specialty['specialty_id']) . "'>
                                         " . htmlspecialchars($specialty['name']) . "
                                         <br>
-                                        <small class='text-muted'>" . htmlspecialchars($specialty['description']) . "</small>
+                                        <small class='text-muted'>" . htmlspecialchars($specialty['description'] ?? '') . "</small>
                                   </li>";
                         }
                     }

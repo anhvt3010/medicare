@@ -379,6 +379,7 @@ if (!isset($_SESSION['admin_name'])) {
             emDobAge: 'Nhân viên phải trên 18 tuổi',
             emEmail: 'Email không hợp lệ',
             emPhone: 'Số điện thoại không hợp lệ',
+            emPhoneExisted: 'Số điện thoại đã tồn tại',
             emAddress: 'Địa chỉ không được để trống và không vượt quá 255 ký tự',
             emPosition: 'Vui lòng chọn chức vụ'
         };
@@ -529,7 +530,13 @@ if (!isset($_SESSION['admin_name'])) {
                     contentType: false,
                     processData: false,
                     success: function(response) {
-                        success_toast('Thêm mới thành công')
+                        if(response['success']){
+                            success_toast(response['message'])
+                        } else {
+                            document.getElementById('errorEmPhone').textContent = errorMessages.emPhoneExisted;
+                            emPhone.classList.add('is-invalid');
+                            $("#loading-spinner").hide();
+                        }
                     },
                     error: function() {
                         failed_toast('Có lỗi xảy ra, vui lòng thử lại.')

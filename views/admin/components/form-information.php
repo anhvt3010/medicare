@@ -5,7 +5,7 @@
             <div class="col-md-8">
                 <label for="patient-name" class="form-label">Họ và tên (*)</label>
                 <div class="input-group-sm">
-                    <input type="text" class="form-control" id="patient-name" placeholder="Nhập họ và tên (*)">
+                    <input type="text" class="form-control" id="patient-name" maxlength="50" placeholder="Nhập họ và tên (*)">
                 </div>
                 <span id="error-name-gender" class="ml-2" style="color: red; display: none"></span>
             </div>
@@ -31,7 +31,7 @@
             <div class="col-md-7">
                 <label for="patient-phone">Số điện thoại (*)</label>
                 <div class="input-group-sm">
-                    <input type="text" class="form-control" id="patient-phone" placeholder="Nhập số điện thoại (*)">
+                    <input type="text" class="form-control" id="patient-phone" maxlength="11" placeholder="Nhập số điện thoại (*)">
                 </div>
                 <span id="error-phone" class="ml-2" style="color: red; display: none"></span>
             </div>
@@ -40,7 +40,7 @@
             <div class="col-md-12">
                 <label for="patient-email" class="form-label">Email (*)</label>
                 <div class="input-group-sm">
-                    <input type="email" class="form-control" id="patient-email" placeholder="Để lại email để nhận thông tin lịch hẹn">
+                    <input type="email" class="form-control" id="patient-email" maxlength="150" placeholder="Để lại email để nhận thông tin lịch hẹn">
                 </div>
                 <span id="error-email" class="ml-2" style="color: red;"></span>
             </div>
@@ -48,7 +48,7 @@
     </div>
     <div class="col-md-12 mb-2">
         <label for="patient-description">Mô tả triệu chứng</label>
-        <textarea class="form-control" id="patient-description" rows="4" style="resize: none" placeholder="Mô tả triệu chứng"></textarea>
+        <textarea class="form-control" id="patient-description" maxlength="500" rows="4" style="resize: none" placeholder="Mô tả triệu chứng"></textarea>
     </div>
     <div class="col-md-12 row pr-0">
         <div class="col-3">

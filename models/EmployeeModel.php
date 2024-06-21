@@ -12,6 +12,25 @@ class EmployeeModel  extends BaseModel {
         return mysqli_query($this->connection, $sql);
     }
 
+    public function checkPhoneExists($phone): bool {
+        $sql = "SELECT COUNT(*) as count FROM employees WHERE phone = ?";
+        $stmt = mysqli_prepare($this->connection, $sql);
+        if ($stmt === false) {
+            throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
+        }
+
+        mysqli_stmt_bind_param($stmt, 's', $phone);
+        if (mysqli_stmt_execute($stmt) === false) {
+            throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));
+        }
+
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        return $row['count'] > 0;
+    }
+
     public function getById($id): array
     {
         $sql = "SELECT e.employee_id AS id,
@@ -99,27 +118,35 @@ class EmployeeModel  extends BaseModel {
         return $result;
     }
 
-    public function addEmployee($name, $dob, $email, $phone, $gender, $address, $position_id, $status, $avt, $update_by): bool
+    public function addEmployee($name, $dob, $email, $phone, $gender, $address, $position_id, $status, $avt, $update_by): array
     {
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        if ($this->checkPhoneExists($phone)) {
+            return [
+                'success' => false,
+                'message' => 'Số điện thoại đã tồn tại trong hệ thống.'
+            ];
+        }
+
         $created_at = date("Y-m-d H:i:s");
         $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
         $role_id = 3;
 
         $sql = "INSERT INTO employees (
-                   position_id,
-                   role_id,
-                   name,
-                   password,
-                   phone,
-                   email,
-                   dob,
-                   gender,
-                   address, 
-                   status,
-                   create_at,
-                   avt,
-                   update_by)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+               position_id,
+               role_id,
+               name,
+               password,
+               phone,
+               email,
+               dob,
+               gender,
+               address, 
+               status,
+               create_at,
+               avt,
+               update_by)
+        VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
         $stmt = mysqli_prepare($this->connection, $sql);
         if ($stmt === false) {
@@ -161,6 +188,9 @@ class EmployeeModel  extends BaseModel {
         mysqli_stmt_close($stmt);
         mysqli_stmt_close($stmtUpdate);
 
-        return $result;
+        return [
+            'success' => true,
+            'message' => 'Nhân viên mới đã được thêm thành công.'
+        ];
     }
 }

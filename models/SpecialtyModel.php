@@ -54,6 +54,19 @@ class SpecialtyModel extends Database{
         return $data;
     }
 
+    public function getSpecialties(): array
+    {
+        $sql = "SELECT *
+            FROM specialties ORDER BY create_at DESC";
+
+        $query = $this->_query($sql);
+        $data = [];
+        while ($result = mysqli_fetch_assoc($query)) {
+            $data[] = $result;
+        }
+        return $data;
+    }
+
     public function getSpecialtiesForAdmin(): array
     {
         $sql = "SELECT *

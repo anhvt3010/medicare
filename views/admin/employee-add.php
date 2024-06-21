@@ -9,7 +9,7 @@
                 <div class="mb-2 row">
                     <div class="col-6">
                         <label for="emName" class="form-label">Tên nhân viên *</label>
-                        <input type="text" class="form-control" id="emName" placeholder="Nhập tên nhân viên mới" autocomplete="off">
+                        <input type="text" class="form-control" id="emName" maxlength="255" placeholder="Nhập tên nhân viên mới" autocomplete="off">
                         <span style="margin-left: 10px; color: red" id="errorEmName"></span>
                     </div>
                     <div class="col-2 p-0">
@@ -28,19 +28,19 @@
                 <div class="row mb-1">
                     <div class="col-6">
                         <label for="emEmail" class="form-label">Email *</label>
-                        <input type="text" class="form-control" id="emEmail" placeholder="Nhập email" autocomplete="off">
+                        <input type="text" class="form-control" id="emEmail" maxlength="255" placeholder="Nhập email" autocomplete="off">
                         <span style="margin-left: 10px; color: red" id="errorEmEmail"></span>
                     </div>
                     <div class="col-6">
                         <label for="emPhone" class="form-label">Số điện thoại *</label>
-                        <input type="text" class="form-control" id="emPhone" placeholder="Nhập số điện thoại" autocomplete="off">
+                        <input type="text" class="form-control" id="emPhone" maxlength="10" placeholder="Nhập số điện thoại" autocomplete="off">
                         <span style="margin-left: 10px; color: red" id="errorEmPhone"></span>
                     </div>
                 </div>
                 <div class="mb-1 row">
                     <div class="col-9">
                         <label for="emAddress" class="form-label">Địa chỉ *</label>
-                        <input type="text" class="form-control" id="emAddress" placeholder="Nhập địa chỉ nhân viên" autocomplete="off">
+                        <input type="text" class="form-control" id="emAddress" maxlength="255" placeholder="Nhập địa chỉ nhân viên" autocomplete="off">
                         <span style="margin-left: 10px; color: red" id="errorEmAddress"></span>
                     </div>
                     <div class="col-3">

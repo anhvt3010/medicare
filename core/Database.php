@@ -3,7 +3,8 @@ class Database{
     const HOST = 'localhost';
     const USERNAME = 'root';
     const PASSWORD = '';
-    const DATABASE = 'medicare';
+//    const DATABASE = 'medicare';
+    const DATABASE = 'medicare_final';
 
 //    product
 //    const HOST = 'localhost';

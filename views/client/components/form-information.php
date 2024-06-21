@@ -10,7 +10,7 @@
                                     <span class="input-group-text">
                                         <i class="fa fa-user"></i>
                                     </span>
-                    <input type="text" class="form-control" id="patient-name" placeholder="Nhập họ và tên (*)">
+                    <input type="text" class="form-control" id="patient-name" maxlength="50" placeholder="Nhập họ và tên (*)">
                 </div>
                 <span id="error-name-gender" class="ml-2" style="color: red; display: none"></span>
             </div>
@@ -41,7 +41,7 @@
                                 <span class="input-group-text">
                                     <i class="fa fa-phone"></i>
                                 </span>
-                <input type="text" class="form-control" id="patient-phone"
+                <input type="text" class="form-control" id="patient-phone" maxlength="11"
                        placeholder="Nhập số điện thoại chính xác để xác nhận bởi CSKH (*)">
             </div>
             <span id="error-phone" class="ml-2" style="color: red; display: none"></span>
@@ -51,7 +51,7 @@
                                 <span class="input-group-text">
                                     <i class="fa-solid fa-envelope"></i>
                                 </span>
-                <input type="email" class="form-control" id="patient-email"
+                <input type="email" class="form-control" id="patient-email" maxlength="150"
                        placeholder="Để lại email để nhận thông tin lịch hẹn">
             </div>
             <span id="error-email" class="ml-2" style="color: red;"></span>
@@ -59,7 +59,7 @@
     </div>
 <!--    <div style="width: 50%; margin: 0">-->
     <div class="col-md-6 mb-4">
-    <textarea class="form-control" id="patient-description" rows="9" style="resize: none"
+    <textarea class="form-control" id="patient-description" rows="9" style="resize: none" maxlength="500"
               placeholder="Vui lòng mô tả rõ triệu chứng của bạn và nhu cầu thăm khám (*)"></textarea>
         <span id="error-description" class="ml-2" style="color: red;"></span>
     </div>

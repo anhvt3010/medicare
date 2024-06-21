@@ -56,7 +56,7 @@
                         <div class="mb-3 row">
                             <div class="col-4">
                                 <label for="" class="form-label">Họ và tên</label>
-                                <input id="paName" type="text" class="form-control" maxlength="50"
+                                <input id="paName" type="text" class="form-control" maxlength="255"
                                        value="<?php echo $patient['name'] ?>"
                                        disabled>
                                 <span id="error-paName" style="color: red; margin-left: 10px"></span>
@@ -84,7 +84,7 @@
                     <div class="mb-3 row">
                         <div class="col-6">
                             <label for="paEmail" class="form-label">Email</label>
-                            <input type="text" class="form-control" id="paEmail"
+                            <input type="text" class="form-control" id="paEmail" maxlength="150"
                                    value="<?php echo $patient['email'] ?? '' ?>" disabled>
                             <span id="error-paEmail" style="color: red; margin-left: 10px"></span>
                         </div>

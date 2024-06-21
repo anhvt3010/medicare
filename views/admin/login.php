@@ -236,7 +236,7 @@ if (isset($_SESSION['admin_name'])) {
                 success: function(response) {
                     console.log(response);
                     if(response['success'] === true) {
-                        success_toast('http://localhost/Medicare/index.php?controller=home&action=home_admin');
+                        success_toast('<?php echo BASE_URL ?>/index.php?controller=home&action=home_admin');
                     } else {
                         inputs.forEach(function (input) {
                             input.classList.add('invalid-input');

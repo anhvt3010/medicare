@@ -65,19 +65,19 @@
                             <div class="row gy-3 overflow-hidden">
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input size="" type="text" class="form-control" name="name" id="name" placeholder="name@example.com" required>
+                                        <input size="" type="text" class="form-control" name="name" id="name" maxlength="255" required>
                                         <label for="name" class="form-label">Họ và tên</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="tel" class="form-control" name="phone" id="phone" placeholder="xxxx xxx xxx" required>
+                                        <input type="tel" class="form-control" name="phone" id="phone" maxlength="10" placeholder="xxxx xxx xxx" required>
                                         <label for="phone" class="form-label">Số điện thoại</label>
                                     </div>
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="password" class="form-control" name="password" id="password" value="" placeholder="Mật khẩu" required>
+                                        <input type="password" class="form-control" name="password" maxlength="255" id="password" value="" placeholder="Mật khẩu" required>
                                         <label for="password" class="form-label">Mật khẩu</label>
                                         <i class="fas fa-eye password-toggle" id="togglePasswordRe"
                                            style="position: absolute; right: 10px; top: 50%;
@@ -86,7 +86,7 @@
                                 </div>
                                 <div class="col-12">
                                     <div class="form-floating">
-                                        <input type="password" class="form-control" name="re-password" id="re-password" value="" placeholder="Xác nhận mật khẩu" required>
+                                        <input type="password" class="form-control" maxlength="255" name="re-password" id="re-password" value="" placeholder="Xác nhận mật khẩu" required>
                                         <label for="password" class="form-label">Xác nhận mật khẩu</label>
                                         <i class="fas fa-eye password-toggle" id="togglePasswordReCon"
                                            style="position: absolute; right: 10px; top: 50%;

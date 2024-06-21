@@ -11,7 +11,7 @@ class SpecialtyController extends BaseController
 
     public function index()
     {
-        $listSpecialties = $this->specialtyModel->getSpecialtiesForAdmin();
+        $listSpecialties = $this->specialtyModel->getSpecialties();
         return $this->view('admin.specialties', [
             'listSpecialties' => $listSpecialties,
         ]);
