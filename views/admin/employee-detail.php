@@ -122,13 +122,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 <h4 class="text-right">Thông tin cá nhân</h4>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-7 pr-0">
                                     <label class="labels">Họ và tên</label>
                                     <input id="docUpName" type="text" class="form-control" placeholder="Nhập họ và tên"
                                            value="<?php echo $employee['name'] ?>" disabled>
                                     <span id="errorDocName" style="color: red"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <label class="labels">Mã nhân viên</label>
                                     <div id="docUpUsername" type="text" class="form-control"
                                          style="line-height: 30px; background-color: #eee">
@@ -138,7 +138,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-7 pr-0">
+                                    <label class="labels">Ngày sinh</label>
+                                    <input id="docUpDob" type="date" class="form-control"
+                                           value="<?php echo $employee['dob'] ?>" disabled>
+                                    <span id="errorDocDob" style="color: red"></span>
+                                </div>
+                                <div class="col-md-5">
                                     <label for="docUpGender" class="form-label">Giới tính</label>
                                     <select id="docUpGender" class="form-select mb-3" aria-label="Large select example"
                                             style="height: 50px" disabled>
@@ -150,21 +156,15 @@ if (!isset($_SESSION['admin_name'])) {
                                         </option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="labels">Ngày sinh</label>
-                                    <input id="docUpDob" type="date" class="form-control"
-                                           value="<?php echo $employee['dob'] ?>" disabled>
-                                    <span id="errorDocDob" style="color: red"></span>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-7 pr-0">
                                     <label class="labels">Email</label>
                                     <input id="docUpEmail" type="text" class="form-control" placeholder="Nhập email"
                                            value="<?php echo $employee['email'] ?>" disabled>
                                     <span id="errorDocEmail" style="color: red"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <label class="labels">Số điện thoại</label>
                                     <input id="docUpPhone" type="text" class="form-control"
                                            value="<?php echo $employee['phone'] ?>" disabled
@@ -173,13 +173,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-8 pr-0">
                                     <label class="labels">Địa chỉ</label>
                                     <input id="docUpAddress" type="text" class="form-control" placeholder="Nhập địa chỉ"
                                            value="<?php echo $employee['address'] ?>" disabled>
                                     <span id="errorDocAddress" style="color: red"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="labels">Trạng thái</label>
                                     <select id="docUpStatus" class="form-select mb-3" aria-label="Large select example"
                                             style="height: 50px" disabled>
@@ -282,6 +282,7 @@ if (!isset($_SESSION['admin_name'])) {
 
             this.addEventListener('click', function () {
                 if (validateDoctorInfo()) {
+                    document.getElementById('docUpPhone').classList.remove('is-invalid');
                     exampleModal.show();
                 }
             });
@@ -295,7 +296,6 @@ if (!isset($_SESSION['admin_name'])) {
 
             formData.append('id', <?php echo $employee['id'] ?>);
             formData.append('name', document.getElementById('docUpName').value);
-            formData.append('username', document.getElementById('docUpUsername').value);
             formData.append('gender', parseInt(document.getElementById('docUpGender').value, 10));
             formData.append('dob', document.getElementById('docUpDob').value);
             formData.append('email', document.getElementById('docUpEmail').value);
@@ -315,17 +315,20 @@ if (!isset($_SESSION['admin_name'])) {
             }
 
             document.getElementById('loading-spinner').style.display = 'block';
-
             $.ajax({
                 url: '<?php echo BASE_URL ?>/index.php?controller=employee&action=update',
                 type: 'POST',
                 data: formData,
-                contentType: false, // Không set contentType
-                processData: false, // Không xử lý dữ liệu
+                contentType: false,
+                processData: false,
                 success: function (response) {
-                    console.log(response);
-                    success_toast('<?php echo BASE_URL ?>/index.php?controller=employee&action=index');
-                    $("#loading-spinner").hide()
+                    if(response['success']){
+                        success_toast('<?php echo BASE_URL ?>/index.php?controller=employee&action=index');
+                    } else {
+                        document.getElementById('errorDocPhone').textContent = 'Số điện thoại đã tồn tại.';
+                        document.getElementById('docUpPhone').classList.add('is-invalid');
+                        $("#loading-spinner").hide();
+                    }
                 },
                 error: function () {
                     failed_toast()
@@ -359,6 +362,7 @@ if (!isset($_SESSION['admin_name'])) {
         // Kiểm tra họ và tên
         if (!name || name.length > 50) {
             document.getElementById('errorDocName').textContent = 'Họ và tên không hợp lệ.';
+            document.getElementById('docUpName').classList.add('is-invalid');
             isValid = false;
         } else {
             document.getElementById('errorDocName').textContent = '';
@@ -368,7 +372,8 @@ if (!isset($_SESSION['admin_name'])) {
         const today = new Date();
         const minAge = new Date(today.getFullYear() - 18, today.getMonth(), today.getDate());
         if (!dob || dob >= minAge) {
-            document.getElementById('errorDocDob').textContent = 'Ngày sinh không hợp lệ.';
+            document.getElementById('errorDocDob').textContent = 'Ngày sinh không hợp lệ.'
+            document.getElementById('docUpDob').classList.add('is-invalid');
             isValid = false;
         } else {
             document.getElementById('errorDocDob').textContent = '';
@@ -376,7 +381,8 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Kiểm tra email
         if (!email || email.length > 150) {
-            document.getElementById('errorDocEmail').textContent = 'Email không hợp lệ.';
+            document.getElementById('errorDocEmail').textContent = 'Vui lòng nhập email hợp lệ.';
+            document.getElementById('docUpEmail').classList.add('is-invalid');
             isValid = false;
         } else {
             document.getElementById('errorDocEmail').textContent = '';
@@ -386,6 +392,7 @@ if (!isset($_SESSION['admin_name'])) {
         const phoneRegex = /((09|03|07|08|05)+([0-9]{8})\b)/g;
         if (!phone || !phoneRegex.test(phone)) {
             document.getElementById('errorDocPhone').textContent = 'Số điện thoại không hợp lệ.';
+            document.getElementById('docUpPhone').classList.add('is-invalid');
             isValid = false;
         } else {
             document.getElementById('errorDocPhone').textContent = '';
@@ -393,7 +400,8 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Kiểm tra địa chỉ
         if (!address || address.length > 255) {
-            document.getElementById('errorDocAddress').textContent = 'Địa chỉ không được để trống và không quá 255 ký tự.';
+            document.getElementById('errorDocAddress').textContent = 'Vui lòng nhập địa chỉ';
+            document.getElementById('docUpAddress').classList.add('is-invalid');
             isValid = false;
         } else {
             document.getElementById('errorDocAddress').textContent = '';

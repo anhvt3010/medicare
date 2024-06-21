@@ -78,7 +78,7 @@ if (!isset($_SESSION['admin_name'])) {
     </style>
 </head>
 <body>
-<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 2000; display: flex; align-items: center; justify-content: center;">
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;">
     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -123,13 +123,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 <h4 class="text-right">Thông tin cá nhân</h4>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-7 pr-0">
                                     <label class="labels">Họ và tên</label>
                                     <input id="docUpName" type="text" class="form-control" placeholder="Nhập họ và tên"
                                            value="<?php echo $doctor['name'] ?>" disabled>
                                     <span id="errorDocName" style="color: red"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <label class="labels">Mã nhân viên</label>
                                     <div type="text" class="form-control"
                                          style="line-height: 30px; background-color: #eee">
@@ -138,28 +138,28 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-7 pr-0">
+                                    <label class="labels">Ngày sinh</label>
+                                    <input id="docUpDob" type="date" class="form-control"
+                                           value="<?php echo $doctor['dob'] ?>" disabled>
+                                    <span id="errorDocDob" style="color: red"></span>
+                                </div>
+                                <div class="col-md-5">
                                     <label for="docUpGender" class="form-label">Giới tính</label>
                                     <select id="docUpGender" class="form-select mb-3" aria-label="Large select example" style="height: 50px" disabled>
                                         <option value="1" <?php echo ($doctor['gender'] == 1) ? 'selected' : ''; ?>>Nam</option>
                                         <option value="0" <?php echo ($doctor['gender'] == 0) ? 'selected' : ''; ?>>Nữ</option>
                                     </select>
                                 </div>
-                                <div class="col-md-6">
-                                    <label class="labels">Ngày sinh</label>
-                                    <input id="docUpDob" type="date" class="form-control"
-                                           value="<?php echo $doctor['dob'] ?>" disabled>
-                                    <span id="errorDocDob" style="color: red"></span>
-                                </div>
                             </div>
                             <div class="row">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-7 pr-0">
                                     <label class="labels">Email</label>
                                     <input id="docUpEmail" type="text" class="form-control" placeholder="Nhập email"
                                            value="<?php echo $doctor['email'] ?>" disabled>
                                     <span id="errorDocEmail" style="color: red"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-5">
                                     <label class="labels">Số điện thoại</label>
                                     <input id="docUpPhone" type="text" class="form-control"
                                            value="<?php echo $doctor['phone'] ?>" disabled placeholder="Nhập số điện thoại">
@@ -167,13 +167,13 @@ if (!isset($_SESSION['admin_name'])) {
                                 </div>
                             </div>
                             <div class="row mt-3">
-                                <div class="col-md-6 pr-0">
+                                <div class="col-md-8 pr-0">
                                     <label class="labels">Địa chỉ</label>
                                     <input id="docUpAddress" type="text" class="form-control" placeholder="Nhập địa chỉ"
                                            value="<?php echo $doctor['address'] ?>" disabled>
                                     <span id="errorDocAddress" style="color: red"></span>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-4">
                                     <label class="labels">Trạng thái</label>
                                     <select id="docUpStatus" class="form-select mb-3" aria-label="Large select example" style="height: 50px" disabled>
                                         <option value="0" <?php echo ($doctor['status'] == 0) ? 'selected' : ''; ?>>Đóng</option>
@@ -320,9 +320,13 @@ if (!isset($_SESSION['admin_name'])) {
                 contentType: false, // Không set contentType
                 processData: false, // Không xử lý dữ liệu
                 success: function(response) {
-                    console.log(response);
-                    success_toast('<?php echo BASE_URL ?>/index.php?controller=doctor&action=index')
-                    $("#loading-spinner").hide();
+                    if(response['success']){
+                        success_toast('<?php echo BASE_URL ?>/index.php?controller=doctor&action=index')
+                    } else {
+                        document.getElementById('errorDocPhone').textContent = 'Số điện thoại đã tồn tại.';
+                        document.getElementById('docUpPhone').classList.add('is-invalid');
+                        $("#loading-spinner").hide();
+                    }
                 },
                 error: function() {
                     failed_toast()

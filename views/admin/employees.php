@@ -570,7 +570,7 @@ if (!isset($_SESSION['admin_name'])) {
             if (toastElement) {
                 var bsToast = new bootstrap.Toast(toastElement); // Khởi tạo lại đối tượng Toast nếu cần
                 toastElement.addEventListener('hidden.bs.toast', function () {
-                    window.location.reload(); // Sử dụng URL được truyền vào
+                    // window.location.reload();
                     document.getElementById('loading-spinner').style.display = 'none';
                 });
             }

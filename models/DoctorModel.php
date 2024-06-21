@@ -35,8 +35,20 @@ class DoctorModel  extends BaseModel {
         return mysqli_fetch_assoc($query);
     }
 
-    public function updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by): bool
+    /**
+     * @throws Exception
+     */
+    public function updateDoctor($doctor_id, $name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by)
     {
+        // Kiểm tra số điện thoại đã tồn tại chưa và không thuộc về nhân viên hiện tại
+        $currentPhone = $this->getById($doctor_id)['phone'];
+        if ($phone !== $currentPhone && $this->checkPhoneExists($phone)) {
+            return [
+                'success' => false,
+                'message' => 'Số điện thoại đã tồn tại trong hệ thống.'
+            ];
+        }
+
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $updated_at = date("Y-m-d H:i:s");
 
@@ -69,17 +81,27 @@ class DoctorModel  extends BaseModel {
         }
 
         mysqli_stmt_close($stmt);
-        return $result;
+        return [
+            'success' => true,
+            'message' => 'Thông tin nhân viên đã được cập nhật thành công.'
+        ];
     }
 
-    public function addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by): bool
+    public function addDoctor($name, $dob, $email, $phone, $gender, $address, $specialty_id, $status, $avt, $update_by): array
     {
+        // Kiểm tra số điện thoại đã tồn tại chưa
+        if ($this->checkPhoneExists($phone)) {
+            return [
+                'success' => false,
+                'message' => 'Số điện thoại đã tồn tại trong hệ thống.'
+            ];
+        }
+
         date_default_timezone_set('Asia/Ho_Chi_Minh');
         $created_at = date("Y-m-d H:i:s");
         $hashedPassword = password_hash('Abc12345', PASSWORD_BCRYPT, ['cost' => 12]);
         $role_id = 2;
-        $position_id = 1; // Giả sử mã vị trí cho bác sĩ là 1
-
+        $position_id = 1;
         // Bước 1: Thêm bác sĩ mà không có employee_code
         $sql = "INSERT INTO employees (
                    specialty_id,
@@ -131,7 +153,10 @@ class DoctorModel  extends BaseModel {
         mysqli_stmt_close($stmt);
         mysqli_stmt_close($stmtUpdate);
 
-        return $result && $resultUpdate;
+        return [
+            'success' => true,
+            'message' => 'Bác sĩ đã được thêm thành công.'
+        ];
     }
 
     public function getDoctorForHome(): array
@@ -210,5 +235,22 @@ class DoctorModel  extends BaseModel {
         return $data;
     }
 
+    public function checkPhoneExists($phone): bool {
+        $sql = "SELECT COUNT(*) as count FROM employees WHERE phone = ?";
+        $stmt = mysqli_prepare($this->connection, $sql);
+        if ($stmt === false) {
+            throw new Exception('MySQL prepare error: ' . mysqli_error($this->connection));
+        }
 
+        mysqli_stmt_bind_param($stmt, 's', $phone);
+        if (mysqli_stmt_execute($stmt) === false) {
+            throw new Exception('Failed to execute statement: ' . mysqli_stmt_error($stmt));
+        }
+
+        $result = mysqli_stmt_get_result($stmt);
+        $row = mysqli_fetch_assoc($result);
+        mysqli_stmt_close($stmt);
+
+        return $row['count'] > 0;
+    }
 }

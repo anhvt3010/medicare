@@ -36,7 +36,7 @@ if (!isset($_SESSION['admin_name'])) {
           crossorigin="anonymous" referrerpolicy="no-referrer"/>
 </head>
 <body>
-<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1050; display: flex; align-items: center; justify-content: center;">
+<div id="loading-spinner" style="text-align: center;line-height:700px;position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.5); z-index: 1060; display: flex; align-items: center; justify-content: center;">
     <div class="spinner-border" style="width: 3rem; height: 3rem;" role="status">
         <span class="sr-only">Loading...</span>
     </div>
@@ -394,12 +394,12 @@ if (!isset($_SESSION['admin_name'])) {
 
         // Xu ly them moi
         const errorMessages = {
-            emName: 'Tên không được để trống và không vượt quá 50 ký tự',
+            emName: 'Vui lòng nhập tên bác sĩ',
             emDob: 'Vui lòng nhập ngày sinh',
             emDobAge: 'Nhân viên phải trên 18 tuổi',
             emEmail: 'Email không hợp lệ',
             emPhone: 'Số điện thoại không hợp lệ',
-            emAddress: 'Địa chỉ không được để trống và không vượt quá 255 ký tự',
+            emAddress: 'Vui lòng nhập địa chỉ',
             emSpecialty: 'Vui lòng chọn chuyên khoa '
         };
 
@@ -458,6 +458,9 @@ if (!isset($_SESSION['admin_name'])) {
                 if (errorElement) {
                     errorElement.textContent = ''; // Xóa nội dung lỗi hiện tại
                 }
+                emSpecialty.classList.remove('is-invalid')
+                errorEmSpecialty.textContent = '';
+                errorEmAvt.textContent = '';
             });
 
             // Kiểm tra tên nhân viên
@@ -551,7 +554,14 @@ if (!isset($_SESSION['admin_name'])) {
                     contentType: false, // Không set contentType
                     processData: false, // Không xử lý dữ liệu
                     success: function(response) {
-                        success_toast('Thêm mới thành công')
+                        console.log(response)
+                        if(response['success']){
+                            success_toast(response['message'])
+                        } else {
+                            errorEmPhone.textContent = response['message'];
+                            emPhone.classList.add('is-invalid');
+                            $("#loading-spinner").hide();
+                        }
                     },
                     error: function() {
                         failed_toast('Có lỗi xảy ra, vui lòng thử lại.')
