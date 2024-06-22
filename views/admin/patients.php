@@ -167,8 +167,12 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                 </button>
                             <div class='dropdown-menu dropdown-menu-right' role='menu'>
-                                <a href="<?php echo BASE_URL ?>/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
-                                   type='button' class='dropdown-item'>Xem chi tiết</a>
+                           <!--       <a href="<?php echo BASE_URL ?>/index.php?controller=patient&action=detail&patient_id=${patient.patient_id}"
+                                   type='button' class='dropdown-item'>Xem chi tiết</a> -->
+                               <form action="<?php echo BASE_URL ?>/index.php?controller=patient&action=detail_patient" method="POST">
+                                    <input type="hidden" name="patient_id" value="${patient.patient_id}">
+                                    <button class="dropdown-item" style="border: none ;background-color: transparent; with:100%" type="submit" id="getAppointment">Chi tiết</button>
+                               </form>
                             </div>
                         </div>
                     </td>

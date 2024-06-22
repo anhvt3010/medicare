@@ -144,8 +144,12 @@
                                                     </svg>
                                                 </button>
                                                 <div class="dropdown-menu dropdown-menu-left">
-                                                    <a type="button" class="dropdown-item"
-                                                       href="<?php echo BASE_URL ?>/index.php?controller=patient&action=detail_appointment&id=<?php echo $appointment['id'] ?>">Chi tiết</a>
+<!--                                                    <a type="button" class="dropdown-item"-->
+<!--                                                       href="--><?php //echo BASE_URL ?><!--/index.php?controller=patient&action=detail_appointment&id=--><?php //echo $appointment['id'] ?><!--">Chi tiết</a>-->
+                                                    <form class="dropdown-item" action="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail_client" method="POST">
+                                                        <input type="hidden" name="id" value="<?php echo $appointment['id'] ?>">
+                                                        <button style="border: none ;background-color: transparent" type="submit" id="getAppointment">Chi tiết</button>
+                                                    </form>
                                                 </div>
                                             </div>
                                         </td>

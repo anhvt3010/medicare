@@ -58,7 +58,8 @@
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $('#loading-spinner').hide();
-        if(<?php echo isset($_GET['phone']) ? json_encode($_GET['phone']) : 'null'; ?> === null) {
+        var phone = <?php echo isset($_GET['phone']) ? json_encode($_GET['phone']) : 'null'; ?>;
+        if (phone == null) {
             window.location.href = `<?php echo BASE_URL ?>/index.php?controller=home&action=not_found`;
         }
 
@@ -66,8 +67,7 @@
         var confirmNewPassword = document.getElementById('confirmNewPassword');
         var btnSaveChange = document.getElementById('btnSaveChange');
 
-        btnSaveChange.addEventListener('click', function (){
-
+        btnSaveChange.addEventListener('click', function () {
             // Xóa các lỗi trước đó
             $('.error').removeClass('error');
             $('.error-message').remove();
@@ -88,34 +88,36 @@
                 return;
             }
 
+            var formData = new FormData();
+            formData.append('phone', phone);
+            formData.append('newPassword', newPassword.value);
+
             $('#loading-spinner').show();
             $.ajax({
                 url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=process_forgot_password',
                 type: 'POST',
-                data: {
-                    phone : <?php echo json_encode($_GET['phone']); ?>,
-                    newPassword : newPassword.value
-                },
+                data: formData,
+                processData: false,  // Không xử lý dữ liệu
+                contentType: false,  // Không đặt contentType
                 success: function (response) {
-                    if(response['success'] === true) {
-                        success_toast(response['message'], '<?php echo BASE_URL ?>/index.php?controller=home&action=login')
+                    console.log(response);
+                    $('#loading-spinner').hide();
+                    if(response.success) {
+                        success_toast(response.message, '<?php echo BASE_URL ?>/index.php?controller=home&action=login');
                     } else {
-                        failed_toast(response['message'])
-                        $('#loading-spinner').hide();
+                        failed_toast(response.message);
                     }
                 },
-                error: function (error) {
-                    console.log(error);
-                    failed_toast('Có lỗi xảy ra');
-                    $("#loading-spinner").hide();
+                error: function (xhr, status, error) {
+                    console.log(phone);
+                    console.log("Error: " + error);
+                    console.log("Status: " + status);
+                    console.log("Response: ", xhr.responseText);
+                    failed_toast('Có lỗi xảy ra: ' + error);
+                    $('#loading-spinner').hide();
                 }
             });
         });
-        function togglePasswordVisibility(fieldId) {
-            var inputField = document.getElementById(fieldId);
-            var currentType = inputField.type;
-            inputField.type = currentType === 'password' ? 'text' : 'password';
-        }
     });
 
 </script>

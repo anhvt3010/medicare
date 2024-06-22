@@ -133,8 +133,12 @@ if (!isset($_SESSION['admin_name'])) {
                                                         </svg>
                                                     </button>
                                                     <div class="dropdown-menu dropdown-menu-right">
-                                                        <a type="button" class="dropdown-item"
-                                                           href="<?php echo BASE_URL ?>/index.php?controller=patient&action=guest_detail&phone=<?php echo $guest['patient_phone'] ?>">Chi tiết</a>
+<!--                                                        <a type="button" class="dropdown-item"-->
+<!--                                                           href="--><?php //echo BASE_URL ?><!--/index.php?controller=patient&action=guest_detail&phone=--><?php //echo $guest['patient_phone'] ?><!--">Chi tiết</a>-->
+                                                        <form action="<?php echo BASE_URL ?>/index.php?controller=patient&action=guest_detail_admin" method="POST">
+                                                            <input type="hidden" name="phone" value="<?php echo $guest['patient_phone'] ?>">
+                                                            <button class="dropdown-item" style="border: none ;background-color: transparent" type="submit" id="getAppointment">Chi tiết</button>
+                                                        </form>
                                                     </div>
                                                 </div>
                                             </td>

@@ -41,6 +41,16 @@ class PatientController extends BaseController
         ]);
     }
 
+    public function guest_detail_admin()
+    {
+        $phone= $_POST['phone'];
+
+        $listAppointments = $this->appointmentModel->getAppointmentsByPhone($phone);
+        return $this->view('admin.guest-detail', [
+            'listAppointments' => $listAppointments,
+        ]);
+    }
+
     public function guest_detail()
     {
         $phone= $_GET['phone'];
@@ -69,6 +79,17 @@ class PatientController extends BaseController
     public function detail()
     {
         $id = $_GET['patient_id'] ?? null;
+        $patient = $this->patientModel->findById($id);
+        $listAppointments = $this->appointmentModel->getAppointmentsByPatient($patient['phone'], $patient['patient_id']);
+        return $this->view('admin.patient-detail', [
+            'patient' => $patient,
+            'listAppointments' => $listAppointments,
+        ]);
+    }
+
+    public function detail_patient()
+    {
+        $id = $_POST['patient_id'];
         $patient = $this->patientModel->findById($id);
         $listAppointments = $this->appointmentModel->getAppointmentsByPatient($patient['phone'], $patient['patient_id']);
         return $this->view('admin.patient-detail', [

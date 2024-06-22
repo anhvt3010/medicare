@@ -40,15 +40,13 @@
         <div class="modal-body">
             <form id="verifyPhoneForm">
                 <div class="mb-3">
-                    <label for="phone" class="col-form-label">Vui lòng nhập số điện thoại liên kết với tài khoản của
-                        bạn:</label>
+                    <label for="phone" class="col-form-label">Vui lòng nhập số điện thoại liên kết với tài khoản của bạn:</label>
                     <input type="tel" class="form-control" id="phoneNumber">
                 </div>
                 <div class="mb-3">
                     <label for="op" class="col-form-label">Nhập mã xác minh gồm 6 số:</label>
                     <input type="number" class="form-control" id="otp">
                 </div>
-
             </form>
         </div>
         <div class="modal-footer d-flex justify-content-between">
@@ -58,6 +56,24 @@
             </button>
         </div>
     </div>
+    <div class="modal-content" style="display: none;" id="changePasswordSection">
+        <div class="modal-header">
+            <h5 class="modal-title" id="changePasswordModalLabel">Đổi Mật Khẩu</h5>
+        </div>
+        <div class="modal-body">
+            <form id="changePasswordForm">
+                <div class="form-group">
+                    <label for="newPassword">Mật khẩu mới:</label>
+                    <input type="password" class="form-control" id="newPassword" required>
+                </div>
+                <div class="form-group">
+                    <label for="confirmNewPassword">Xác nhận mật khẩu mới:</label>
+                    <input type="password" class="form-control" id="confirmNewPassword" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Đổi Mật Khẩu</button>
+            </form>
+        </div>
+    </div>
 </main>
 <?php include "components/footer.html" ?>
 
@@ -65,14 +81,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script src="<?php echo BASE_URL ?>/assets/js/toast/use-bootstrap-toaster.min.js"></script>
+
 <script>
     document.addEventListener('DOMContentLoaded', function () {
         $('#loading-spinner').hide();
         var sendCode = document.getElementById('sendCode');
-        sendCode.disabled = true
+        sendCode.disabled = true;
         var phoneNumber = document.getElementById('phoneNumber');
 
         phoneNumber.addEventListener('change', function (){
+            phoneNumber.style.borderColor = ''
             // Xóa các lỗi trước đó
             $('.error').removeClass('error');
             $('.error-message').remove();
@@ -94,7 +112,9 @@
             var OTP = 123456;
             var otpInput = document.getElementById('otp');
             var otpreq = parseInt(otpInput?.value, 10);
+
             phoneNumber.style.borderColor = '';
+
             $.ajax({
                 url: '<?php echo BASE_URL ?>/index.php?controller=patient&action=check_phone',
                 type: 'POST',
@@ -104,12 +124,9 @@
                 success: function(response) {
                     if (response) {
                         if (otpreq === OTP) {
-                            success_toast(
-                                "Xác minh OTP thành công",
-                                `<?php echo BASE_URL ?>/index.php?controller=auth&action=forgot_password&phone=${encodeURIComponent(phoneNumber.value)}`
-                            )
-                            otpInput.style.borderColor = '#24fa24';
-
+                            $('.modal-content').hide();
+                            $('#changePasswordSection').show();
+                            $('#loading-spinner').hide();
                         } else {
                             otpInput.value = ''; // Xóa nội dung của ô nhập
                             otpInput.style.borderColor = 'red'; // Thêm border màu đỏ
@@ -119,20 +136,72 @@
                         }
                     } else {
                         phoneNumber.style.borderColor = 'red';
-                        failed_toast('Số điện thoại không tồn tại.');
+                        failed_toast('Số điện thoại không tồn tại hoặc không hợp lệ.');
                         $('#loading-spinner').hide();
                     }
-                    // success_toast('Thêm mới thành công.')
                 },
                 error: function() {
                     failed_toast('Có lỗi xảy ra, vui lòng thử lại.');
-                    document.getElementById('loading-spinner').style.display = 'none';
+                    $('#loading-spinner').hide();
                 }
             });
+        });
 
+        $('#changePasswordForm').on('submit', function(e) {
+            e.preventDefault();
+
+            var newPassword = document.getElementById('newPassword');
+            var confirmNewPassword = document.getElementById('confirmNewPassword');
+            // Xóa các lỗi trước đó
+            $('.error').removeClass('error');
+            $('.error-message').remove();
+
+            // Kiểm tra mật khẩu mới và mật khẩu xác nhận có khớp nhau không
+            if (newPassword.value !== confirmNewPassword.value) {
+                newPassword.classList.add('error');
+                confirmNewPassword.classList.add('error');
+                $(confirmNewPassword).after('<div class="error-message">Mật khẩu mới và xác nhận mật khẩu không khớp.</div>');
+                return;
+            }
+
+            // Kiểm tra độ phức tạp của mật khẩu mới
+            var passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+            if (!passwordRegex.test(newPassword.value)) {
+                newPassword.classList.add('error');
+                $(newPassword).after('<div class="error-message">Mật khẩu phải có ít nhất 8 kí tự, bao gồm chữ hoa, chữ thường và số.</div>');
+                return;
+            }
+
+            var formData = new FormData();
+            formData.append('phone', phoneNumber.value);
+            formData.append('newPassword', newPassword.value);
+
+            $('#loading-spinner').show();
+            $.ajax({
+                url: '<?php echo BASE_URL ?>/index.php?controller=auth&action=process_forgot_password',
+                type: 'POST',
+                data: formData,
+                processData: false,  // Không xử lý dữ liệu
+                contentType: false,  // Không đặt contentType
+                success: function (response) {
+                    console.log(response);
+                    $('#loading-spinner').hide();
+                    if(response.success) {
+                        success_toast(response.message, '<?php echo BASE_URL ?>/index.php?controller=home&action=login');
+                    } else {
+                        failed_toast(response.message);
+                    }
+                },
+                error: function (xhr, status, error) {
+                    console.log("Error: " + error);
+                    console.log("Status: " + status);
+                    console.log("Response: ", xhr.responseText);
+                    failed_toast('Có lỗi xảy ra: ' + error);
+                    $('#loading-spinner').hide();
+                }
+            });
         });
     });
-
 </script>
 <script>
     function success_toast(message, redirectUrl) {

@@ -111,9 +111,13 @@ if (!isset($_SESSION['admin_name'])) {
                                         </svg>
                                     </button>
                                     <div class="dropdown-menu dropdown-menu-left">
-                                        <a type="button" class="dropdown-item"
-                                           href="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail&id=<?php echo $appointment['id'] ?>">Chi
-                                            tiết</a>
+<!--                                        <a type="button" class="dropdown-item"-->
+<!--                                           href="--><?php //echo BASE_URL ?><!--/index.php?controller=appointment&action=detail&id=--><?php //echo $appointment['id'] ?><!--">Chi-->
+<!--                                            tiết</a>-->
+                                        <form action="<?php echo BASE_URL ?>/index.php?controller=appointment&action=detail_appointment" method="POST">
+                                            <input type="hidden" name="id" value="<?php echo $appointment['id'] ?>">
+                                            <button class="dropdown-item" style="border: none ;background-color: transparent;" type="submit" id="getAppointment">Chi tiết</button>
+                                        </form>
                                     </div>
                                 </div>
                             </td>
