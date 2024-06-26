@@ -5,31 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="d135579f-d2e6-42b6-af04-33dcd6f1265a" name="Changes" comment="fixbug">
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources.local.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/df8db5aa-7ca3-4757-916b-addbc52015d9.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/dataSources/df8db5aa-7ca3-4757-916b-addbc52015d9/storage_v2/_src_/schema/medicare.rjhQyg.meta" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/jsLibraryMappings.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/Medicio.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/codeception.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/dataSources.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/git_toolbox_prj.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/inspectionProfiles/Project_Default.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/php.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/php.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phpspec.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/phpunit.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/composer.json" beforeDir="false" afterPath="$PROJECT_DIR$/composer.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/AppointmentController.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/AppointmentController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/controllers/PatientController.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/PatientController.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/appointment-confirm.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/appointment-confirm.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/guest-detail.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/guest-detail.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/guests.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/guests.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/admin/patients.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/admin/patients.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/client/confirm-phone.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/client/confirm-phone.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/client/forgot-password.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/client/forgot-password.php" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/client/history.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/client/history.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -127,7 +103,7 @@
       <workItem from="1718928697276" duration="23259000" />
       <workItem from="1718982350350" duration="11636000" />
       <workItem from="1719016841408" duration="648000" />
-      <workItem from="1719024491092" duration="15579000" />
+      <workItem from="1719024491092" duration="16562000" />
     </task>
     <task id="LOCAL-00002" summary="fixbug">
       <option name="closed" value="true" />
@@ -169,7 +145,15 @@
       <option name="project" value="LOCAL" />
       <updated>1719014628977</updated>
     </task>
-    <option name="localTasksCounter" value="7" />
+    <task id="LOCAL-00007" summary="fixbug">
+      <option name="closed" value="true" />
+      <created>1719054388154</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1719054388154</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
